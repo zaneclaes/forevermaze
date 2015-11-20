@@ -1,0 +1,517 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2B4E97C81BFFA5DD0066D521 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97C71BFFA5DD0066D521 /* AppDelegate.swift */; };
+		2B4E97CA1BFFA5DD0066D521 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2B4E97C91BFFA5DD0066D521 /* GameScene.sks */; };
+		2B4E97CC1BFFA5DD0066D521 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */; };
+		2B4E97CE1BFFA5DD0066D521 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97CD1BFFA5DD0066D521 /* GameViewController.swift */; };
+		2B4E97D11BFFA5DD0066D521 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B4E97CF1BFFA5DD0066D521 /* Main.storyboard */; };
+		2B4E97D31BFFA5DD0066D521 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B4E97D21BFFA5DD0066D521 /* Assets.xcassets */; };
+		2B4E97D61BFFA5DD0066D521 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B4E97D41BFFA5DD0066D521 /* LaunchScreen.storyboard */; };
+		2B4E97E11BFFA5DE0066D521 /* ForeverMazeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97E01BFFA5DE0066D521 /* ForeverMazeTests.swift */; };
+		2B4E97EC1BFFA5DE0066D521 /* ForeverMazeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97EB1BFFA5DE0066D521 /* ForeverMazeUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2B4E97DD1BFFA5DE0066D521 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2B4E97BC1BFFA5DD0066D521 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2B4E97C31BFFA5DD0066D521;
+			remoteInfo = ForeverMaze;
+		};
+		2B4E97E81BFFA5DE0066D521 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2B4E97BC1BFFA5DD0066D521 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2B4E97C31BFFA5DD0066D521;
+			remoteInfo = ForeverMaze;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2B4E97C41BFFA5DD0066D521 /* ForeverMaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ForeverMaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B4E97C71BFFA5DD0066D521 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2B4E97C91BFFA5DD0066D521 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		2B4E97CD1BFFA5DD0066D521 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		2B4E97D01BFFA5DD0066D521 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		2B4E97D21BFFA5DD0066D521 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2B4E97D51BFFA5DD0066D521 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		2B4E97D71BFFA5DD0066D521 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2B4E97DC1BFFA5DE0066D521 /* ForeverMazeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ForeverMazeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B4E97E01BFFA5DE0066D521 /* ForeverMazeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeverMazeTests.swift; sourceTree = "<group>"; };
+		2B4E97E21BFFA5DE0066D521 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2B4E97E71BFFA5DE0066D521 /* ForeverMazeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ForeverMazeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B4E97EB1BFFA5DE0066D521 /* ForeverMazeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeverMazeUITests.swift; sourceTree = "<group>"; };
+		2B4E97ED1BFFA5DE0066D521 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2B4E97C11BFFA5DD0066D521 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B4E97D91BFFA5DE0066D521 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B4E97E41BFFA5DE0066D521 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2B4E97BB1BFFA5DD0066D521 = {
+			isa = PBXGroup;
+			children = (
+				2B4E97C61BFFA5DD0066D521 /* ForeverMaze */,
+				2B4E97DF1BFFA5DE0066D521 /* ForeverMazeTests */,
+				2B4E97EA1BFFA5DE0066D521 /* ForeverMazeUITests */,
+				2B4E97C51BFFA5DD0066D521 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2B4E97C51BFFA5DD0066D521 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2B4E97C41BFFA5DD0066D521 /* ForeverMaze.app */,
+				2B4E97DC1BFFA5DE0066D521 /* ForeverMazeTests.xctest */,
+				2B4E97E71BFFA5DE0066D521 /* ForeverMazeUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2B4E97C61BFFA5DD0066D521 /* ForeverMaze */ = {
+			isa = PBXGroup;
+			children = (
+				2B4E97C71BFFA5DD0066D521 /* AppDelegate.swift */,
+				2B4E97C91BFFA5DD0066D521 /* GameScene.sks */,
+				2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */,
+				2B4E97CD1BFFA5DD0066D521 /* GameViewController.swift */,
+				2B4E97CF1BFFA5DD0066D521 /* Main.storyboard */,
+				2B4E97D21BFFA5DD0066D521 /* Assets.xcassets */,
+				2B4E97D41BFFA5DD0066D521 /* LaunchScreen.storyboard */,
+				2B4E97D71BFFA5DD0066D521 /* Info.plist */,
+			);
+			path = ForeverMaze;
+			sourceTree = "<group>";
+		};
+		2B4E97DF1BFFA5DE0066D521 /* ForeverMazeTests */ = {
+			isa = PBXGroup;
+			children = (
+				2B4E97E01BFFA5DE0066D521 /* ForeverMazeTests.swift */,
+				2B4E97E21BFFA5DE0066D521 /* Info.plist */,
+			);
+			path = ForeverMazeTests;
+			sourceTree = "<group>";
+		};
+		2B4E97EA1BFFA5DE0066D521 /* ForeverMazeUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2B4E97EB1BFFA5DE0066D521 /* ForeverMazeUITests.swift */,
+				2B4E97ED1BFFA5DE0066D521 /* Info.plist */,
+			);
+			path = ForeverMazeUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2B4E97C31BFFA5DD0066D521 /* ForeverMaze */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B4E97F01BFFA5DE0066D521 /* Build configuration list for PBXNativeTarget "ForeverMaze" */;
+			buildPhases = (
+				2B4E97C01BFFA5DD0066D521 /* Sources */,
+				2B4E97C11BFFA5DD0066D521 /* Frameworks */,
+				2B4E97C21BFFA5DD0066D521 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ForeverMaze;
+			productName = ForeverMaze;
+			productReference = 2B4E97C41BFFA5DD0066D521 /* ForeverMaze.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2B4E97DB1BFFA5DE0066D521 /* ForeverMazeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B4E97F31BFFA5DE0066D521 /* Build configuration list for PBXNativeTarget "ForeverMazeTests" */;
+			buildPhases = (
+				2B4E97D81BFFA5DE0066D521 /* Sources */,
+				2B4E97D91BFFA5DE0066D521 /* Frameworks */,
+				2B4E97DA1BFFA5DE0066D521 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2B4E97DE1BFFA5DE0066D521 /* PBXTargetDependency */,
+			);
+			name = ForeverMazeTests;
+			productName = ForeverMazeTests;
+			productReference = 2B4E97DC1BFFA5DE0066D521 /* ForeverMazeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		2B4E97E61BFFA5DE0066D521 /* ForeverMazeUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B4E97F61BFFA5DE0066D521 /* Build configuration list for PBXNativeTarget "ForeverMazeUITests" */;
+			buildPhases = (
+				2B4E97E31BFFA5DE0066D521 /* Sources */,
+				2B4E97E41BFFA5DE0066D521 /* Frameworks */,
+				2B4E97E51BFFA5DE0066D521 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2B4E97E91BFFA5DE0066D521 /* PBXTargetDependency */,
+			);
+			name = ForeverMazeUITests;
+			productName = ForeverMazeUITests;
+			productReference = 2B4E97E71BFFA5DE0066D521 /* ForeverMazeUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2B4E97BC1BFFA5DD0066D521 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = "inZania LLC";
+				TargetAttributes = {
+					2B4E97C31BFFA5DD0066D521 = {
+						CreatedOnToolsVersion = 7.1.1;
+					};
+					2B4E97DB1BFFA5DE0066D521 = {
+						CreatedOnToolsVersion = 7.1.1;
+						TestTargetID = 2B4E97C31BFFA5DD0066D521;
+					};
+					2B4E97E61BFFA5DE0066D521 = {
+						CreatedOnToolsVersion = 7.1.1;
+						TestTargetID = 2B4E97C31BFFA5DD0066D521;
+					};
+				};
+			};
+			buildConfigurationList = 2B4E97BF1BFFA5DD0066D521 /* Build configuration list for PBXProject "ForeverMaze" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2B4E97BB1BFFA5DD0066D521;
+			productRefGroup = 2B4E97C51BFFA5DD0066D521 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2B4E97C31BFFA5DD0066D521 /* ForeverMaze */,
+				2B4E97DB1BFFA5DE0066D521 /* ForeverMazeTests */,
+				2B4E97E61BFFA5DE0066D521 /* ForeverMazeUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2B4E97C21BFFA5DD0066D521 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B4E97CA1BFFA5DD0066D521 /* GameScene.sks in Resources */,
+				2B4E97D61BFFA5DD0066D521 /* LaunchScreen.storyboard in Resources */,
+				2B4E97D31BFFA5DD0066D521 /* Assets.xcassets in Resources */,
+				2B4E97D11BFFA5DD0066D521 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B4E97DA1BFFA5DE0066D521 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B4E97E51BFFA5DE0066D521 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2B4E97C01BFFA5DD0066D521 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B4E97CC1BFFA5DD0066D521 /* GameScene.swift in Sources */,
+				2B4E97CE1BFFA5DD0066D521 /* GameViewController.swift in Sources */,
+				2B4E97C81BFFA5DD0066D521 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B4E97D81BFFA5DE0066D521 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B4E97E11BFFA5DE0066D521 /* ForeverMazeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B4E97E31BFFA5DE0066D521 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B4E97EC1BFFA5DE0066D521 /* ForeverMazeUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2B4E97DE1BFFA5DE0066D521 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2B4E97C31BFFA5DD0066D521 /* ForeverMaze */;
+			targetProxy = 2B4E97DD1BFFA5DE0066D521 /* PBXContainerItemProxy */;
+		};
+		2B4E97E91BFFA5DE0066D521 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2B4E97C31BFFA5DD0066D521 /* ForeverMaze */;
+			targetProxy = 2B4E97E81BFFA5DE0066D521 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		2B4E97CF1BFFA5DD0066D521 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2B4E97D01BFFA5DD0066D521 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		2B4E97D41BFFA5DD0066D521 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2B4E97D51BFFA5DD0066D521 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2B4E97EE1BFFA5DE0066D521 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2B4E97EF1BFFA5DE0066D521 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2B4E97F11BFFA5DE0066D521 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = ForeverMaze/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = inzania.ForeverMaze;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		2B4E97F21BFFA5DE0066D521 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = ForeverMaze/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = inzania.ForeverMaze;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		2B4E97F41BFFA5DE0066D521 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = ForeverMazeTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = inzania.ForeverMazeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ForeverMaze.app/ForeverMaze";
+			};
+			name = Debug;
+		};
+		2B4E97F51BFFA5DE0066D521 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = ForeverMazeTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = inzania.ForeverMazeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ForeverMaze.app/ForeverMaze";
+			};
+			name = Release;
+		};
+		2B4E97F71BFFA5DE0066D521 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = ForeverMazeUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = inzania.ForeverMazeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = ForeverMaze;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		2B4E97F81BFFA5DE0066D521 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = ForeverMazeUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = inzania.ForeverMazeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = ForeverMaze;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2B4E97BF1BFFA5DD0066D521 /* Build configuration list for PBXProject "ForeverMaze" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B4E97EE1BFFA5DE0066D521 /* Debug */,
+				2B4E97EF1BFFA5DE0066D521 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2B4E97F01BFFA5DE0066D521 /* Build configuration list for PBXNativeTarget "ForeverMaze" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B4E97F11BFFA5DE0066D521 /* Debug */,
+				2B4E97F21BFFA5DE0066D521 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		2B4E97F31BFFA5DE0066D521 /* Build configuration list for PBXNativeTarget "ForeverMazeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B4E97F41BFFA5DE0066D521 /* Debug */,
+				2B4E97F51BFFA5DE0066D521 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		2B4E97F61BFFA5DE0066D521 /* Build configuration list for PBXNativeTarget "ForeverMazeUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B4E97F71BFFA5DE0066D521 /* Debug */,
+				2B4E97F81BFFA5DE0066D521 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2B4E97BC1BFFA5DD0066D521 /* Project object */;
+}
