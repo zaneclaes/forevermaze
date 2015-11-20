@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2B4E97C81BFFA5DD0066D521 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97C71BFFA5DD0066D521 /* AppDelegate.swift */; };
-		2B4E97CA1BFFA5DD0066D521 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2B4E97C91BFFA5DD0066D521 /* GameScene.sks */; };
 		2B4E97CC1BFFA5DD0066D521 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */; };
 		2B4E97CE1BFFA5DD0066D521 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97CD1BFFA5DD0066D521 /* GameViewController.swift */; };
 		2B4E97D11BFFA5DD0066D521 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B4E97CF1BFFA5DD0066D521 /* Main.storyboard */; };
@@ -38,7 +37,6 @@
 /* Begin PBXFileReference section */
 		2B4E97C41BFFA5DD0066D521 /* ForeverMaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ForeverMaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B4E97C71BFFA5DD0066D521 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2B4E97C91BFFA5DD0066D521 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		2B4E97CD1BFFA5DD0066D521 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		2B4E97D01BFFA5DD0066D521 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -102,7 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				2B4E97C71BFFA5DD0066D521 /* AppDelegate.swift */,
-				2B4E97C91BFFA5DD0066D521 /* GameScene.sks */,
 				2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */,
 				2B4E97CD1BFFA5DD0066D521 /* GameViewController.swift */,
 				2B4E97CF1BFFA5DD0066D521 /* Main.storyboard */,
@@ -235,7 +232,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B4E97CA1BFFA5DD0066D521 /* GameScene.sks in Resources */,
 				2B4E97D61BFFA5DD0066D521 /* LaunchScreen.storyboard in Resources */,
 				2B4E97D31BFFA5DD0066D521 /* Assets.xcassets in Resources */,
 				2B4E97D11BFFA5DD0066D521 /* Main.storyboard in Resources */,
@@ -408,6 +404,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = ForeverMaze/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = inzania.ForeverMaze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -419,6 +416,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = ForeverMaze/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = inzania.ForeverMaze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -494,6 +492,7 @@
 				2B4E97F21BFFA5DE0066D521 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2B4E97F31BFFA5DE0066D521 /* Build configuration list for PBXNativeTarget "ForeverMazeTests" */ = {
 			isa = XCConfigurationList;
@@ -502,6 +501,7 @@
 				2B4E97F51BFFA5DE0066D521 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2B4E97F61BFFA5DE0066D521 /* Build configuration list for PBXNativeTarget "ForeverMazeUITests" */ = {
 			isa = XCConfigurationList;
@@ -510,6 +510,7 @@
 				2B4E97F81BFFA5DE0066D521 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
