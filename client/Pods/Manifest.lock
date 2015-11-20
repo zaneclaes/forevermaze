@@ -1,0 +1,47 @@
+PODS:
+  - CocoaLumberjack/Core (2.2.0)
+  - CocoaLumberjack/Default (2.2.0):
+    - CocoaLumberjack/Core
+  - CocoaLumberjack/Extensions (2.2.0):
+    - CocoaLumberjack/Default
+  - CocoaLumberjack/Swift (2.2.0):
+    - CocoaLumberjack/Extensions
+  - DeviceKit (0.0.1)
+  - Firebase (2.4.3)
+  - Kingfisher (2.0.1)
+  - OMGHTTPURLRQ (3.0.2):
+    - OMGHTTPURLRQ/RQ (= 3.0.2)
+  - OMGHTTPURLRQ/FormURLEncode (3.0.2)
+  - OMGHTTPURLRQ/RQ (3.0.2):
+    - OMGHTTPURLRQ/FormURLEncode
+    - OMGHTTPURLRQ/UserAgent
+  - OMGHTTPURLRQ/UserAgent (3.0.2)
+  - PromiseKit (3.0.0):
+    - PromiseKit/Foundation (= 3.0.0)
+    - PromiseKit/QuartzCore (= 3.0.0)
+    - PromiseKit/UIKit (= 3.0.0)
+  - PromiseKit/CorePromise (3.0.0)
+  - PromiseKit/Foundation (3.0.0):
+    - OMGHTTPURLRQ (~> 3.0.0)
+    - PromiseKit/CorePromise
+  - PromiseKit/QuartzCore (3.0.0):
+    - PromiseKit/CorePromise
+  - PromiseKit/UIKit (3.0.0):
+    - PromiseKit/CorePromise
+
+DEPENDENCIES:
+  - CocoaLumberjack/Swift
+  - DeviceKit
+  - Firebase (>= 2.4.3)
+  - Kingfisher (~> 2.0)
+  - PromiseKit (>= 3.0)
+
+SPEC CHECKSUMS:
+  CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
+  DeviceKit: 71d6c03c31b860c0e7c186d5f1756cfd9e11614b
+  Firebase: 48179995b561e2262c5d4060ecdffca45fbbff8b
+  Kingfisher: 3af2020040453f710507819e6aa5f5721da03d9b
+  OMGHTTPURLRQ: 8376dc887d76a5a7e2a67881dc788f917a2f437c
+  PromiseKit: 665540a1eb43156446872dcf49ed7dee6ebbe13b
+
+COCOAPODS: 0.39.0

@@ -1,0 +1,20 @@
+/* 
+  Localizable.strings
+  ForeverMaze
+
+  Created by Zane Claes on 1/31/16.
+  Copyright © 2016 inZania LLC. All rights reserved.
+*/
+"menu.ok" = "Ok";
+"menu.login" = "Login";
+"menu.logout" = "Logout";
+"menu.resume" = "Resume";
+"menu.about" = "About";
+"menu.scores" = "Scores";
+"menu.loading" = "Loading...";
+
+"game.level" = "Level ";
+
+"errors.data" = "There was an error loading the data";
+"errors.network" = "Please check your internet connection.";
+"errors.permissions" = "You must login with the required permissions to continue.";
