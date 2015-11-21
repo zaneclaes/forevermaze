@@ -7,12 +7,16 @@
 //
 
 import SpriteKit
+import PromiseKit
 
 class GameScene: SKScene {
   override func didMoveToView(view: SKView) {
-    Map.world.load()
-    Account.current.resume { (error) -> Void in
-      print("RESUMED")
+    //Map.world.load()
+
+    Account.current.resume().then { (userId) -> Void in
+      print("RESUMED: \(userId)")
+    }.error { (error) -> Void in
+      print("RESUME ERR \(error)")
     }
   }
 
@@ -21,8 +25,10 @@ class GameScene: SKScene {
       Account.current.logout()
     }
     else {
-      Account.current.login { (error) -> Void in
-        print("LOGGED IN YAYYY: \(error)")
+      Account.current.login().then { (token) -> Void in
+        print("TOKEN \(token)")
+      }.error { (error) -> Void in
+        print("LOGIN ERR \(error)")
       }
     }
   }

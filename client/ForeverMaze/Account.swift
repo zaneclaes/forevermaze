@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import PromiseKit
 
 class Account {
   static let current: Account = Account()
@@ -16,45 +17,62 @@ class Account {
   var player: Player?
   private var auth: FAuthData? = nil
   private let connection: Firebase
+  let permissions : Array<String> = ["public_profile", "email", "user_friends"]
 
   init() {
     self.connection = Firebase(url: Config.firebaseUrl)
   }
 
-  func resume(completion: ((error: NSError!) -> Void)!) {
+  func resume() -> Promise<String!> {
     guard let token: FBSDKAccessToken = FBSDKAccessToken.currentAccessToken() else {
-      completion?(error: nil)
-      return
+      return Promise { fulfill, reject in
+        fulfill(nil)
+      }
     }
-    self._loginWithToken(token, completion: completion)
+    return self._handOffToken(token)
   }
 
-  func login(completion: ((error: NSError!) -> Void)!) {
+  func login() -> Promise<String!> {
+    return self._loginToFacebook().then { (token) -> Promise<String!> in
+      return self._handOffToken(token)
+    }
+  }
+
+  private func _loginToFacebook() -> Promise<FBSDKAccessToken> {
     guard let token: FBSDKAccessToken = FBSDKAccessToken.currentAccessToken() else {
       print("[LOGIN] Facebook start...")
-      let permissions : Array<String> = ["public_profile", "email", "user_friends"]
-      Account.fb.logInWithReadPermissions(permissions, fromViewController: nil, handler: { (result, error) -> Void in
-        print("[LOGIN] done: \(error) \(result)")
-        if error != nil {
-          completion?(error: error)
-        }
-        else {
-          // Loop back to login
-          self.login(completion)
-        }
-      })
-      return
+
+      return Promise { fulfill, reject in
+        Account.fb.logInWithReadPermissions(permissions, fromViewController: nil, handler: { (result, error) -> Void in
+          if error == nil {
+            fulfill(FBSDKAccessToken.currentAccessToken())
+          }
+          else {
+            reject(error)
+          }
+        })
+      }
     }
-    self._loginWithToken(token, completion: completion)
+    return Promise { fulfill, reject in
+      fulfill(token)
+    }
   }
 
-  private func _loginWithToken(token: FBSDKAccessToken, completion: ((error: NSError!) -> Void)!) {
+
+  private func _handOffToken(token: FBSDKAccessToken) -> Promise<String!> {
     print("[LOGIN] Firebase start...")
-    connection.authWithOAuthProvider("facebook", token: token.tokenString) { (error, auth) -> Void in
-      print("[LOGIN] Firebase done: \(error) \(auth)")
-      self.auth = auth
-      self.player = Player(playerID: self.playerID)
-      completion?(error: error)
+
+    return Promise { fulfill, reject in
+      self.connection.authWithOAuthProvider("facebook", token: token.tokenString, withCompletionBlock: { (error, auth) -> Void in
+        if error == nil {
+          self.auth = auth
+          self.player = Player(playerID: self.playerID)
+          fulfill(self.playerID)
+        }
+        else {
+          reject(error)
+        }
+      })
     }
   }
 

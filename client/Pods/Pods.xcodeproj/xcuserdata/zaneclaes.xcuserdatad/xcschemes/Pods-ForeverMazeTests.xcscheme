@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '12BB16A63008D4CD84860F35'
+               BlueprintIdentifier = 'B52B4FF38BF678AD8A261619'
                BlueprintName = 'Pods-ForeverMazeTests'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'Pods_ForeverMazeTests.framework'>

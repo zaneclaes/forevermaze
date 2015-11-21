@@ -85,7 +85,11 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-ForeverMaze/Firebase.framework"
+  install_framework "Pods-ForeverMaze/OMGHTTPURLRQ.framework"
+  install_framework "Pods-ForeverMaze/PromiseKit.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-ForeverMaze/Firebase.framework"
+  install_framework "Pods-ForeverMaze/OMGHTTPURLRQ.framework"
+  install_framework "Pods-ForeverMaze/PromiseKit.framework"
 fi
