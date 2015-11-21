@@ -10,14 +10,21 @@ import SpriteKit
 
 class GameScene: SKScene {
   override func didMoveToView(view: SKView) {
-    /*
-    let myLabel = SKLabelNode(fontNamed:"Chalkduster")
-    myLabel.text = "Hello, World!";
-    myLabel.fontSize = 45;
-    myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
+    Map.world.load()
+    Account.current.resume { (error) -> Void in
+      print("RESUMED")
+    }
+  }
 
-    self.addChild(myLabel)
-    */
+  override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    if Account.current.isLoggedIn {
+      Account.current.logout()
+    }
+    else {
+      Account.current.login { (error) -> Void in
+        print("LOGGED IN YAYYY: \(error)")
+      }
+    }
   }
   
   override func update(currentTime: CFTimeInterval) {

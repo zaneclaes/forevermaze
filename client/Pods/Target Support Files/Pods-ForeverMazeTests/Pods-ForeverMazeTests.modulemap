@@ -1,0 +1,6 @@
+framework module Pods_ForeverMazeTests {
+  umbrella header "Pods-ForeverMazeTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
