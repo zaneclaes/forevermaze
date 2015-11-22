@@ -18,6 +18,9 @@ class LocalPlayer : Player {
   }*/
 
   static func load(playerID: String!) -> Promise<LocalPlayer> {
+    guard (playerID != nil) else {
+      return Promise { fulfill, reject in reject(Error.DoubleOhSux0r) }
+    }
     return self.loadFromPath("/players/\(playerID)").then { (snapshot) -> LocalPlayer in
       Account.current.player = LocalPlayer(playerID: playerID, snapshot: snapshot)
       return Account.current.player!

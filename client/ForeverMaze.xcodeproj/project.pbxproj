@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		01B3E9499C4727F1AB72F51D /* Pods_ForeverMazeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA8648F75F588B9ECD57B492 /* Pods_ForeverMazeUITests.framework */; };
+		2B2A76B21C023B6900172E27 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B2A76AF1C023B6900172E27 /* FBSDKCoreKit.framework */; };
+		2B2A76B31C023B6900172E27 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B2A76B01C023B6900172E27 /* FBSDKLoginKit.framework */; };
+		2B2A76B41C023B6900172E27 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B2A76B11C023B6900172E27 /* FBSDKShareKit.framework */; };
+		2B2A76B81C023E5900172E27 /* robots.atlasc in Resources */ = {isa = PBXBuildFile; fileRef = 2B2A76B71C023E5900172E27 /* robots.atlasc */; };
+		2B2A76BA1C0240A300172E27 /* AccountScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2A76B91C0240A300172E27 /* AccountScene.swift */; };
 		2B4E97C81BFFA5DD0066D521 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97C71BFFA5DD0066D521 /* AppDelegate.swift */; };
 		2B4E97CC1BFFA5DD0066D521 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */; };
 		2B4E97CE1BFFA5DD0066D521 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97CD1BFFA5DD0066D521 /* GameViewController.swift */; };
@@ -16,15 +21,6 @@
 		2B4E97D61BFFA5DD0066D521 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B4E97D41BFFA5DD0066D521 /* LaunchScreen.storyboard */; };
 		2B4E97E11BFFA5DE0066D521 /* ForeverMazeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97E01BFFA5DE0066D521 /* ForeverMazeTests.swift */; };
 		2B4E97EC1BFFA5DE0066D521 /* ForeverMazeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97EB1BFFA5DE0066D521 /* ForeverMazeUITests.swift */; };
-		2BB6F1411BFFCCC6009DF879 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BB6F13E1BFFCCC5009DF879 /* FBSDKCoreKit.framework */; };
-		2BB6F1421BFFCCC6009DF879 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BB6F13E1BFFCCC5009DF879 /* FBSDKCoreKit.framework */; };
-		2BB6F1431BFFCCC6009DF879 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BB6F13E1BFFCCC5009DF879 /* FBSDKCoreKit.framework */; };
-		2BB6F1441BFFCCC6009DF879 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BB6F13F1BFFCCC6009DF879 /* FBSDKLoginKit.framework */; };
-		2BB6F1451BFFCCC6009DF879 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BB6F13F1BFFCCC6009DF879 /* FBSDKLoginKit.framework */; };
-		2BB6F1461BFFCCC6009DF879 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BB6F13F1BFFCCC6009DF879 /* FBSDKLoginKit.framework */; };
-		2BB6F1471BFFCCC6009DF879 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BB6F1401BFFCCC6009DF879 /* FBSDKShareKit.framework */; };
-		2BB6F1481BFFCCC6009DF879 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BB6F1401BFFCCC6009DF879 /* FBSDKShareKit.framework */; };
-		2BB6F1491BFFCCC6009DF879 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BB6F1401BFFCCC6009DF879 /* FBSDKShareKit.framework */; };
 		2BB6F14B1BFFD243009DF879 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6F14A1BFFD243009DF879 /* Account.swift */; };
 		2BB6F14C1BFFD243009DF879 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6F14A1BFFD243009DF879 /* Account.swift */; };
 		2BB6F14D1BFFD243009DF879 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6F14A1BFFD243009DF879 /* Account.swift */; };
@@ -78,6 +74,11 @@
 
 /* Begin PBXFileReference section */
 		27EA223623F55D4B9B66DEB7 /* Pods-ForeverMazeUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ForeverMazeUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ForeverMazeUITests/Pods-ForeverMazeUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		2B2A76AF1C023B6900172E27 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = Frameworks/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		2B2A76B01C023B6900172E27 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = Frameworks/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		2B2A76B11C023B6900172E27 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = Frameworks/FBSDKShareKit.framework; sourceTree = "<group>"; };
+		2B2A76B71C023E5900172E27 /* robots.atlasc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = robots.atlasc; path = Resources/robots.atlasc; sourceTree = SOURCE_ROOT; };
+		2B2A76B91C0240A300172E27 /* AccountScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountScene.swift; sourceTree = "<group>"; };
 		2B4E97C41BFFA5DD0066D521 /* ForeverMaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ForeverMaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B4E97C71BFFA5DD0066D521 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -93,9 +94,6 @@
 		2B4E97EB1BFFA5DE0066D521 /* ForeverMazeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeverMazeUITests.swift; sourceTree = "<group>"; };
 		2B4E97ED1BFFA5DE0066D521 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2BB6F13D1BFFCC03009DF879 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
-		2BB6F13E1BFFCCC5009DF879 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
-		2BB6F13F1BFFCCC6009DF879 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
-		2BB6F1401BFFCCC6009DF879 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		2BB6F14A1BFFD243009DF879 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Account.swift; path = ForeverMaze/Account.swift; sourceTree = "<group>"; };
 		2BB6F14E1BFFD272009DF879 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Config.swift; path = ForeverMaze/Config.swift; sourceTree = "<group>"; };
 		2BB6F1561BFFDB62009DF879 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -121,10 +119,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2BB6F1471BFFCCC6009DF879 /* FBSDKShareKit.framework in Frameworks */,
+				2B2A76B41C023B6900172E27 /* FBSDKShareKit.framework in Frameworks */,
 				CAA3BD874CAB642CA12B0D45 /* Pods_ForeverMaze.framework in Frameworks */,
-				2BB6F1411BFFCCC6009DF879 /* FBSDKCoreKit.framework in Frameworks */,
-				2BB6F1441BFFCCC6009DF879 /* FBSDKLoginKit.framework in Frameworks */,
+				2B2A76B21C023B6900172E27 /* FBSDKCoreKit.framework in Frameworks */,
+				2B2A76B31C023B6900172E27 /* FBSDKLoginKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,10 +130,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2BB6F1481BFFCCC6009DF879 /* FBSDKShareKit.framework in Frameworks */,
 				61508CF9E208CADD928A3BF4 /* Pods_ForeverMazeTests.framework in Frameworks */,
-				2BB6F1421BFFCCC6009DF879 /* FBSDKCoreKit.framework in Frameworks */,
-				2BB6F1451BFFCCC6009DF879 /* FBSDKLoginKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,10 +138,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2BB6F1491BFFCCC6009DF879 /* FBSDKShareKit.framework in Frameworks */,
 				01B3E9499C4727F1AB72F51D /* Pods_ForeverMazeUITests.framework in Frameworks */,
-				2BB6F1431BFFCCC6009DF879 /* FBSDKCoreKit.framework in Frameworks */,
-				2BB6F1461BFFCCC6009DF879 /* FBSDKLoginKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,6 +222,7 @@
 		2BB6F12B1BFFC656009DF879 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2B2A76B71C023E5900172E27 /* robots.atlasc */,
 				2B4E97D21BFFA5DD0066D521 /* Assets.xcassets */,
 				2B4E97D71BFFA5DD0066D521 /* Info.plist */,
 			);
@@ -279,6 +272,7 @@
 			isa = PBXGroup;
 			children = (
 				2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */,
+				2B2A76B91C0240A300172E27 /* AccountScene.swift */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -307,9 +301,9 @@
 		8D57B1F3DDF70A8C48D2E983 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2BB6F13E1BFFCCC5009DF879 /* FBSDKCoreKit.framework */,
-				2BB6F13F1BFFCCC6009DF879 /* FBSDKLoginKit.framework */,
-				2BB6F1401BFFCCC6009DF879 /* FBSDKShareKit.framework */,
+				2B2A76AF1C023B6900172E27 /* FBSDKCoreKit.framework */,
+				2B2A76B01C023B6900172E27 /* FBSDKLoginKit.framework */,
+				2B2A76B11C023B6900172E27 /* FBSDKShareKit.framework */,
 				A642EFC082C73A26F677CC35 /* Pods_ForeverMaze.framework */,
 				66306F8B5EABF513C7D79A93 /* Pods_ForeverMazeTests.framework */,
 				AA8648F75F588B9ECD57B492 /* Pods_ForeverMazeUITests.framework */,
@@ -429,6 +423,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B2A76B81C023E5900172E27 /* robots.atlasc in Resources */,
 				2B4E97D61BFFA5DD0066D521 /* LaunchScreen.storyboard in Resources */,
 				2B4E97D31BFFA5DD0066D521 /* Assets.xcassets in Resources */,
 				2B4E97D11BFFA5DD0066D521 /* Main.storyboard in Resources */,
@@ -579,6 +574,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B2A76BA1C0240A300172E27 /* AccountScene.swift in Sources */,
 				2BB6F1601BFFDCB4009DF879 /* Mobile.swift in Sources */,
 				2BB6F1701BFFE499009DF879 /* GameSprite.swift in Sources */,
 				2BB6F1791BFFEA0C009DF879 /* Map.swift in Sources */,
@@ -757,6 +753,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = ForeverMaze/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -775,6 +772,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = ForeverMaze/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

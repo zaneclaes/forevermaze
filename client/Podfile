@@ -5,15 +5,19 @@ use_frameworks!
 target 'ForeverMaze' do
   pod 'Firebase', '>= 2.4.3'  
   pod "PromiseKit", ">= 3.0"
+  pod "CocoaLumberjack/Swift"
+  pod "DeviceKit"
 end
 
 target 'ForeverMazeTests' do
   pod 'Firebase', '>= 2.4.3'
   pod "PromiseKit", ">= 3.0"
+  pod "CocoaLumberjack/Swift"
 end
 
 target 'ForeverMazeUITests' do
   pod 'Firebase', '>= 2.4.3'
   pod "PromiseKit", ">= 3.0"
+  pod "CocoaLumberjack/Swift"
 end
 

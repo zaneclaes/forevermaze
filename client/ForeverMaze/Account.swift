@@ -9,6 +9,7 @@
 import Foundation
 import Firebase
 import PromiseKit
+import CocoaLumberjack
 
 class Account {
   static let current: Account = Account()
@@ -40,7 +41,7 @@ class Account {
 
   private func _loginToFacebook() -> Promise<FBSDKAccessToken> {
     guard let token: FBSDKAccessToken = FBSDKAccessToken.currentAccessToken() else {
-      print("[LOGIN] Facebook start...")
+      DDLogDebug("[ACCOUNT] Facebook start...")
 
       return Promise { fulfill, reject in
         Account.fb.logInWithReadPermissions(permissions, fromViewController: nil, handler: { (result, error) -> Void in
@@ -60,7 +61,7 @@ class Account {
 
 
   private func _handOffToken(token: FBSDKAccessToken) -> Promise<String!> {
-    print("[LOGIN] Firebase start...")
+    DDLogDebug("[ACCOUNT] Firebase start...")
 
     return Promise { fulfill, reject in
       self.connection.authWithOAuthProvider("facebook", token: token.tokenString, withCompletionBlock: { (error, auth) -> Void in
@@ -77,8 +78,9 @@ class Account {
   }
 
   func logout() {
-    print("[LOGIN] Logged out.")
+    DDLogDebug("[ACCOUNT] Logged out.")
     self.auth = nil
+    self.player = nil
     Account.fb.logOut()
   }
 

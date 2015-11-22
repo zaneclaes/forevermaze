@@ -8,21 +8,25 @@
 
 import SpriteKit
 import PromiseKit
+import CocoaLumberjack
 
 class GameScene: SKScene {
   override func didMoveToView(view: SKView) {
-    Map.world.load()
+    let label = SKLabelNode(text: "Loading World...")
+    label.color = SKColor.whiteColor()
+    label.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y: CGRectGetMidY(self.scene!.frame))
+    self.addChild(label)
 
-    Account.current.resume().then { (playerID) -> Promise<LocalPlayer> in
-      print("RESUMED: \(playerID)")
-      return LocalPlayer.load(playerID)
-    }.then { (player) -> Void in
-      print("PLAYER \(player)")
-      player.alias = "inZania2"
-      print("PLAYER \(player)")
+    Map.world.load().then { (map) -> Void in
+      label.removeFromParent()
     }.error { (error) -> Void in
-      print("RESUME ERR \(error)")
+      label.text = "\(error)"
+      DDLogError("World Error \(error)")
     }
+
+    let tex = SKSpriteNode(imageNamed: "droid_e")
+    tex.position = CGPointMake(100, 200)
+    self.addChild(tex)
   }
 
   override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -31,9 +35,9 @@ class GameScene: SKScene {
     }
     else {
       Account.current.login().then { (userId) -> Void in
-        print("TOKEN \(userId)")
+        DDLogInfo("TOKEN \(userId)")
       }.error { (error) -> Void in
-        print("LOGIN ERR \(error)")
+        DDLogInfo("LOGIN ERR \(error)")
       }
     }
   }

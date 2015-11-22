@@ -4,6 +4,16 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>CocoaLumberjack.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>DeviceKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Firebase.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,12 +52,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3AF7281CD6E2518F4428403B73375E25</key>
+		<key>34D7BF0FBB6001BC2A65939B02F8596D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>61A283D0A6A19749EEE925C72E1212B9</key>
+		<key>35E05B47FDCCEE48BA982C9E7F06DB1C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6908E193ACF09AB16FEDDFB5F346F9B0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8E9D40006A591ECFB652F34417D80F71</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>AD4A9545DD72B7E86F67CC21F5AFC8D2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -57,12 +82,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E5F7B61A87AB9DA25559863214CA3E11</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>EBEE2FE573E12F5CA9883D3793742B09</key>
+		<key>D082FD9722F53B9C3A1229257D4008F7</key>
 		<dict>
 			<key>primary</key>
 			<true/>

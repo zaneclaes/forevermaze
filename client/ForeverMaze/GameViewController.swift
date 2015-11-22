@@ -9,14 +9,12 @@
 import UIKit
 import SpriteKit
 
-import UIKit
-import SpriteKit
-
 class GameViewController: UIViewController {
 
   override func viewDidLoad() {
+    Config.setup()
     super.viewDidLoad()
-    let scene = GameScene(size: view.bounds.size)
+    let scene = AccountScene(size: view.bounds.size)
     let skView = view as! SKView
     skView.showsFPS = true
     skView.showsNodeCount = true
