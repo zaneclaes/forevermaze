@@ -11,11 +11,17 @@ import Firebase
 
 class Player : Mobile {
 
-  let playerID: String
+  let playerID: String!
+  dynamic var alias: String?
 
-  init(playerID: String) {
+  init (playerID: String!, snapshot: FDataSnapshot!) {
     self.playerID = playerID
-    super.init(connection: Firebase(url: Config.firebaseUrl + "/players/\(playerID)"))
+    self.alias = snapshot.childSnapshotForPath("alias").value as? String
+    super.init(snapshot: snapshot, attributes: ["alias"])
+  }
+
+  override var description:String {
+    return "<Player \(playerID)>: \(alias!)"
   }
 
   var isCurrentUser: Bool {

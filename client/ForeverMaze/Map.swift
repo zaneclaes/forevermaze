@@ -22,7 +22,7 @@ class Map {
         var columnBuilder = Array<Tile>()
         var y:UInt = 0
         for row in column.children.allObjects as! [FDataSnapshot] {
-          columnBuilder.append(Tile(x: x, y: y, connection: row.ref))
+          columnBuilder.append(Tile(x: x, y: y, snapshot: row))
           y++
         }
         x++

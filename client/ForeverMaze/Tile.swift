@@ -33,11 +33,10 @@ class Tile : GameSprite {
   let x: UInt
   let y: UInt
 
-  init(x: UInt, y: UInt, connection: Firebase) {
+  init(x: UInt, y: UInt, snapshot: FDataSnapshot) {
     self.x = x
     self.y = y
-    super.init(connection: connection)
-    print("\(x)x\(y): \(self.emotion)")
+    super.init(snapshot: snapshot, attributes: ["e"])
   }
 
   func randomizeEmotion() {
@@ -45,7 +44,7 @@ class Tile : GameSprite {
   }
 
   var emotion: Emotion {
-    return Emotion.random() //self.connection.childByAppendingPath("e") as! [Emotion]
+    return Emotion(rawValue: self.snapshot.childSnapshotForPath("e").value as! Int)!
   }
 
   /*

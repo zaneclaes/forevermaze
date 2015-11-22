@@ -11,10 +11,15 @@ import PromiseKit
 
 class GameScene: SKScene {
   override func didMoveToView(view: SKView) {
-    //Map.world.load()
+    Map.world.load()
 
-    Account.current.resume().then { (userId) -> Void in
-      print("RESUMED: \(userId)")
+    Account.current.resume().then { (playerID) -> Promise<LocalPlayer> in
+      print("RESUMED: \(playerID)")
+      return LocalPlayer.load(playerID)
+    }.then { (player) -> Void in
+      print("PLAYER \(player)")
+      player.alias = "inZania2"
+      print("PLAYER \(player)")
     }.error { (error) -> Void in
       print("RESUME ERR \(error)")
     }
@@ -25,8 +30,8 @@ class GameScene: SKScene {
       Account.current.logout()
     }
     else {
-      Account.current.login().then { (token) -> Void in
-        print("TOKEN \(token)")
+      Account.current.login().then { (userId) -> Void in
+        print("TOKEN \(userId)")
       }.error { (error) -> Void in
         print("LOGIN ERR \(error)")
       }

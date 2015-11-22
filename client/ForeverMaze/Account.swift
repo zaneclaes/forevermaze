@@ -14,7 +14,7 @@ class Account {
   static let current: Account = Account()
   private static let fb: FBSDKLoginManager = FBSDKLoginManager()
 
-  var player: Player?
+  var player: LocalPlayer?
   private var auth: FAuthData? = nil
   private let connection: Firebase
   let permissions : Array<String> = ["public_profile", "email", "user_friends"]
@@ -66,7 +66,7 @@ class Account {
       self.connection.authWithOAuthProvider("facebook", token: token.tokenString, withCompletionBlock: { (error, auth) -> Void in
         if error == nil {
           self.auth = auth
-          self.player = Player(playerID: self.playerID)
+          // self.player = Player(playerID: self.playerID)
           fulfill(self.playerID)
         }
         else {
