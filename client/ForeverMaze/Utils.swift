@@ -7,11 +7,29 @@
 //
 
 import Foundation
+import PromiseKit
+import Firebase
 
 class Utils {
 
-  static let reservedProperties = ["description", "connection", "snapshot"]
+  /**
+   * Given a path to a firebase object, get the snapshot with a timeout.
+   */
+  static func loadSnapshot(firebasePath: String!) -> Promise<FDataSnapshot> {
+    return Promise { fulfill, reject in
+      after(life: Config.timeout).then {
+        reject(Errors.network)
+      }
 
+      let connection = Firebase(url: Config.firebaseUrl + firebasePath)
+      connection.observeEventType(.Value, withBlock: { snapshot in
+        connection.removeAllObservers()
+        fulfill(snapshot)
+      })
+    }
+  }
+
+  // Given an object and a filtration block, return an array of all properties on the object.
   static func getProperties(obj: AnyObject!, filter: ((String, String) -> (Bool))!) -> [String] {
     return self.getClassProperties(object_getClass(obj), filter: filter)
   }

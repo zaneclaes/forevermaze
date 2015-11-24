@@ -64,16 +64,4 @@ class GameSprite : NSObject {
   deinit {
     cleanup()
   }
-
-  static func loadFromPath(relativePath: String!) -> Promise<FDataSnapshot> {
-    return Promise { fulfill, reject in
-      // TODO: Timeouts?? Connection errors?
-
-      let connection = Firebase(url: Config.firebaseUrl + relativePath)
-      connection.observeEventType(.Value, withBlock: { snapshot in
-        connection.removeAllObservers()
-        fulfill(snapshot)
-      })
-    }
-  }
 }

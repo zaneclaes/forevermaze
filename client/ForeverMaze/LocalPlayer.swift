@@ -14,7 +14,7 @@ class LocalPlayer : Player {
     guard (playerID != nil) else {
       return Promise { fulfill, reject in fulfill(nil) }
     }
-    return self.loadFromPath("/players/\(playerID)").then { (snapshot) -> LocalPlayer in
+    return Utils.loadSnapshot("/players/\(playerID)").then { (snapshot) -> LocalPlayer in
       Account.player = LocalPlayer(playerID: playerID, snapshot: snapshot)
       Account.player?.lastLogin = NSDate().timeIntervalSince1970
       return Account.player!

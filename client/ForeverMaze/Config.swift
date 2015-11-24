@@ -13,6 +13,8 @@ import DeviceKit
 class Config {
   static let firebaseUrl:String = "https://forevermaze.firebaseio.com"
   static let device = Device()
+  static let timeout = 30
+  static let baseErrorDomain = NSBundle.mainBundle().bundleIdentifier
 
   static func setup() {
     DDLog.addLogger(DDTTYLogger.sharedInstance()) // TTY = Xcode console
@@ -21,4 +23,5 @@ class Config {
 
     DDLogInfo("[CONFIG] \(device)")
   }
+
 }
