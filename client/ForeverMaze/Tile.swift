@@ -32,11 +32,13 @@ class Tile : GameSprite {
 
   let x: UInt
   let y: UInt
+  dynamic var e:Int
 
   init(x: UInt, y: UInt, snapshot: FDataSnapshot) {
     self.x = x
     self.y = y
-    super.init(snapshot: snapshot, attributes: ["e"])
+    self.e = 0
+    super.init(snapshot: snapshot)
   }
 
   func randomizeEmotion() {
@@ -44,7 +46,7 @@ class Tile : GameSprite {
   }
 
   var emotion: Emotion {
-    return Emotion(rawValue: self.snapshot.childSnapshotForPath("e").value as! Int)!
+    return Emotion(rawValue: self.e)!
   }
 
   /*

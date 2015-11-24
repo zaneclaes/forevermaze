@@ -30,12 +30,12 @@ class GameScene: SKScene {
   }
 
   override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-    if Account.current.isLoggedIn {
-      Account.current.logout()
+    if Account.isLoggedIn {
+      Account.logout()
     }
     else {
-      Account.current.login().then { (userId) -> Void in
-        DDLogInfo("TOKEN \(userId)")
+      Account.login().then { (player) -> Void in
+        DDLogInfo("[PLAYER] \(player)")
       }.error { (error) -> Void in
         DDLogInfo("LOGIN ERR \(error)")
       }

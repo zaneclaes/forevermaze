@@ -21,8 +21,8 @@ class AccountScene: SKScene {
 
     UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 
-    Account.current.resume().then { (playerID) -> Void in
-      DDLogInfo("PLAYER ID \(playerID)")
+    Account.resume().then { (player) -> Void in
+      DDLogInfo("[PLAYER]: \(player)")
       self.pushGameScene()
     }.always {
       UIApplication.sharedApplication().networkActivityIndicatorVisible = false
@@ -44,7 +44,7 @@ class AccountScene: SKScene {
   override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
     UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 
-    Account.current.login().then { (playerID) -> Void in
+    Account.login().then { (playerID) -> Void in
       DDLogInfo("PLAYER ID \(playerID)")
       self.pushGameScene()
     }.always {

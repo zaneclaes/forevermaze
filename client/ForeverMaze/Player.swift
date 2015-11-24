@@ -12,19 +12,23 @@ import Firebase
 class Player : Mobile {
 
   let playerID: String!
-  dynamic var alias: String?
+  dynamic var alias: String!
+  dynamic var lastLogin: NSNumber?
 
   init (playerID: String!, snapshot: FDataSnapshot!) {
+    let alias = snapshot.childSnapshotForPath("alias").value as? String
+    
     self.playerID = playerID
-    self.alias = snapshot.childSnapshotForPath("alias").value as? String
-    super.init(snapshot: snapshot, attributes: ["alias"])
+    self.alias = alias == nil ? "Player" : alias
+    self.lastLogin = snapshot.childSnapshotForPath("lastLogin").value as? NSNumber
+    super.init(snapshot: snapshot)
   }
 
   override var description:String {
-    return "<Player \(playerID)>: \(alias!)"
+    return "<\(self.dynamicType) \(playerID)>: \(alias!)"
   }
 
   var isCurrentUser: Bool {
-    return Account.current.isLoggedIn && Account.current.playerID == self.playerID
+    return Account.isLoggedIn && Account.playerID == self.playerID
   }
 }

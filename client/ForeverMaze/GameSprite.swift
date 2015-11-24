@@ -16,34 +16,29 @@ class GameSprite : NSObject {
   let connection: Firebase!
   let snapshot: FDataSnapshot!
 
-  private let attributes:Array<String>
+  private var properties:Array<String>
 
-  init (snapshot: FDataSnapshot!, attributes: Array<String>) {
+  init (snapshot: FDataSnapshot!) {
     self.connection = snapshot.ref
     self.snapshot = snapshot
-    self.attributes = attributes
-    self.observing = true
+    self.properties = []
     super.init()
-    beginObserving()
-  }
 
-  func beginObserving() {
-    for attribute in self.attributes {
-      self.addObserver(self, forKeyPath: attribute, options: [.New, .Old], context: &KVOContext)
+    for attribute in self.getDynamicAttributes() {
+      self.addProperty(attribute)
     }
   }
 
-  func endObserving() {
-    for attribute in self.attributes {
-      self.removeObserver(self, forKeyPath: attribute)
-    }
+  func getDynamicAttributes() -> [String] {
+    return Utils.getWritableProperties(self)
   }
 
-  // Toggle the observers for the attributes
-  var observing: Bool {
-    didSet {
-      self.observing ? self.beginObserving() : self.endObserving()
+  func addProperty(property: String!) {
+    guard !properties.contains(property) else {
+      return
     }
+    properties.append(property)
+    self.addObserver(self, forKeyPath: property, options: [.New, .Old], context: &KVOContext)
   }
 
   override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
@@ -56,9 +51,15 @@ class GameSprite : NSObject {
     }
   }
 
-  deinit {
-    self.observing = false
+  func cleanup() {
+    for property in self.properties {
+      self.removeObserver(self, forKeyPath: property)
+    }
     self.connection.removeAllObservers()
+  }
+
+  deinit {
+    cleanup()
   }
 
   static func loadFromPath(relativePath: String!) -> Promise<FDataSnapshot> {
