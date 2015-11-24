@@ -30,7 +30,6 @@ class Map {
           x++
           self.tiles.append(columnBuilder)
         }
-        // snapshot.childrenCount, snapshot.children
       })
       fulfill(self)
     }

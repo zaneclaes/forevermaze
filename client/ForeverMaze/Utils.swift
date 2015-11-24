@@ -12,13 +12,13 @@ class Utils {
 
   static let reservedProperties = ["description", "connection", "snapshot"]
 
-  static func getWritableProperties(obj: AnyObject!) -> [String] {
-    return self.getWritableClassProperties(object_getClass(obj))
+  static func getProperties(obj: AnyObject!, filter: ((String, String) -> (Bool))!) -> [String] {
+    return self.getClassProperties(object_getClass(obj), filter: filter)
   }
-
-  static func getWritableClassProperties(klass: AnyClass!) -> [String] {
+  
+  static func getClassProperties(klass: AnyClass!, filter: ((String, String) -> (Bool))!) -> [String] {
     let superclass:AnyClass! = class_getSuperclass(klass)
-    var dynamicProperties = superclass == nil ? [String]() : getWritableClassProperties(superclass)
+    var dynamicProperties = superclass == nil ? [String]() : getClassProperties(superclass, filter: filter)
     guard klass != NSObject.self else {
       return dynamicProperties
     }
@@ -27,21 +27,17 @@ class Utils {
     let properties = class_copyPropertyList(klass, &propertyCount)
     for var i = 0; i < Int(propertyCount); i++ {
       let property = properties[i]
-      let propertyName = property_getName(property)
+      let propertyName = String(CString: property_getName(property), encoding: NSUTF8StringEncoding)!
       // n.b., the `attributes` array should tell us if the property is dynamic
       // Sadly it seems proken in Swift
       // c.f., https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
       // We should have been able to look for `,D,` to indicate @dynamic
       let attributes = String(CString: property_getAttributes(property), encoding: NSUTF8StringEncoding)!
-      if (attributes.rangeOfString(",R,") != nil) {
+      if (filter(propertyName, attributes)) {
         // Readonly property
         continue
       }
-
-      let prop = String(CString: propertyName, encoding: NSUTF8StringEncoding)!
-      if !reservedProperties.contains(prop) {
-        dynamicProperties.append(prop)
-      }
+      dynamicProperties.append(propertyName)
     }
     free(properties)
 

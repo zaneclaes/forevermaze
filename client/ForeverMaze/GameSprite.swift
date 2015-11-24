@@ -30,7 +30,10 @@ class GameSprite : NSObject {
   }
 
   func getDynamicAttributes() -> [String] {
-    return Utils.getWritableProperties(self)
+    return Utils.getProperties(self, filter: { (name, attributes) -> (Bool) in
+      // Not read-only implies writablitiy.
+      return attributes.rangeOfString(",R,") != nil
+    })
   }
 
   func addProperty(property: String!) {

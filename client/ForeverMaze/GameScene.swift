@@ -30,16 +30,6 @@ class GameScene: SKScene {
   }
 
   override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-    if Account.isLoggedIn {
-      Account.logout()
-    }
-    else {
-      Account.login().then { (player) -> Void in
-        DDLogInfo("[PLAYER] \(player)")
-      }.error { (error) -> Void in
-        DDLogInfo("LOGIN ERR \(error)")
-      }
-    }
   }
   
   override func update(currentTime: CFTimeInterval) {
