@@ -6,7 +6,7 @@
 //  Copyright © 2015 inZania LLC. All rights reserved.
 //
 
-import Foundation
+import SpriteKit
 import Firebase
 import PromiseKit
 
@@ -24,6 +24,15 @@ enum Emotion: Int {
     }
   }
 
+  var color:UIColor {
+    switch self {
+    case Happiness: return .yellowColor()
+    case Sadness:   return .blueColor()
+    case Anger:     return .redColor()
+    case Fear:      return .greenColor()
+    }
+  }
+
   static func random() -> Emotion {
     return Emotion(rawValue: Int(arc4random_uniform(NumberOfEmotions)))!
   }
@@ -38,6 +47,9 @@ class Tile : GameSprite {
   init(position: MapPosition, snapshot: FDataSnapshot) {
     self.position = position
     super.init(snapshot: snapshot)
+    self.sprite = SKSpriteNode(imageNamed: "iso_3d_ground")
+    self.sprite.color = self.emotion.color
+    self.sprite.colorBlendFactor = 1.0
   }
 
   func removeObject(obj: GameObject) {

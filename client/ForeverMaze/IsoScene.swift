@@ -47,7 +47,7 @@ class IsoScene: SKScene {
     fatalError("init(coder:) has not been implemented")
   }
 
-  let mapSize: MapSize
+  var mapBox: MapBox
   let viewIso:SKSpriteNode
   let layerIsoGround:SKNode
   let layerIsoObjects:SKNode
@@ -55,11 +55,11 @@ class IsoScene: SKScene {
   var touches = Set<UITouch>()
   var firstTouchLocation = CGPointZero
 
-  init(mapSize: MapSize, size: CGSize) {
+  init(mapBox: MapBox, size: CGSize) {
     viewIso = SKSpriteNode()
     layerIsoGround = SKNode()
     layerIsoObjects = SKNode()
-    self.mapSize = mapSize
+    self.mapBox = mapBox
 
     super.init(size: size)
     self.anchorPoint = CGPoint(x:0.5, y:0.5)
@@ -116,12 +116,19 @@ class IsoScene: SKScene {
     self.updateTouches(touches)
   }
 
-  func placeTileIso(tile:Tile, direction:Direction, position:CGPoint) {
-    let tileSprite = SKSpriteNode(imageNamed: "iso_3d_ground")
-    tileSprite.position = position
-    tileSprite.anchorPoint = CGPoint(x:0, y:0)
-    layerIsoGround.addChild(tileSprite)
-    //layerIsoObjects.addChild(tileSprite)
+  private func addGameSprite(gameSprite:GameSprite, at: MapPosition, inLayer:SKNode) {
+    let position = at - self.mapBox.origin
+    gameSprite.sprite.position = point2DToIso(CGPoint(x: (position.xIndex*tileSize.width), y: -(position.yIndex*tileSize.height)))
+    gameSprite.sprite.anchorPoint = CGPoint(x:0, y:0)
+    inLayer.addChild(gameSprite.sprite)
+  }
+
+  func addObject(obj:GameObject) {
+    self.addGameSprite(obj, at: obj.position, inLayer: layerIsoObjects)
+  }
+
+  func addTile(tile:Tile) {
+    self.addGameSprite(tile, at: tile.position, inLayer: layerIsoGround)
   }
 
   func placeAllTilesIso() {
@@ -144,13 +151,13 @@ class IsoScene: SKScene {
 
   func point2DToPosition(point:CGPoint) -> MapPosition {
     return MapPosition(
-      xIndex: Int(point.x / CGFloat(mapSize.width)),
-      yIndex: Int(point.y / CGFloat(mapSize.height))
+      xIndex: Int(point.x / CGFloat(mapBox.size.width)),
+      yIndex: Int(point.y / CGFloat(mapBox.size.height))
     )
   }
 
   func positionToPoint2D(pos:MapPosition) -> CGPoint {
-    return CGPoint(x: Int(pos.x * mapSize.width), y: Int(pos.y * mapSize.height))
+    return CGPoint(x: Int(pos.x * mapBox.size.width), y: Int(pos.y * mapBox.size.height))
   }
 
 

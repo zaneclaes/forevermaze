@@ -6,7 +6,7 @@
 //  Copyright © 2015 inZania LLC. All rights reserved.
 //
 
-import Foundation
+import SpriteKit
 import Firebase
 import PromiseKit
 
@@ -15,6 +15,8 @@ private var KVOContext = 0
 class GameSprite : NSObject {
   let connection: Firebase!
   let snapshot: FDataSnapshot!
+
+  var sprite = SKSpriteNode()
 
   private var properties:Array<String>
 

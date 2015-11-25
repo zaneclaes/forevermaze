@@ -6,18 +6,91 @@
 //  Copyright © 2015 inZania LLC. All rights reserved.
 //
 
-import Foundation
+import SpriteKit
 import Firebase
 import PromiseKit
 
+enum Direction: Int {
+  case N,NE,E,SE,S,SW,W,NW
+
+  var description:String {
+    switch self {
+    case N: return "N"
+    case NE:return "NE"
+    case E: return "E"
+    case SE:return "SE"
+    case S: return "S"
+    case SW:return "SW"
+    case W: return "W"
+    case NW:return "NW"
+    }
+  }
+
+  var amount:(Int, Int) {
+    switch self {
+    case N: return (0,1)
+    case NE:return (1,1)
+    case E: return (1,0)
+    case SE:return (1,-1)
+    case S: return (0,-1)
+    case SW:return (-1,-1)
+    case W: return (-1,0)
+    case NW:return (-1,1)
+    }
+  }
+
+  static var directions:Array<Direction> {
+    return [N,NE,E,SE,S,SW,W,NW]
+  }
+
+  init?(degrees: Int) {
+    let degreesPerDirection = Int(360 / 8)
+    self.init(rawValue: degrees / degreesPerDirection)
+  }
+}
+
 class GameObject : GameSprite {
   // Lookup cache for all gameSprites in the map, on ID
-  static var cache:[String:GameSprite] = [:]
+  static var cache:[String:GameObject] = [:]
+  static var textureCache:[String:SKTexture] = [:]
 
   private dynamic var x: UInt = 0
   private dynamic var y: UInt = 0
   private dynamic var width: UInt = 1
   private dynamic var height: UInt = 1
+  private dynamic var dir:Int = 0
+
+  override init(snapshot: FDataSnapshot!) {
+    super.init(snapshot: snapshot)
+    // Build texture cache...
+    self.sprite = SKSpriteNode(imageNamed: assetName)
+    for dir in Direction.directions {
+      let assetName = self.assetPrefix + dir.description.lowercaseString
+      GameObject.textureCache[assetName] = SKTexture(imageNamed: assetName)
+    }
+  }
+
+  var assetPrefix:String {
+    return "iso_3d_droid_"
+  }
+
+  var assetName:String {
+    return self.assetPrefix + self.direction.description.lowercaseString
+  }
+
+  private func updateSprite() {
+    self.sprite.texture = GameObject.textureCache[assetName]
+  }
+
+  var direction:Direction {
+    set {
+      if self.dir != newValue.rawValue {
+        self.dir = newValue.rawValue
+        self.updateSprite()
+      }
+    }
+    get { return Direction(rawValue: self.dir)! }
+  }
 
   var size: MapSize {
     return MapSize(width: max(1, self.width), height: max(1, self.height))
@@ -78,5 +151,27 @@ class GameObject : GameSprite {
       // objects might not always exist, if data is in a suboptimal state
       fulfill(obj)
     }
+  }
+
+  /**
+   * Cleanup also uncaches textures from the static textureCache when they're not needed.
+   */
+  override func cleanup() {
+    var texturesStillInUse = false
+    for (_, obj) in GameObject.cache {
+      if obj.assetPrefix == self.assetPrefix {
+        texturesStillInUse = true
+        break
+      }
+    }
+    if !texturesStillInUse {
+      let keys = GameObject.textureCache.keys
+      for key in keys {
+        if key.hasPrefix(self.assetPrefix) {
+          GameObject.textureCache.removeValueForKey(key)
+        }
+      }
+    }
+    super.cleanup()
   }
 }

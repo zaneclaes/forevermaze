@@ -17,7 +17,7 @@ class GameScene: IsoScene {
   }
 
   init(size: CGSize) {
-    super.init(mapSize: Config.worldSize, size: size)
+    super.init(mapBox: MapBox(center: (Account.player?.position)!, size: Config.screenTiles), size: size)
   }
 
   override func didMoveToView(view: SKView) {
@@ -44,14 +44,15 @@ class GameScene: IsoScene {
   }
 
   override func placeAllTilesIso() {
-    for i in 0..<32 {
-      for j in 0..<32 {
-        let tile = Map.tiles[(Account.player?.position)!]
-        let direction = Direction(rawValue: 0)!
-        let point = point2DToIso(CGPoint(x: (j*tileSize.width), y: -(i*tileSize.height)))
-        placeTileIso(tile, direction:direction, position:point)
+    let center:MapPosition = (Account.player?.position)!
+    let boundingBox:MapBox = MapBox(center: center, size: Config.screenTiles)
+    for i in 0..<Int(Config.screenTiles.width) {
+      for j in 0..<Int(Config.screenTiles.height) {
+        let position = boundingBox.origin + (i,j)
+        addTile(Map.tiles[position])
       }
     }
+    addObject(Account.player!)
   }
 
   /*Map.rebuild().then { () -> Void in
@@ -63,8 +64,14 @@ class GameScene: IsoScene {
   override func update(currentTime: CFTimeInterval) {
     let dir = self.dPadDirection
     if dir != nil {
+      //var actions = Array<SKAction>()
+      //actions.append(SKAction.runBlock({
+      //}))
       Account.player?.direction = dir!
-      Account.player?.step()
+
+      //Account.player?.sprite.removeAllActions()
+      //Account.player?.sprite.runAction(SKAction.sequence(actions))
+
       Map.load(Account.player!.position)
       DDLogInfo("\(Account.player!)")
     }
