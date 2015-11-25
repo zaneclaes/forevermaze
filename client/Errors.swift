@@ -16,4 +16,10 @@ class Errors {
     userInfo: [NSLocalizedDescriptionKey : I18n.t("errors.network")]
   )
 
+  static let data = NSError(
+    domain: Config.baseErrorDomain! + ".data",
+    code: 2,
+    userInfo: [NSLocalizedDescriptionKey : I18n.t("errors.data")]
+  )
+
 }

@@ -30,6 +30,34 @@ extension Firebase {
 
 class Data {
   /**
+   * Object IDs will be loaded and stored into GameObject cache
+   * (not returned via the promise)
+   */
+  static func loadObjects(ids: [String]) -> Promise<Void> {
+    var promises = Array<Promise<Void>>()
+    for id in ids {
+      if GameObject.cache[id] != nil {
+        continue
+      }
+      let promise = loadObject(id).then { gameObject in
+        return Promise { fulfill, reject in fulfill() }
+      }
+      promises.append(promise)
+    }
+    return when(promises)
+  }
+  /**
+   * Uses loadSnapshot to infer and create a GameObject
+   * In GameObject land, an ID is a path
+   * Therefore, we can separate on the `/` character and infer
+   * the type of class to use to instantiate the object.
+   */
+  static func loadObject(id: String!) -> Promise<GameObject!> {
+    return loadSnapshot(id).then { (snapshot) -> Promise<GameObject!> in
+      return GameObject.factory(snapshot)
+    }
+  }
+  /**
    * Given a path to a firebase object, get the snapshot with a timeout.
    */
   static func loadSnapshot(firebasePath: String!) -> Promise<FDataSnapshot> {

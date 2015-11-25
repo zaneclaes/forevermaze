@@ -42,10 +42,6 @@ class Mobile : GameObject {
 
   private dynamic var dir:Int = 0
 
-  override var firebaseProperties:[String] {
-    return super.firebaseProperties + ["dir"]
-  }
-
   var direction:Direction {
     set { self.dir = newValue.rawValue          }
     get { return Direction(rawValue: self.dir)! }

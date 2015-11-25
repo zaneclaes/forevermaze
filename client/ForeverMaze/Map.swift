@@ -37,7 +37,7 @@ struct MapPosition : CustomStringConvertible {
   }
 
   var description:String {
-    return "<\(self.dynamicType)>: \(x)x\(y)"
+    return "(\(x)x\(y))"
   }
 
   init(x: UInt, y: UInt) {
@@ -61,7 +61,7 @@ struct MapSize : CustomStringConvertible {
   let height: UInt
 
   var description:String {
-    return "<\(self.dynamicType)>: \(width)x\(height)"
+    return "[\(width)x\(height)]"
   }
 
   init(width: UInt, height: UInt) {
@@ -108,6 +108,9 @@ struct MapBox : CustomStringConvertible {
 class Map {
   static var tiles: [String: Tile] = [:]
 
+  static func getTile(position: MapPosition) -> Tile! {
+    return tiles["\(position.x)x\(position.y)"]
+  }
   /**
    * Load the map into the tiles array based upon Config.screenTiles
    * If a tile already exists, it does not reload it.
@@ -115,16 +118,17 @@ class Map {
    */
   static func load(center: MapPosition) -> Promise<Void> {
     let boundingBox:MapBox = MapBox(center: center, size: Config.screenTiles)
+    var removedObjectIds = Set<String>()
     //
     // Evict any old tiles...
     //
     let keys = tiles.keys
     for key in keys {
-      let parts:Array<String> = key.componentsSeparatedByString("x")
-      if parts.count < 2 {
-        continue
-      }
-      if !boundingBox.contains(MapPosition(x: UInt(parts[0])!, y: UInt(parts[1])!)) {
+      let tile = tiles[key]
+      if !boundingBox.contains(tile!.position) {
+        for objectId in tile!.objectIds {
+          removedObjectIds.insert(objectId)
+        }
         tiles.removeValueForKey(key)
       }
     }
@@ -140,14 +144,23 @@ class Map {
           continue
         }
         let promise = Data.loadSnapshot("/tiles/\(key)").then { (snapshot) -> Promise<Void> in
-          return Promise { fulfill, reject in
-            tiles[key] = Tile(position: pos, snapshot: snapshot)
-            fulfill()
+          let tile = Tile(position: pos, snapshot: snapshot)
+          tiles[key] = tile
+          for objectId in tile.objectIds {
+            removedObjectIds.remove(objectId)
           }
+          return tile.loadObjects()
         }
         promises.append(promise)
       }
     }
+    //
+    // Uncache + Cache objects
+    //
+    for id in removedObjectIds {
+      GameObject.cache.removeValueForKey(id)
+    }
+
     return when(promises)
   }
   /**

@@ -15,9 +15,11 @@ class LocalPlayer : Player {
       return Promise { fulfill, reject in fulfill(nil) }
     }
     return Data.loadSnapshot("/players/\(playerID)").then { (snapshot) -> LocalPlayer in
-      Account.player = LocalPlayer(playerID: playerID, snapshot: snapshot)
-      Account.player?.lastLogin = NSDate().timeIntervalSince1970
-      return Account.player!
+      let player = LocalPlayer(playerID: playerID, snapshot: snapshot)
+      Account.player = player
+      player.lastLogin = NSDate().timeIntervalSince1970
+      GameObject.cache[player.id] = player
+      return player
     }
   }
 

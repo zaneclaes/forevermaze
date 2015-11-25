@@ -31,6 +31,9 @@ class GameScene: SKScene {
   }
 
   override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    Account.player?.step()
+    Map.load(Account.player!.position)
+    
     /*Map.rebuild().then { () -> Void in
       DDLogInfo("Rebuilt World")
     }.error { (error) -> Void in

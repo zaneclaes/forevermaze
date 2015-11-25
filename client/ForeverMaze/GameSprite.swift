@@ -38,8 +38,8 @@ class GameSprite : NSObject {
 
   var firebaseProperties:[String] {
     return Utils.getProperties(self, filter: { (name, attributes) -> (Bool) in
-      // Not read-only implies writablitiy.
-      return attributes.rangeOfString(",R") != nil
+      // Not read-only implies writablitiy, or Q implies private (I think?)
+      return attributes.rangeOfString(",R") != nil && attributes.rangeOfString("Q,") == nil
     })
   }
 

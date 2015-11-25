@@ -18,10 +18,15 @@ class Player : Mobile {
   init (playerID: String!, snapshot: FDataSnapshot!) {
     self.playerID = playerID
     super.init(snapshot: snapshot)
+    self.alias = self.alias == nil ? "Player" : self.alias
   }
 
   override var description:String {
-    return "<\(self.dynamicType) \(playerID)>: \(alias!) \(self.box)"
+    return "<\(self.dynamicType) \(playerID)>: \(alias!) @ \(self.position)"
+  }
+
+  override var id:String {
+    return "/players/\(self.playerID)"
   }
 
   var isCurrentUser: Bool {

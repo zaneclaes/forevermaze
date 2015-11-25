@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import PromiseKit
 
 let NumberOfEmotions: UInt32 = 4
 
@@ -31,11 +32,23 @@ enum Emotion: Int {
 class Tile : GameSprite {
 
   let position: MapPosition
-  dynamic var e:Int = 0
+  private dynamic var e:Int = 0
+  dynamic var objectIds:Array<String> = []
 
   init(position: MapPosition, snapshot: FDataSnapshot) {
     self.position = position
     super.init(snapshot: snapshot)
+  }
+
+  func removeObject(obj: GameObject) {
+    let idx = self.objectIds.indexOf(obj.id)
+    if idx >= 0 {
+      self.objectIds.removeAtIndex(idx!)
+    }
+  }
+
+  func addObject(obj: GameObject) {
+    self.objectIds.append(obj.id)
   }
 
   var emotion: Emotion {
@@ -44,5 +57,18 @@ class Tile : GameSprite {
 
   override var description:String {
     return "<Tile \(position.x)x\(position.y)>: \(emotion)"
+  }
+
+  var loaded: Bool {
+    for id in self.objectIds {
+      if GameObject.cache[id] == nil {
+        return false
+      }
+    }
+    return true
+  }
+
+  func loadObjects() -> Promise<Void> {
+    return Data.loadObjects(self.objectIds)
   }
 }
