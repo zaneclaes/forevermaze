@@ -48,10 +48,7 @@ class Mobile : GameObject {
   }
 
   func move(xDist: Int, yDist: Int) {
-    self.position = MapPosition(
-      xIndex: self.position.xIndex + xDist,
-      yIndex: self.position.yIndex + yDist
-    )
+    self.position = self.position + (xDist, yDist)
   }
 
   func step(direction: Direction) {

@@ -12,7 +12,6 @@ import SpriteKit
 class GameViewController: UIViewController {
 
   override func viewDidLoad() {
-    Config.setup()
     super.viewDidLoad()
     let scene = AccountScene(size: view.bounds.size)
     let skView = view as! SKView

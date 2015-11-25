@@ -25,10 +25,10 @@ class GameObject : GameSprite {
 
   var position: MapPosition {
     set {
-      Map.getTile(self.position)?.removeObject(self)
+      Map.tiles[self.position]?.removeObject(self)
       self.x = newValue.x
       self.y = newValue.y
-      Map.getTile(self.position)?.addObject(self)
+      Map.tiles[self.position]?.addObject(self)
     }
     get {
       return MapPosition(x: self.x, y: self.y)

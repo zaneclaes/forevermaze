@@ -21,7 +21,9 @@ class AccountScene: SKScene {
 
     UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 
-    Account.resume().then { (player) -> Void in
+    Config.setup().then { () -> Promise<LocalPlayer!> in
+      return Account.resume()
+    }.then { (player) -> Void in
       DDLogInfo("[PLAYER]: \(player)")
       self.pushGameScene()
     }.always {

@@ -16,6 +16,13 @@ import PromiseKit
  * Translates between positions (UInt) and indicies (Int)
  * Indicies are useful for wraparound data
  ***********************************************************************/
+func + (p1: MapPosition, p2: MapPosition) -> MapPosition {
+  return MapPosition(xIndex: p1.xIndex + p2.xIndex, yIndex: p1.yIndex + p2.yIndex)
+}
+func + (p1: MapPosition, p2: (Int, Int)) -> MapPosition {
+  return MapPosition(xIndex: p1.xIndex + p2.0, yIndex: p1.yIndex + p2.1)
+}
+
 struct MapPosition : CustomStringConvertible {
   var x: UInt
   var y: UInt
@@ -105,12 +112,25 @@ struct MapBox : CustomStringConvertible {
 /************************************************************************
  * Main Map Interface
  ***********************************************************************/
-class Map {
-  static var tiles: [String: Tile] = [:]
+class MapTiles {
+  var cache: [String: Tile] = [:]
 
-  static func getTile(position: MapPosition) -> Tile! {
-    return tiles["\(position.x)x\(position.y)"]
+  func evict(key: String) {
+    cache.removeValueForKey(key)
   }
+
+  subscript(position: MapPosition) -> Tile! {
+    get { return self.cache["\(position.x)x\(position.y)"]        }
+    set { self.cache["\(position.x)x\(position.y)"] = newValue    }
+  }
+
+  subscript(key: String) -> Tile! {
+    return self.cache[key]
+  }
+}
+class Map {
+  static var tiles = MapTiles()
+
   /**
    * Load the map into the tiles array based upon Config.screenTiles
    * If a tile already exists, it does not reload it.
@@ -122,14 +142,14 @@ class Map {
     //
     // Evict any old tiles...
     //
-    let keys = tiles.keys
+    let keys = tiles.cache.keys
     for key in keys {
       let tile = tiles[key]
       if !boundingBox.contains(tile!.position) {
         for objectId in tile!.objectIds {
           removedObjectIds.insert(objectId)
         }
-        tiles.removeValueForKey(key)
+        tiles.evict(key)
       }
     }
     //
@@ -140,12 +160,12 @@ class Map {
       for (var y = boundingBox.origin.yIndex; y < Int(boundingBox.size.height) + boundingBox.origin.yIndex; y++) {
         let pos = MapPosition(xIndex: x, yIndex: y)
         let key = "\(pos.x)x\(pos.y)"
-        if tiles[key] != nil {
+        if tiles[pos] != nil {
           continue
         }
         let promise = Data.loadSnapshot("/tiles/\(key)").then { (snapshot) -> Promise<Void> in
           let tile = Tile(position: pos, snapshot: snapshot)
-          tiles[key] = tile
+          tiles[pos] = tile
           for objectId in tile.objectIds {
             removedObjectIds.remove(objectId)
           }

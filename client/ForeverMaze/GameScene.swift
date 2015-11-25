@@ -10,8 +10,19 @@ import SpriteKit
 import PromiseKit
 import CocoaLumberjack
 
-class GameScene: SKScene {
+class GameScene: IsoScene {
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  init(size: CGSize) {
+    super.init(mapSize: Config.worldSize, size: size)
+  }
+
   override func didMoveToView(view: SKView) {
+    super.didMoveToView(view)
+
     let label = SKLabelNode(text: "Loading World...")
     label.color = SKColor.whiteColor()
     label.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y: CGRectGetMidY(self.scene!.frame))
@@ -19,15 +30,28 @@ class GameScene: SKScene {
 
     Map.load(Account.player!.position).then { () -> Void in
       DDLogInfo("Loaded.")
+      self.placeAllTilesIso()
       label.removeFromParent()
     }.error { (error) -> Void in
       label.text = "\(error)"
       DDLogError("World Error \(error)")
     }
 
+    /*
     let tex = SKSpriteNode(imageNamed: "droid_e")
     tex.position = CGPointMake(100, 200)
-    self.addChild(tex)
+    self.addChild(tex)*/
+  }
+
+  override func placeAllTilesIso() {
+    for i in 0..<32 {
+      for j in 0..<32 {
+        let tile = Map.tiles[(Account.player?.position)!]
+        let direction = Direction(rawValue: 0)!
+        let point = point2DToIso(CGPoint(x: (j*tileSize.width), y: -(i*tileSize.height)))
+        placeTileIso(tile, direction:direction, position:point)
+      }
+    }
   }
 
   override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
