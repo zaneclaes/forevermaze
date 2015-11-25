@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import CocoaLumberjack
 
 func + (left: CGPoint, right: CGPoint) -> CGPoint {
   return CGPoint(x: left.x + right.x, y: left.y + right.y)
@@ -51,6 +52,8 @@ class IsoScene: SKScene {
   let layerIsoGround:SKNode
   let layerIsoObjects:SKNode
   let tileSize = (width:32, height:32)
+  var touches = Set<UITouch>()
+  var firstTouchLocation = CGPointZero
 
   init(mapSize: MapSize, size: CGSize) {
     viewIso = SKSpriteNode()
@@ -71,6 +74,46 @@ class IsoScene: SKScene {
     viewIso.addChild(layerIsoGround)
     viewIso.addChild(layerIsoObjects)
     addChild(viewIso)
+  }
+
+  var dPadDirection:Direction? {
+    if self.touches.count != 1 || firstTouchLocation.x > self.size.width/2 {
+      // We must have exactly one touch that started on the left side of the screen
+      return nil
+    }
+    let touch = self.touches.first!
+    let loc = touch.locationInView(self.view)
+    let coords = loc - firstTouchLocation
+    let degrees = 180 + Int(Float(M_PI_2) - Float(180 / M_PI) * atan2f(Float(coords.x), Float(coords.y)))
+    return Direction(degrees: degrees)
+  }
+
+  func updateTouches(touches: Set<UITouch>) {
+    if self.touches.count <= 0 && touches.count > 0 {
+      firstTouchLocation = touches.first!.locationInView(self.view)
+    }
+    self.touches.unionInPlace(touches)
+  }
+
+  func endTouches(touches: Set<UITouch>) {
+    self.touches.subtractInPlace(touches)
+    firstTouchLocation = CGPointZero
+  }
+
+  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    self.updateTouches(touches)
+  }
+
+  override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    self.endTouches(touches)
+  }
+
+  override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
+    self.endTouches(touches!)
+  }
+
+  override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    self.updateTouches(touches)
   }
 
   func placeTileIso(tile:Tile, direction:Direction, position:CGPoint) {

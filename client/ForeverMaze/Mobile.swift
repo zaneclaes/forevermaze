@@ -36,6 +36,13 @@ enum Direction: Int {
     case NW:return (-1,1)
     }
   }
+
+  init?(degrees: Int) {
+    let degreesPerDirection = Int(360 / 8)
+    let rotatedDegrees = degrees + degreesPerDirection / 2
+    let raw = Int(rotatedDegrees / degreesPerDirection)
+    self.init(rawValue: raw)
+  }
 }
 
 class Mobile : GameObject {

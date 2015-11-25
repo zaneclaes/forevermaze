@@ -54,18 +54,20 @@ class GameScene: IsoScene {
     }
   }
 
-  override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-    Account.player?.step()
-    Map.load(Account.player!.position)
-    
-    /*Map.rebuild().then { () -> Void in
-      DDLogInfo("Rebuilt World")
-    }.error { (error) -> Void in
-      DDLogError("World Error \(error)")
-    }*/
-  }
-  
+  /*Map.rebuild().then { () -> Void in
+  DDLogInfo("Rebuilt World")
+  }.error { (error) -> Void in
+  DDLogError("World Error \(error)")
+  }*/
+
   override func update(currentTime: CFTimeInterval) {
-    /* Called before each frame is rendered */
+    let dir = self.dPadDirection
+    if dir != nil {
+      Account.player?.direction = dir!
+      Account.player?.step()
+      Map.load(Account.player!.position)
+      DDLogInfo("\(Account.player!)")
+    }
+    super.update(currentTime)
   }
 }

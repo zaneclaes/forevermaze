@@ -22,7 +22,7 @@ class Player : Mobile {
   }
 
   override var description:String {
-    return "<\(self.dynamicType) \(playerID)>: \(alias!) @ \(self.position)"
+    return "<\(self.dynamicType) \(playerID)>: \(alias!) @\(self.position)->\(self.direction)"
   }
 
   override var id:String {
