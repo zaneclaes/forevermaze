@@ -24,15 +24,22 @@ class GameSprite : NSObject {
     self.properties = []
     super.init()
 
-    for attribute in self.getDynamicAttributes() {
-      self.addProperty(attribute)
+    for property in self.firebaseProperties {
+      // Assign the initial variable from the snapshot:
+      if snapshot.hasChild(property) {
+        let val = snapshot.childSnapshotForPath(property).value
+        self.setValue(val, forKey: property)
+      }
+
+      // Begin KVO:
+      self.addProperty(property)
     }
   }
 
-  func getDynamicAttributes() -> [String] {
+  var firebaseProperties:[String] {
     return Utils.getProperties(self, filter: { (name, attributes) -> (Bool) in
       // Not read-only implies writablitiy.
-      return attributes.rangeOfString(",R,") != nil
+      return attributes.rangeOfString(",R") != nil
     })
   }
 

@@ -9,22 +9,31 @@
 import Foundation
 import Firebase
 
-enum Direction: Int {
-  case N,NE,E,SE,S,SW,W,NW
+class GameObject : GameSprite {
+  private dynamic var x: UInt = 0
+  private dynamic var y: UInt = 0
+  private dynamic var width: UInt = 1
+  private dynamic var height: UInt = 1
 
-  var description:String {
-    switch self {
-    case N: return "North"
-    case NE:return "North East"
-    case E: return "East"
-    case SE:return "South East"
-    case S: return "South"
-    case SW:return "South West"
-    case W: return "West"
-    case NW:return "North West"
+  override var firebaseProperties:[String] {
+    return super.firebaseProperties + ["x","y","width","height"]
+  }
+
+  var size: MapSize {
+    return MapSize(width: max(1, self.width), height: max(1, self.height))
+  }
+
+  var position: MapPosition {
+    set {
+      self.x = newValue.x
+      self.y = newValue.y
+    }
+    get {
+      return MapPosition(x: self.x, y: self.y)
     }
   }
-}
 
-class GameObject : GameSprite {
+  var box: MapBox {
+    return MapBox(origin: self.position, size: self.size)
+  }
 }

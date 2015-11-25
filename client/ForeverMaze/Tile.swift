@@ -30,33 +30,19 @@ enum Emotion: Int {
 
 class Tile : GameSprite {
 
-  let x: UInt
-  let y: UInt
-  dynamic var e:Int
+  let position: MapPosition
+  dynamic var e:Int = 0
 
-  init(x: UInt, y: UInt, snapshot: FDataSnapshot) {
-    self.x = x
-    self.y = y
-    self.e = 0
+  init(position: MapPosition, snapshot: FDataSnapshot) {
+    self.position = position
     super.init(snapshot: snapshot)
-  }
-
-  func randomizeEmotion() {
-    self.connection.childByAppendingPath("e").setValue(Emotion.random().rawValue)
   }
 
   var emotion: Emotion {
     return Emotion(rawValue: self.e)!
   }
 
-  /*
-  static func randomizeMap(size: UInt) {
-    for (var x: UInt = 0; x < size; x++) {
-      for (var y: UInt = 0; y < size; y++) {
-        let tile: Tile = Tile(x: x, y: y)
-        tile.randomizeEmotion()
-      }
-    }
-  }*/
-
+  override var description:String {
+    return "<Tile \(position.x)x\(position.y)>: \(emotion)"
+  }
 }

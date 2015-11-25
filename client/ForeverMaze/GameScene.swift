@@ -17,7 +17,8 @@ class GameScene: SKScene {
     label.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y: CGRectGetMidY(self.scene!.frame))
     self.addChild(label)
 
-    Map.world.load().then { (map) -> Void in
+    Map.load(Account.player!.position).then { () -> Void in
+      DDLogInfo("Loaded.")
       label.removeFromParent()
     }.error { (error) -> Void in
       label.text = "\(error)"
@@ -30,6 +31,11 @@ class GameScene: SKScene {
   }
 
   override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    /*Map.rebuild().then { () -> Void in
+      DDLogInfo("Rebuilt World")
+    }.error { (error) -> Void in
+      DDLogError("World Error \(error)")
+    }*/
   }
   
   override func update(currentTime: CFTimeInterval) {
