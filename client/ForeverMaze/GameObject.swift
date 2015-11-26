@@ -44,8 +44,12 @@ enum Direction: Int {
   }
 
   init?(degrees: Int) {
-    let degreesPerDirection = Int(360 / 8)
-    self.init(rawValue: degrees / degreesPerDirection)
+    let degreesPerDirection = Double(360 / 8)
+    var rotatedDegrees = Double(degrees) - degreesPerDirection/2
+    rotatedDegrees = rotatedDegrees > 360 ? (rotatedDegrees - 360) : rotatedDegrees
+    rotatedDegrees = rotatedDegrees < 0 ? (rotatedDegrees + 360) : rotatedDegrees
+    let raw = Int(floor(rotatedDegrees / degreesPerDirection))
+    self.init(rawValue: raw)
   }
 }
 
@@ -65,8 +69,8 @@ class GameObject : GameSprite {
     // Build texture cache...
     self.sprite = SKSpriteNode(imageNamed: assetName)
     for dir in Direction.directions {
-      let assetName = self.assetPrefix + dir.description.lowercaseString
-      GameObject.textureCache[assetName] = SKTexture(imageNamed: assetName)
+      let textureName = self.assetPrefix + dir.description.lowercaseString
+      GameObject.textureCache[textureName] = SKTexture(imageNamed: textureName)
     }
   }
 
@@ -78,15 +82,11 @@ class GameObject : GameSprite {
     return self.assetPrefix + self.direction.description.lowercaseString
   }
 
-  private func updateSprite() {
-    self.sprite.texture = GameObject.textureCache[assetName]
-  }
-
   var direction:Direction {
     set {
       if self.dir != newValue.rawValue {
         self.dir = newValue.rawValue
-        self.updateSprite()
+        self.sprite.texture = GameObject.textureCache[assetName]
       }
     }
     get { return Direction(rawValue: self.dir)! }
@@ -125,7 +125,7 @@ class GameObject : GameSprite {
       let path = snapshot.ref.description.stringByReplacingOccurrencesOfString(Config.firebaseUrl + "/", withString: "")
       let parts = path.componentsSeparatedByString("/")
       let root = parts.first?.lowercaseString
-      let type = snapshot.childSnapshotForPath("type").value as! String
+      let type = snapshot.childSnapshotForPath("type").value as? String
       let objId:String! = parts.count > 1 ? parts[1] : nil
       var obj:GameObject! = nil
       if objId == nil {

@@ -68,7 +68,7 @@ class IsoScene: SKScene {
   override func didMoveToView(view: SKView) {
     let deviceScale = self.size.width/667
 
-    viewIso.position = CGPoint(x:self.size.width*0, y:self.size.height*0.25)
+    viewIso.position = CGPoint(x:self.size.width * -0.25, y:self.size.height * -0.25)
     viewIso.xScale = deviceScale
     viewIso.yScale = deviceScale
     viewIso.addChild(layerIsoGround)
@@ -76,6 +76,9 @@ class IsoScene: SKScene {
     addChild(viewIso)
   }
 
+  /************************************************************************
+   * Touches & Controls
+   ***********************************************************************/
   var dPadDirection:Direction? {
     if self.touches.count != 1 || firstTouchLocation.x > self.size.width/2 {
       // We must have exactly one touch that started on the left side of the screen
@@ -83,6 +86,9 @@ class IsoScene: SKScene {
     }
     let touch = self.touches.first!
     let loc = touch.locationInView(self.view)
+    if distance(loc, p2: firstTouchLocation) < 10 {
+      return nil
+    }
     let coords = loc - firstTouchLocation
     let degrees = 180 + Int(Float(M_PI_2) - Float(180 / M_PI) * atan2f(Float(coords.x), Float(coords.y)))
     return Direction(degrees: degrees)
@@ -115,12 +121,24 @@ class IsoScene: SKScene {
   override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
     self.updateTouches(touches)
   }
+  /************************************************************************
+   * Object Management
+   ***********************************************************************/
 
   private func addGameSprite(gameSprite:GameSprite, at: MapPosition, inLayer:SKNode) {
-    let position = at - self.mapBox.origin
-    gameSprite.sprite.position = point2DToIso(CGPoint(x: (position.xIndex*tileSize.width), y: -(position.yIndex*tileSize.height)))
+    gameSprite.sprite.position = mapPositionToIsoPoint(at)
     gameSprite.sprite.anchorPoint = CGPoint(x:0, y:0)
     inLayer.addChild(gameSprite.sprite)
+    /*
+    if inLayer == layerIsoGround {
+      let label = SKLabelNode(text: (at - self.mapBox.origin).description)
+      label.color = SKColor.whiteColor()
+      label.fontName = "AvenirNext-Bold"
+      label.fontSize = 12
+      label.zPosition = 1
+      label.position = gameSprite.sprite.position + CGPoint(x: tileSize.width, y: tileSize.height/2)
+      layerIsoObjects.addChild(label)
+    }*/
   }
 
   func addObject(obj:GameObject) {
@@ -131,14 +149,14 @@ class IsoScene: SKScene {
     self.addGameSprite(tile, at: tile.position, inLayer: layerIsoGround)
   }
 
-  func placeAllTilesIso() {
-    fatalError("IsoScene requires placeAllTilesIso to be implemented")
-  }
+  /************************************************************************
+   * point/position math
+   ***********************************************************************/
 
-  func point2DToIso(p:CGPoint) -> CGPoint {
-    var point = p * CGPoint(x:1, y:-1)
-    point = CGPoint(x:(point.x - point.y), y: ((point.x + point.y) / 2))
-    point = point * CGPoint(x:1, y:-1)
+  func mapPositionToIsoPoint(pos:MapPosition) -> CGPoint {
+    let position = pos - self.mapBox.origin
+    let pixels = CGPoint(x: (position.xIndex*tileSize.width), y: (position.yIndex*tileSize.height))
+    let point = CGPoint(x:((pixels.x + pixels.y)), y: (pixels.y - pixels.x)/2)
     return point
   }
 
@@ -160,7 +178,6 @@ class IsoScene: SKScene {
     return CGPoint(x: Int(pos.x * mapBox.size.width), y: Int(pos.y * mapBox.size.height))
   }
 
-
   func degreesToDirection(var degrees:CGFloat) -> Direction {
     if (degrees < 0) {
       degrees = degrees + 360
@@ -174,7 +191,6 @@ class IsoScene: SKScene {
     }
     return Direction(rawValue: direction)!
   }
-
 
   func isoOcclusionZSort() {
     let childrenSortedForDepth = layerIsoObjects.children.sort() {
@@ -194,8 +210,5 @@ class IsoScene: SKScene {
   }
 
   override func update(currentTime: CFTimeInterval) {
-    // TODO: determine when a depth sort is needed.
-    // IsoGame used a nth-frame timer, which seems silly.
-    isoOcclusionZSort()
   }
 }
