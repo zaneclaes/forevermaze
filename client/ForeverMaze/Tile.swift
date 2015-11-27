@@ -39,6 +39,8 @@ enum Emotion: Int {
 }
 
 class Tile : GameSprite {
+  static let assetName = "iso_3d_ground"
+  static let texture = SKTexture(imageNamed: Tile.assetName)
 
   let position: MapPosition
   private dynamic var e:Int = 0
@@ -47,9 +49,18 @@ class Tile : GameSprite {
   init(position: MapPosition, snapshot: FDataSnapshot) {
     self.position = position
     super.init(snapshot: snapshot)
-    self.sprite = SKSpriteNode(imageNamed: "iso_3d_ground")
+    self.sprite = SKSpriteNode(texture: Tile.texture)
     self.sprite.color = self.emotion.color
     self.sprite.colorBlendFactor = 1.0
+
+    /*
+    let label = SKLabelNode(text: self.position.description)
+    label.color = SKColor.whiteColor()
+    label.fontName = "AvenirNext-Bold"
+    label.fontSize = 12
+    label.zPosition = 1
+    label.position = CGPoint(x: self.sprite.size.width/2, y: self.sprite.size.height/2)
+    self.sprite.addChild(label)*/
   }
 
   func removeObject(obj: GameObject) {

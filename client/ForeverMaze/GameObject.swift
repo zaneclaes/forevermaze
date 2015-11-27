@@ -66,11 +66,27 @@ class GameObject : GameSprite {
 
   override init(snapshot: FDataSnapshot!) {
     super.init(snapshot: snapshot)
-    // Build texture cache...
     self.sprite = SKSpriteNode(imageNamed: assetName)
+  }
+  /**
+   * Write all the missing SKTextures into the textureCache 
+   * Also preload them from disk to avoid any later flickering
+   */
+  func cacheTextures() -> Promise<Void> {
+    var textures = Array<SKTexture>()
     for dir in Direction.directions {
       let textureName = self.assetPrefix + dir.description.lowercaseString
-      GameObject.textureCache[textureName] = SKTexture(imageNamed: textureName)
+      if (GameObject.textureCache[textureName] != nil) {
+        continue
+      }
+      let tex = SKTexture(imageNamed: textureName)
+      GameObject.textureCache[textureName] = tex
+      textures.append(tex)
+    }
+    return Promise { fulfill, reject in
+      SKTexture.preloadTextures(textures) { () -> Void in
+        fulfill()
+      }
     }
   }
 
@@ -142,17 +158,20 @@ class GameObject : GameSprite {
         }
       }
 
-      // Cache the object so we can find it later easily
-      if obj != nil {
-        cache[obj.id] = obj
+      if (obj == nil) {
+        // We don't error out because this is frequently used in chains
+        // objects might not always exist, if data is in a suboptimal state
+        fulfill(nil)
+        return
       }
 
-      // We don't error out because this is frequently used in chains
-      // objects might not always exist, if data is in a suboptimal state
-      fulfill(obj)
+      // Cache the object so we can find it later easily
+      cache[obj.id] = obj
+      obj.cacheTextures().then { (o) -> Void in
+        fulfill(obj)
+      }
     }
   }
-
   /**
    * Cleanup also uncaches textures from the static textureCache when they're not needed.
    */

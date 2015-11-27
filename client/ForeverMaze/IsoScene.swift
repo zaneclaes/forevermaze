@@ -47,19 +47,23 @@ class IsoScene: SKScene {
     fatalError("init(coder:) has not been implemented")
   }
 
-  var mapBox: MapBox
+  var center: MapPosition
+  let worldSize: MapSize
   let viewIso:SKSpriteNode
   let layerIsoGround:SKNode
   let layerIsoObjects:SKNode
+  var playerSprite:SKSpriteNode? = nil
   let tileSize = (width:32, height:32)
   var touches = Set<UITouch>()
   var firstTouchLocation = CGPointZero
+  var tiles:[MapPosition:Tile] = [:]
 
-  init(mapBox: MapBox, size: CGSize) {
+  init(center: MapPosition, worldSize: MapSize, size: CGSize) {
     viewIso = SKSpriteNode()
     layerIsoGround = SKNode()
     layerIsoObjects = SKNode()
-    self.mapBox = mapBox
+    self.worldSize = worldSize
+    self.center = center
 
     super.init(size: size)
     self.anchorPoint = CGPoint(x:0.5, y:0.5)
@@ -68,7 +72,8 @@ class IsoScene: SKScene {
   override func didMoveToView(view: SKView) {
     let deviceScale = self.size.width/667
 
-    viewIso.position = CGPoint(x:self.size.width * -0.25, y:self.size.height * -0.25)
+    viewIso.anchorPoint = CGPointZero
+    viewIso.position = mapPositionToIsoPoint(self.center) * CGPointMake(-1, -1)
     viewIso.xScale = deviceScale
     viewIso.yScale = deviceScale
     viewIso.addChild(layerIsoGround)
@@ -129,16 +134,6 @@ class IsoScene: SKScene {
     gameSprite.sprite.position = mapPositionToIsoPoint(at)
     gameSprite.sprite.anchorPoint = CGPoint(x:0, y:0)
     inLayer.addChild(gameSprite.sprite)
-    /*
-    if inLayer == layerIsoGround {
-      let label = SKLabelNode(text: (at - self.mapBox.origin).description)
-      label.color = SKColor.whiteColor()
-      label.fontName = "AvenirNext-Bold"
-      label.fontSize = 12
-      label.zPosition = 1
-      label.position = gameSprite.sprite.position + CGPoint(x: tileSize.width, y: tileSize.height/2)
-      layerIsoObjects.addChild(label)
-    }*/
   }
 
   func addObject(obj:GameObject) {
@@ -146,7 +141,20 @@ class IsoScene: SKScene {
   }
 
   func addTile(tile:Tile) {
+    if self.tiles[tile.position] != nil {
+      return
+    }
     self.addGameSprite(tile, at: tile.position, inLayer: layerIsoGround)
+    self.tiles[tile.position] = tile
+  }
+
+  func removeTile(position: MapPosition) -> Tile? {
+    let tile = self.tiles[position]
+    if tile != nil {
+      self.tiles.removeValueForKey(position)
+      tile!.sprite.removeFromParent()
+    }
+    return tile
   }
 
   /************************************************************************
@@ -154,8 +162,7 @@ class IsoScene: SKScene {
    ***********************************************************************/
 
   func mapPositionToIsoPoint(pos:MapPosition) -> CGPoint {
-    let position = pos - self.mapBox.origin
-    let pixels = CGPoint(x: (position.xIndex*tileSize.width), y: (position.yIndex*tileSize.height))
+    let pixels = CGPoint(x: (pos.xIndex*tileSize.width), y: (pos.yIndex*tileSize.height))
     let point = CGPoint(x:((pixels.x + pixels.y)), y: (pixels.y - pixels.x)/2)
     return point
   }
@@ -169,13 +176,13 @@ class IsoScene: SKScene {
 
   func point2DToPosition(point:CGPoint) -> MapPosition {
     return MapPosition(
-      xIndex: Int(point.x / CGFloat(mapBox.size.width)),
-      yIndex: Int(point.y / CGFloat(mapBox.size.height))
+      xIndex: Int(point.x / CGFloat(worldSize.width)),
+      yIndex: Int(point.y / CGFloat(worldSize.height))
     )
   }
 
   func positionToPoint2D(pos:MapPosition) -> CGPoint {
-    return CGPoint(x: Int(pos.x * mapBox.size.width), y: Int(pos.y * mapBox.size.height))
+    return CGPoint(x: Int(pos.x * worldSize.width), y: Int(pos.y * worldSize.height))
   }
 
   func degreesToDirection(var degrees:CGFloat) -> Direction {
@@ -209,6 +216,74 @@ class IsoScene: SKScene {
     }
   }
 
+  /************************************************************************
+   * steps / walking
+   ***********************************************************************/
+
+  func drawWorld() {
+    let boundingBox:MapBox = MapBox(center: self.center, size: Config.screenTiles)
+    for i in 0..<Int(boundingBox.size.width) {
+      for j in 0..<Int(boundingBox.size.height) {
+        let position = boundingBox.origin + (i,j)
+        if Map.tiles.contains(position) {
+          addTile(Map.tiles[position])
+        }
+      }
+    }
+    for tile in self.tiles.values {
+      if !boundingBox.contains(tile.position) {
+        removeTile(tile.position)
+      }
+    }
+  }
+
+  private func onMoved() {
+    let qualityOfServiceClass = QOS_CLASS_BACKGROUND
+    let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
+    dispatch_async(backgroundQueue, {
+      Map.load(Account.player!.position).then { () -> Void in
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+          self.drawWorld()
+          self.isoOcclusionZSort()
+        })
+      }
+    })
+  }
+
+  private func checkStep() {
+    let dir = self.dPadDirection
+    if dir == nil {
+      return
+    }
+    let oldPoint = self.mapPositionToIsoPoint(self.center)
+
+    Account.player?.direction = dir!
+    Account.player?.step()
+    self.center = (Account.player?.position)!
+    self.onMoved()
+
+    let point = self.mapPositionToIsoPoint(self.center)
+    let diff = point - oldPoint
+    let dist = Double(distance((playerSprite?.position)!, p2: point))
+    let time = dist * Config.stepTime
+
+    let moveAction = SKAction.customActionWithDuration(time, actionBlock: { (node, elapsed) -> Void in
+      let percentDone = min(elapsed / CGFloat(time), 1)
+      let pos = oldPoint + (diff * CGPoint(x: percentDone, y: percentDone))
+      self.playerSprite?.position = pos
+      self.viewIso.position = pos * CGPoint(x: -1, y: -1)
+    })
+
+    playerSprite?.runAction(SKAction.sequence([
+      moveAction,
+      SKAction.runBlock(self.checkStep)
+    ]), withKey: "step")
+  }
+
   override func update(currentTime: CFTimeInterval) {
+    if playerSprite?.actionForKey("step") == nil {
+      self.checkStep()
+    }
+    super.update(currentTime)
   }
 }

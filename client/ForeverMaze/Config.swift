@@ -17,6 +17,7 @@ class Config {
   static let device = Device()
   static let timeout = 30
   static let baseErrorDomain = NSBundle.mainBundle().bundleIdentifier
+  static let stepTime = 0.01
   static var remote:FDataSnapshot!
 
   static func setup() -> Promise<Void> {

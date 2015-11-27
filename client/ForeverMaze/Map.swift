@@ -26,7 +26,7 @@ func + (p1: MapPosition, p2: (Int, Int)) -> MapPosition {
   return MapPosition(xIndex: p1.xIndex + p2.0, yIndex: p1.yIndex + p2.1)
 }
 
-struct MapPosition : CustomStringConvertible {
+struct MapPosition : CustomStringConvertible, Hashable {
   var x: UInt
   var y: UInt
 
@@ -36,6 +36,10 @@ struct MapPosition : CustomStringConvertible {
     x = x >= Int(Config.worldSize.width) - Int(Config.screenTiles.width) ? (x - Int(Config.worldSize.width)) : x
     y = y >= Int(Config.worldSize.height) - Int(Config.screenTiles.height) ? (y - Int(Config.worldSize.height)) : y
     return (x, y)
+  }
+
+  var hashValue: Int {
+    return self.description.hashValue
   }
 
   var xIndex: Int {
@@ -62,6 +66,9 @@ struct MapPosition : CustomStringConvertible {
     let yPos = yIndex < 0 ? UInt(Int(Config.worldSize.height) + yIndex) : UInt(yIndex)
     self.y = yPos >= UInt(Config.worldSize.height) ? (yPos - UInt(Config.worldSize.height)) : yPos
   }
+}
+func ==(lhs: MapPosition, rhs: MapPosition) -> Bool {
+  return lhs.x == rhs.x && lhs.y == rhs.y
 }
 /************************************************************************
  * MapSize
@@ -120,6 +127,10 @@ class MapTiles {
 
   func evict(key: String) {
     cache.removeValueForKey(key)
+  }
+
+  func contains(position: MapPosition) -> Bool {
+    return self.cache.keys.contains("\(position.x)x\(position.y)")
   }
 
   subscript(position: MapPosition) -> Tile! {

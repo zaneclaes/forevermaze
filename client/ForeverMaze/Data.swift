@@ -44,7 +44,12 @@ class Data {
       }
       promises.append(promise)
     }
-    return when(promises)
+    if (promises.count > 0) {
+      return Promise { fulfill, reject in fulfill() }
+    }
+    else {
+      return when(promises)
+    }
   }
   /**
    * Uses loadSnapshot to infer and create a GameObject
