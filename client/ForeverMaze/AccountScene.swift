@@ -25,7 +25,12 @@ class AccountScene: SKScene {
       return Account.resume()
     }.then { (player) -> Void in
       DDLogInfo("[PLAYER]: \(player)")
-      self.pushGameScene()
+      if player != nil {
+        self.pushGameScene()
+      }
+      else {
+        label.text = "Tap to Login"
+      }
     }.always {
       UIApplication.sharedApplication().networkActivityIndicatorVisible = false
     }.error { (error) -> Void in

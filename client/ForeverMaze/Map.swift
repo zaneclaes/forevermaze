@@ -159,6 +159,9 @@ class Map {
     let keys = tiles.cache.keys
     for key in keys {
       let tile = tiles[key]
+      if tile == nil {
+        continue
+      }
       if !boundingBox.contains(tile!.position) {
         for objectId in tile!.objectIds {
           removedObjectIds.insert(objectId)

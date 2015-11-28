@@ -18,6 +18,7 @@ class Config {
   static let timeout = 30
   static let baseErrorDomain = NSBundle.mainBundle().bundleIdentifier
   static let stepTime = 0.01
+  static var worldSize = MapSize(width: 10, height: 10)
   static var remote:FDataSnapshot!
 
   static func setup() -> Promise<Void> {
@@ -29,16 +30,14 @@ class Config {
     return Data.loadSnapshot("/config").then { (snapshot) -> Promise<Void> in
       remote = snapshot
       return Promise { fulfill, reject in
+        let worldSize = remote?.childSnapshotForPath("worldSize")
+        let width:Int = (worldSize?.childSnapshotForPath("width").value as! NSNumber).integerValue
+        let height:Int = (worldSize?.childSnapshotForPath("height").value as! NSNumber).integerValue
+        self.worldSize = MapSize(width: UInt(max(10,width)), height: UInt(max(10,height)))
+
         fulfill()
       }
     }
-  }
-
-  static var worldSize:MapSize {
-    let worldSize = remote?.childSnapshotForPath("worldSize")
-    let width:Int = (worldSize?.childSnapshotForPath("width").value as! NSNumber).integerValue
-    let height:Int = (worldSize?.childSnapshotForPath("height").value as! NSNumber).integerValue
-    return MapSize(width: UInt(max(10,width)), height: UInt(max(10,height)))
   }
 
   static var screenTiles:MapSize {

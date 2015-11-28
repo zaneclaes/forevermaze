@@ -70,15 +70,22 @@ class IsoScene: SKScene {
   }
 
   override func didMoveToView(view: SKView) {
-    let deviceScale = self.size.width/667
+    let deviceScale = CGFloat(1.0) //self.size.width/667
+    let maxPos = mapPositionToIsoPoint(MapPosition(x: self.worldSize.width, y: self.worldSize.height))
 
     viewIso.anchorPoint = CGPointZero
-    viewIso.position = mapPositionToIsoPoint(self.center) * CGPointMake(-1, -1)
+    viewIso.position = self.viewIsoPositionForPoint(mapPositionToIsoPoint(self.center))
     viewIso.xScale = deviceScale
     viewIso.yScale = deviceScale
     viewIso.addChild(layerIsoGround)
     viewIso.addChild(layerIsoObjects)
+    viewIso.anchorPoint = CGPointMake(0.5, 0.5)
+    viewIso.size = CGSizeMake(maxPos.x, maxPos.y)
     addChild(viewIso)
+  }
+
+  func viewIsoPositionForPoint(p: CGPoint) -> CGPoint {
+    return p * CGPointMake(-1, -1)// + CGPointMake(self.size.width/2, self.size.height/2)
   }
 
   /************************************************************************
@@ -134,6 +141,7 @@ class IsoScene: SKScene {
     gameSprite.sprite.position = mapPositionToIsoPoint(at)
     gameSprite.sprite.anchorPoint = CGPoint(x:0, y:0)
     inLayer.addChild(gameSprite.sprite)
+    DDLogInfo("ADD: \(at) -> \(gameSprite.sprite.position)")
   }
 
   func addObject(obj:GameObject) {
@@ -151,6 +159,7 @@ class IsoScene: SKScene {
   func removeTile(position: MapPosition) -> Tile? {
     let tile = self.tiles[position]
     if tile != nil {
+      DDLogInfo("REMOVE: \(tile!.position) -> \(position)")
       self.tiles.removeValueForKey(position)
       tile!.sprite.removeFromParent()
     }
@@ -162,7 +171,7 @@ class IsoScene: SKScene {
    ***********************************************************************/
 
   func mapPositionToIsoPoint(pos:MapPosition) -> CGPoint {
-    let pixels = CGPoint(x: (pos.xIndex*tileSize.width), y: (pos.yIndex*tileSize.height))
+    let pixels = CGPoint(x: (Int(pos.x)*tileSize.width), y: (Int(pos.y)*tileSize.height))
     let point = CGPoint(x:((pixels.x + pixels.y)), y: (pixels.y - pixels.x)/2)
     return point
   }
@@ -230,11 +239,14 @@ class IsoScene: SKScene {
         }
       }
     }
+    /*
     for tile in self.tiles.values {
       if !boundingBox.contains(tile.position) {
         removeTile(tile.position)
       }
-    }
+    }*/
+    self.isoOcclusionZSort()
+    DDLogInfo("WORLD: \(self.viewIso.anchorPoint) -> \(self.viewIso.position)")
   }
 
   private func onMoved() {
@@ -242,10 +254,7 @@ class IsoScene: SKScene {
     let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
     dispatch_async(backgroundQueue, {
       Map.load(Account.player!.position).then { () -> Void in
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-          self.drawWorld()
-          self.isoOcclusionZSort()
-        })
+        dispatch_async(dispatch_get_main_queue(), self.drawWorld)
       }
     })
   }
@@ -271,7 +280,7 @@ class IsoScene: SKScene {
       let percentDone = min(elapsed / CGFloat(time), 1)
       let pos = oldPoint + (diff * CGPoint(x: percentDone, y: percentDone))
       self.playerSprite?.position = pos
-      self.viewIso.position = pos * CGPoint(x: -1, y: -1)
+      self.viewIso.position = self.viewIsoPositionForPoint(pos)
     })
 
     playerSprite?.runAction(SKAction.sequence([

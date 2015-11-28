@@ -53,14 +53,13 @@ class Tile : GameSprite {
     self.sprite.color = self.emotion.color
     self.sprite.colorBlendFactor = 1.0
 
-    /*
     let label = SKLabelNode(text: self.position.description)
     label.color = SKColor.whiteColor()
     label.fontName = "AvenirNext-Bold"
     label.fontSize = 12
     label.zPosition = 1
-    label.position = CGPoint(x: self.sprite.size.width/2, y: self.sprite.size.height/2)
-    self.sprite.addChild(label)*/
+    label.position = CGPoint(x: self.sprite.size.width/2, y: self.sprite.size.height/4)
+    self.sprite.addChild(label)
   }
 
   func removeObject(obj: GameObject) {
