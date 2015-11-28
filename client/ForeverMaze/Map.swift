@@ -25,6 +25,9 @@ func - (p1: MapPosition, p2: MapPosition) -> MapPosition {
 func + (p1: MapPosition, p2: (Int, Int)) -> MapPosition {
   return MapPosition(xIndex: p1.xIndex + p2.0, yIndex: p1.yIndex + p2.1)
 }
+func - (p1: MapPosition, p2: (Int, Int)) -> MapPosition {
+  return MapPosition(xIndex: p1.xIndex - p2.0, yIndex: p1.yIndex - p2.1)
+}
 
 struct MapPosition : CustomStringConvertible, Hashable {
   var x: UInt

@@ -264,14 +264,27 @@ class IsoScene: SKScene {
     if dir == nil {
       return
     }
-    let oldPoint = self.mapPositionToIsoPoint(self.center)
+    let oldPos = self.center
+    var oldPoint = self.mapPositionToIsoPoint(oldPos)
 
-    Account.player?.direction = dir!
-    Account.player?.step()
+    Account.player!.direction = dir!
+    Account.player!.step()
     self.center = (Account.player?.position)!
     self.onMoved()
-
+    
     let point = self.mapPositionToIsoPoint(self.center)
+    let wrapX = self.center.x == 0 || self.center.x == self.worldSize.width - 1
+    let wrapY = self.center.y == 0 || self.center.y == self.worldSize.height - 1
+    if wrapX || wrapY {
+      // Before doing step calculations, teleport around the edge of the world.
+      DDLogInfo("Wrapping from \(oldPoint) to \(point)")
+      let testPos = MapPosition(x: 5, y: 5)
+      let testPoint = self.mapPositionToIsoPoint(testPos)
+      let travelDist = testPoint - self.mapPositionToIsoPoint(testPos + Account.player!.direction.amount)
+      let teleportPoint = point + travelDist
+      self.playerSprite?.position = teleportPoint
+      oldPoint = teleportPoint
+    }
     let diff = point - oldPoint
     let dist = Double(distance((playerSprite?.position)!, p2: point))
     let time = dist * Config.stepTime
