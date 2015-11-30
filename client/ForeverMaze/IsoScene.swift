@@ -137,22 +137,26 @@ class IsoScene: SKScene {
    * Object Management
    ***********************************************************************/
 
-  private func addGameSprite(gameSprite:GameSprite, at: MapPosition, inLayer:SKNode) {
+  private func addGameSprite(gameSprite:GameSprite, at: MapPosition, inLayer:SKNode) -> Bool {
+    guard gameSprite.sprite.parent == nil else {
+      return false
+    }
     gameSprite.sprite.position = mapPositionToIsoPoint(at, closeToCenter: gameSprite.sprite != self.playerSprite)
     gameSprite.sprite.anchorPoint = CGPoint(x:0, y:0)
     inLayer.addChild(gameSprite.sprite)
+    return true
   }
 
-  func addObject(obj:GameObject) {
-    self.addGameSprite(obj, at: obj.position, inLayer: layerIsoObjects)
+  func addObject(obj:GameObject) -> Bool {
+    return self.addGameSprite(obj, at: obj.position, inLayer: layerIsoObjects)
   }
 
-  func addTile(tile:Tile) {
+  func addTile(tile:Tile) -> Bool {
     if self.tiles[tile.position] != nil {
-      return
+      return false
     }
-    self.addGameSprite(tile, at: tile.position, inLayer: layerIsoGround)
     self.tiles[tile.position] = tile
+    return self.addGameSprite(tile, at: tile.position, inLayer: layerIsoGround)
   }
 
   func removeTile(position: MapPosition) -> Tile? {
@@ -175,22 +179,20 @@ class IsoScene: SKScene {
     if closeToCenter {
       let halfW = Config.screenTiles.width/2
       if self.center.x >= (self.worldSize.width - halfW) && pos.x < halfW {
-        xPos += Int(self.center.x + 1)
+        xPos += Int(self.worldSize.width)
       }
       else if self.center.x <= halfW && pos.x >= (self.worldSize.width - halfW) {
         xPos = pos.xIndex
       }
       let halfH = Config.screenTiles.height/2
       if self.center.y >= (self.worldSize.height - halfH) && pos.y < halfH {
-        yPos += Int(self.center.y + 1)
+        yPos += Int(self.worldSize.height)
       }
       else if self.center.y <= halfH && pos.y >= (self.worldSize.height - halfH) {
         yPos = pos.yIndex
       }
     }
     
-    //let xPos = abs(Int(pos.x) - Int(self.center.x)) > abs(pos.xIndex - Int(self.center.x)) ? pos.xIndex : Int(pos.x)
-    //let yPos = abs(Int(pos.y) - Int(self.center.y)) > abs(pos.yIndex - Int(self.center.y)) ? pos.yIndex : Int(pos.y)
     let pixels = CGPoint(x: xPos * tileSize.width, y: yPos*tileSize.height)
     let point = CGPoint(x:((pixels.x + pixels.y)), y: (pixels.y - pixels.x)/2)
     return point
@@ -259,6 +261,22 @@ class IsoScene: SKScene {
       removeTile(self.tiles.values.first!.position)
     }
   }
+  
+  func drawObjects(tile: Tile) -> UInt {
+    var cnt:UInt = 0
+    for objId in tile.objectIds {
+      guard let obj = GameObject.cache[objId] else {
+        continue
+      }
+      if obj.id.hasSuffix((Account.player?.playerID)!) {
+        continue
+      }
+      if addObject(obj) {
+        cnt++
+      }
+    }
+    return cnt
+  }
 
   func drawTiles() {
     let boundingBox:MapBox = MapBox(center: self.center, size: Config.screenTiles)
@@ -266,7 +284,12 @@ class IsoScene: SKScene {
       for j in 0..<Int(boundingBox.size.height) {
         let position = boundingBox.origin + (i,j)
         if Map.tiles.contains(position) {
-          addTile(Map.tiles[position])
+          guard let tile = Map.tiles[position] else {
+            continue
+          }
+          if addTile(tile) {
+            drawObjects(tile)
+          }
         }
       }
     }

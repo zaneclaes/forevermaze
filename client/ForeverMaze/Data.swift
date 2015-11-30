@@ -59,7 +59,7 @@ class Data {
    */
   static func loadObject(id: String!) -> Promise<GameObject!> {
     return loadSnapshot(id).then { (snapshot) -> Promise<GameObject!> in
-      return GameObject.factory(snapshot)
+      return GameObject.factory(id, snapshot: snapshot)
     }
   }
   /**

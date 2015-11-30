@@ -71,6 +71,7 @@
 		2FAF468F1C0BCD8A00B1F898 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B2A76B01C023B6900172E27 /* FBSDKLoginKit.framework */; };
 		2FAF46901C0BCD8A00B1F898 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B2A76B11C023B6900172E27 /* FBSDKShareKit.framework */; };
 		2FAF46921C0BCDC000B1F898 /* ForeverMazeTests-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 2FAF46911C0BCDC000B1F898 /* ForeverMazeTests-Bridging-Header.h */; };
+		2FAF46951C0C188C00B1F898 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAF46941C0C188C00B1F898 /* String+Extensions.swift */; };
 		61508CF9E208CADD928A3BF4 /* Pods_ForeverMazeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66306F8B5EABF513C7D79A93 /* Pods_ForeverMazeTests.framework */; };
 		CAA3BD874CAB642CA12B0D45 /* Pods_ForeverMaze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A642EFC082C73A26F677CC35 /* Pods_ForeverMaze.framework */; };
 /* End PBXBuildFile section */
@@ -130,6 +131,7 @@
 		2BB884F01C0622DC006E4570 /* IsoScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IsoScene.swift; sourceTree = "<group>"; };
 		2FAF46811C0BCC7F00B1F898 /* MapTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapTests.swift; sourceTree = "<group>"; };
 		2FAF46911C0BCDC000B1F898 /* ForeverMazeTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ForeverMazeTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		2FAF46941C0C188C00B1F898 /* String+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		457A4F550D4EC648C1DC46A7 /* Pods-ForeverMazeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ForeverMazeUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ForeverMazeUITests/Pods-ForeverMazeUITests.release.xcconfig"; sourceTree = "<group>"; };
 		4EAE2995D26AE7AA31F4B635 /* Pods-ForeverMazeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ForeverMazeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ForeverMazeTests/Pods-ForeverMazeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		66306F8B5EABF513C7D79A93 /* Pods_ForeverMazeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ForeverMazeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -202,8 +204,9 @@
 		2B4E97C61BFFA5DD0066D521 /* ForeverMaze */ = {
 			isa = PBXGroup;
 			children = (
+				2FAF46931C0C186A00B1F898 /* Extensions */,
 				2BB6F12C1BFFC665009DF879 /* World */,
-				2BB884EF1C0622C9006E4570 /* Extensions & Helpers */,
+				2BB884EF1C0622C9006E4570 /* Base Classes */,
 				2BB6F1291BFFC633009DF879 /* Singletons */,
 				2BB6F12A1BFFC642009DF879 /* Main */,
 				2BB6F12B1BFFC656009DF879 /* Resources */,
@@ -323,12 +326,20 @@
 			name = Statics;
 			sourceTree = "<group>";
 		};
-		2BB884EF1C0622C9006E4570 /* Extensions & Helpers */ = {
+		2BB884EF1C0622C9006E4570 /* Base Classes */ = {
 			isa = PBXGroup;
 			children = (
 				2BB884F01C0622DC006E4570 /* IsoScene.swift */,
 			);
-			name = "Extensions & Helpers";
+			name = "Base Classes";
+			sourceTree = "<group>";
+		};
+		2FAF46931C0C186A00B1F898 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2FAF46941C0C188C00B1F898 /* String+Extensions.swift */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 		8A95AC5B9706D3F985626BDC /* Pods */ = {
@@ -621,6 +632,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FAF46951C0C188C00B1F898 /* String+Extensions.swift in Sources */,
 				2B2A76BA1C0240A300172E27 /* AccountScene.swift in Sources */,
 				2BB6F1601BFFDCB4009DF879 /* Mobile.swift in Sources */,
 				2BB6F1701BFFE499009DF879 /* GameSprite.swift in Sources */,

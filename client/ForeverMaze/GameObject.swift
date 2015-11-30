@@ -136,20 +136,15 @@ class GameObject : GameSprite {
   /**
    * Given a data snapshot, inspect path components to infer and build an object
    */
-  static func factory(snapshot: FDataSnapshot) -> Promise<GameObject!> {
+  static func factory(objId: String, snapshot: FDataSnapshot) -> Promise<GameObject!> {
     return Promise { fulfill, reject in
       let path = snapshot.ref.description.stringByReplacingOccurrencesOfString(Config.firebaseUrl + "/", withString: "")
       let parts = path.componentsSeparatedByString("/")
       let root = parts.first?.lowercaseString
       let type = snapshot.childSnapshotForPath("type").value as? String
-      let objId:String! = parts.count > 1 ? parts[1] : nil
       var obj:GameObject! = nil
-      if objId == nil {
-        fulfill(nil)
-        return
-      }
 
-      if root == "players" && objId != Account.playerID {
+      if root == "players" && !objId.hasSuffix(Account.playerID) {
         obj = Player(playerID: objId, snapshot: snapshot)
       }
       else if root == "objects" {
@@ -166,7 +161,7 @@ class GameObject : GameSprite {
       }
 
       // Cache the object so we can find it later easily
-      cache[obj.id] = obj
+      cache[objId] = obj
       obj.cacheTextures().then { (o) -> Void in
         fulfill(obj)
       }
