@@ -138,7 +138,7 @@ class IsoScene: SKScene {
    ***********************************************************************/
 
   private func addGameSprite(gameSprite:GameSprite, at: MapPosition, inLayer:SKNode) {
-    gameSprite.sprite.position = mapPositionToIsoPoint(at)
+    gameSprite.sprite.position = mapPositionToIsoPoint(at, closeToCenter: gameSprite.sprite != self.playerSprite)
     gameSprite.sprite.anchorPoint = CGPoint(x:0, y:0)
     inLayer.addChild(gameSprite.sprite)
   }
@@ -168,10 +168,36 @@ class IsoScene: SKScene {
    * point/position math
    ***********************************************************************/
 
-  func mapPositionToIsoPoint(pos:MapPosition) -> CGPoint {
-    let pixels = CGPoint(x: (Int(pos.x)*tileSize.width), y: (Int(pos.y)*tileSize.height))
+  func mapPositionToIsoPoint(pos:MapPosition, closeToCenter:Bool) -> CGPoint {
+    // Since positions can wrap around the world, we choose the point which is closest to our current center.
+    var xPos = Int(pos.x)
+    var yPos = Int(pos.y)
+    if closeToCenter {
+      let halfW = Config.screenTiles.width/2
+      if self.center.x >= (self.worldSize.width - halfW) && pos.x < halfW {
+        xPos += Int(self.center.x + 1)
+      }
+      else if self.center.x <= halfW && pos.x >= (self.worldSize.width - halfW) {
+        xPos = pos.xIndex
+      }
+      let halfH = Config.screenTiles.height/2
+      if self.center.y >= (self.worldSize.height - halfH) && pos.y < halfH {
+        yPos += Int(self.center.y + 1)
+      }
+      else if self.center.y <= halfH && pos.y >= (self.worldSize.height - halfH) {
+        yPos = pos.yIndex
+      }
+    }
+    
+    //let xPos = abs(Int(pos.x) - Int(self.center.x)) > abs(pos.xIndex - Int(self.center.x)) ? pos.xIndex : Int(pos.x)
+    //let yPos = abs(Int(pos.y) - Int(self.center.y)) > abs(pos.yIndex - Int(self.center.y)) ? pos.yIndex : Int(pos.y)
+    let pixels = CGPoint(x: xPos * tileSize.width, y: yPos*tileSize.height)
     let point = CGPoint(x:((pixels.x + pixels.y)), y: (pixels.y - pixels.x)/2)
     return point
+  }
+  
+  func mapPositionToIsoPoint(pos:MapPosition) -> CGPoint {
+    return self.mapPositionToIsoPoint(pos, closeToCenter: false)
   }
 
   func pointIsoTo2D(p:CGPoint) -> CGPoint {
@@ -227,6 +253,12 @@ class IsoScene: SKScene {
   /************************************************************************
    * steps / walking
    ***********************************************************************/
+  
+  func clearTiles() {
+    while self.tiles.values.count > 0 {
+      removeTile(self.tiles.values.first!.position)
+    }
+  }
 
   func drawTiles() {
     let boundingBox:MapBox = MapBox(center: self.center, size: Config.screenTiles)
@@ -282,6 +314,10 @@ class IsoScene: SKScene {
       let teleportPoint = point + travelDist
       self.playerSprite?.position = teleportPoint
       oldPoint = teleportPoint
+      
+      // Redraw the world, otherwise we just teleported into nothingness.
+      self.clearTiles()
+      self.drawTiles()
     }
     let diff = point - oldPoint
     let dist = Double(distance((playerSprite?.position)!, p2: point))

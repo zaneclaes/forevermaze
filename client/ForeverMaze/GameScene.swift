@@ -31,8 +31,8 @@ class GameScene: IsoScene {
     Map.load(Account.player!.position).then { () -> Void in
       DDLogInfo("Loaded.")
       
-      self.addObject(Account.player!)
       self.playerSprite = Account.player!.sprite
+      self.addObject(Account.player!)
       DDLogInfo("Player @ \(Account.player!.sprite.position)")
 
       self.center = (Account.player?.position)!
