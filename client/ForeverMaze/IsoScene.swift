@@ -141,7 +141,6 @@ class IsoScene: SKScene {
     gameSprite.sprite.position = mapPositionToIsoPoint(at)
     gameSprite.sprite.anchorPoint = CGPoint(x:0, y:0)
     inLayer.addChild(gameSprite.sprite)
-    DDLogInfo("ADD: \(at) -> \(gameSprite.sprite.position)")
   }
 
   func addObject(obj:GameObject) {
@@ -159,7 +158,6 @@ class IsoScene: SKScene {
   func removeTile(position: MapPosition) -> Tile? {
     let tile = self.tiles[position]
     if tile != nil {
-      DDLogInfo("REMOVE: \(tile!.position) -> \(position)")
       self.tiles.removeValueForKey(position)
       tile!.sprite.removeFromParent()
     }
@@ -209,6 +207,7 @@ class IsoScene: SKScene {
   }
 
   func isoOcclusionZSort() {
+    let baseZ = 5
     let childrenSortedForDepth = layerIsoObjects.children.sort() {
       let p0 = self.pointIsoTo2D($0.position)
       let p1 = self.pointIsoTo2D($1.position)
@@ -221,7 +220,7 @@ class IsoScene: SKScene {
     }
     for i in 0..<childrenSortedForDepth.count {
       let node = (childrenSortedForDepth[i] )
-      node.zPosition = CGFloat(i)
+      node.zPosition = CGFloat(i + baseZ)
     }
   }
 
@@ -229,7 +228,7 @@ class IsoScene: SKScene {
    * steps / walking
    ***********************************************************************/
 
-  func drawWorld() {
+  func drawTiles() {
     let boundingBox:MapBox = MapBox(center: self.center, size: Config.screenTiles)
     for i in 0..<Int(boundingBox.size.width) {
       for j in 0..<Int(boundingBox.size.height) {
@@ -239,14 +238,12 @@ class IsoScene: SKScene {
         }
       }
     }
-    /*
     for tile in self.tiles.values {
       if !boundingBox.contains(tile.position) {
         removeTile(tile.position)
       }
-    }*/
+    }
     self.isoOcclusionZSort()
-    DDLogInfo("WORLD: \(self.viewIso.anchorPoint) -> \(self.viewIso.position)")
   }
 
   private func onMoved() {
@@ -254,7 +251,7 @@ class IsoScene: SKScene {
     let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
     dispatch_async(backgroundQueue, {
       Map.load(Account.player!.position).then { () -> Void in
-        dispatch_async(dispatch_get_main_queue(), self.drawWorld)
+        dispatch_async(dispatch_get_main_queue(), self.drawTiles)
       }
     })
   }
@@ -273,11 +270,12 @@ class IsoScene: SKScene {
     self.onMoved()
     
     let point = self.mapPositionToIsoPoint(self.center)
-    let wrapX = self.center.x == 0 || self.center.x == self.worldSize.width - 1
-    let wrapY = self.center.y == 0 || self.center.y == self.worldSize.height - 1
+    let wrapX = (self.center.x == 0 && oldPos.x == self.worldSize.width - 1) ||
+                (self.center.x == self.worldSize.width - 1 && oldPos.x == 0)
+    let wrapY = (self.center.y == 0 && oldPos.y == self.worldSize.height - 1) ||
+                (self.center.y == self.worldSize.height - 1 && oldPos.y == 0)
     if wrapX || wrapY {
       // Before doing step calculations, teleport around the edge of the world.
-      DDLogInfo("Wrapping from \(oldPoint) to \(point)")
       let testPos = MapPosition(x: 5, y: 5)
       let testPoint = self.mapPositionToIsoPoint(testPos)
       let travelDist = testPoint - self.mapPositionToIsoPoint(testPos + Account.player!.direction.amount)

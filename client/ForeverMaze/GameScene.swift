@@ -30,12 +30,13 @@ class GameScene: IsoScene {
 
     Map.load(Account.player!.position).then { () -> Void in
       DDLogInfo("Loaded.")
-
-      self.center = (Account.player?.position)!
-      self.drawWorld()
-
+      
       self.addObject(Account.player!)
       self.playerSprite = Account.player!.sprite
+      DDLogInfo("Player @ \(Account.player!.sprite.position)")
+
+      self.center = (Account.player?.position)!
+      self.drawTiles()
 
       label.removeFromParent()
     }.error { (error) -> Void in

@@ -9,6 +9,7 @@
 import Foundation
 import Firebase
 import PromiseKit
+import CocoaLumberjack
 
 /************************************************************************
  * MapPosition
@@ -54,7 +55,7 @@ struct MapPosition : CustomStringConvertible, Hashable {
   }
 
   var description:String {
-    return "(\(x)x\(y))"
+    return "\(x)x\(y)"
   }
 
   init(x: UInt, y: UInt) {
@@ -96,29 +97,74 @@ struct MapSize : CustomStringConvertible {
 struct MapBox : CustomStringConvertible {
   let origin: MapPosition
   let size: MapSize
+  let center: MapPosition
+  
+  private var testRects:Array<CGRect> {
+    // n.b., CGRectContainsPoint(CGRectMake(0,0,1,1),CGPointMake(1,1)) -> False
+    let rectWidth = CGFloat(size.width)
+    let rectHeight = CGFloat(size.height)
+    
+    var rects = [CGRectMake(CGFloat(origin.x), CGFloat(origin.y), rectWidth, rectHeight)]
+    if wrapX {
+      rects.append(CGRectMake(CGFloat(origin.xIndex), CGFloat(origin.y), rectWidth, rectHeight))
+    }
+    if wrapY {
+      rects.append(CGRectMake(CGFloat(origin.x), CGFloat(origin.yIndex), rectWidth, rectHeight))
+    }
+    if wrapX && wrapY {
+      rects.append(CGRectMake(CGFloat(origin.xIndex), CGFloat(origin.yIndex), rectWidth, rectHeight))
+    }
+    return rects
+  }
 
   // Takes in a position, but first denormalizes into integers for easy comparison
   func contains(position: MapPosition) -> Bool {
-    let xStop = self.origin.xIndex + Int(self.size.width)
-    let yStop = self.origin.yIndex + Int(self.size.height)
-    return position.xIndex >= self.origin.xIndex && position.xIndex <= xStop &&
-            position.yIndex >= self.origin.yIndex && position.yIndex <= yStop
+    /*if (origin.x + size.width) >= UInt(CGFloat.max) || (origin.y + size.height) >= UInt(CGFloat.max) {
+      DDLogError("World is too big.")
+    }*/
+    
+    let rects = testRects
+    let point = CGPointMake(CGFloat(position.x), CGFloat(position.y))
+    for rect in rects {
+      if CGRectContainsPoint(rect, point) {
+        return true
+      }
+    }
+    return false
+  }
+  
+  var wrapX:Bool {
+    return origin.x > (Config.worldSize.width - Config.screenTiles.width)
+  }
+  
+  var wrapY:Bool {
+    return origin.y > (Config.worldSize.height - Config.screenTiles.height)
+  }
+  
+  var wraps:Bool {
+    return wrapX || wrapY
+  }
+  
+  var destination:MapPosition {
+    return MapPosition(xIndex: origin.xIndex + Int(size.width - 1), yIndex: origin.yIndex + Int(size.height - 1))
   }
 
   var description:String {
-    return "<\(self.dynamicType)>: [\(origin.x)x\(origin.y)] [\(size.width)x\(size.height)]"
+    return "<\(self.dynamicType)>: [\(origin)] [\(size)] [\(destination)]"
   }
 
   init(origin: MapPosition, size:MapSize) {
     self.origin = origin
     self.size = size
+    self.center = MapPosition(xIndex: origin.xIndex + Int(size.width/2), yIndex: origin.yIndex + Int(size.height/2))
   }
 
   init(center: MapPosition, size:MapSize) {
     self.origin = MapPosition(
-      xIndex: center.xIndex - Int(size.width/2),
-      yIndex: center.yIndex - Int(size.height/2)
+      xIndex: center.xIndex - Int(floorf(Float(size.width)/2.0)),
+      yIndex: center.yIndex - Int(floorf(Float(size.height)/2.0))
     )
+    self.center = center
     self.size = size
   }
 }
@@ -156,6 +202,7 @@ class Map {
   static func load(center: MapPosition) -> Promise<Void> {
     let boundingBox:MapBox = MapBox(center: center, size: Config.screenTiles)
     var removedObjectIds = Set<String>()
+    DDLogDebug("Loading @ \(boundingBox) around \(center)")
     //
     // Evict any old tiles...
     //
@@ -170,6 +217,7 @@ class Map {
           removedObjectIds.insert(objectId)
         }
         tiles.evict(key)
+        DDLogDebug("Evicting \(key)")
       }
     }
     //
@@ -191,6 +239,7 @@ class Map {
           }
           return tile.loadObjects()
         }
+        DDLogDebug("Caching \(key)")
         promises.append(promise)
       }
     }

@@ -54,11 +54,11 @@ class Tile : GameSprite {
     self.sprite.colorBlendFactor = 1.0
 
     let label = SKLabelNode(text: self.position.description)
-    label.color = SKColor.whiteColor()
+    label.color = SKColor.blackColor()
     label.fontName = "AvenirNext-Bold"
     label.fontSize = 12
     label.zPosition = 1
-    label.position = CGPoint(x: self.sprite.size.width/2, y: self.sprite.size.height/4)
+    label.position = CGPoint(x: self.sprite.size.width/2+1, y: self.sprite.size.height/4-1)
     self.sprite.addChild(label)
   }
 

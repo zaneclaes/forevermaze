@@ -18,7 +18,7 @@ class Config {
   static let timeout = 30
   static let baseErrorDomain = NSBundle.mainBundle().bundleIdentifier
   static let stepTime = 0.01
-  static var worldSize = MapSize(width: 10, height: 10)
+  static var worldSize = MapSize(width: 100, height: 100)
   static var remote:FDataSnapshot!
 
   static func setup() -> Promise<Void> {
@@ -41,7 +41,7 @@ class Config {
   }
 
   static var screenTiles:MapSize {
-    return MapSize(width: 10, height: 10)
+    return MapSize(width: 11, height: 11)// n.b., this should always be odd, to enforce a single point as the center of a mapbox
   }
 
 }

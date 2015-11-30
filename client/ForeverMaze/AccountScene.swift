@@ -49,6 +49,9 @@ class AccountScene: SKScene {
   }
 
   override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    if UIApplication.sharedApplication().networkActivityIndicatorVisible {
+      return
+    }
     UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 
     Account.login().then { (playerID) -> Void in
