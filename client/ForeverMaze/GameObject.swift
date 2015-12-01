@@ -9,6 +9,7 @@
 import SpriteKit
 import Firebase
 import PromiseKit
+import CocoaLumberjack
 
 enum Direction: Int {
   case N,NE,E,SE,S,SW,W,NW
@@ -103,6 +104,9 @@ class GameObject : GameSprite {
       if self.dir != newValue.rawValue {
         self.dir = newValue.rawValue
         self.sprite.texture = GameObject.textureCache[assetName]
+        if self.sprite.texture?.size() == CGSizeZero || self.sprite.texture == nil {
+          DDLogError("Texture Error: \(GameObject.textureCache)")
+        }
       }
     }
     get { return Direction(rawValue: self.dir)! }
@@ -171,7 +175,7 @@ class GameObject : GameSprite {
    * Cleanup also uncaches textures from the static textureCache when they're not needed.
    */
   override func cleanup() {
-    var texturesStillInUse = false
+    var texturesStillInUse = self.assetPrefix == Account.player?.assetPrefix
     for (_, obj) in GameObject.cache {
       if obj.assetPrefix == self.assetPrefix {
         texturesStillInUse = true
