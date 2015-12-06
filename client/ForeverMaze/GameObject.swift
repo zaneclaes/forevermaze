@@ -84,9 +84,14 @@ class GameObject : GameSprite {
       GameObject.textureCache[textureName] = tex
       textures.append(tex)
     }
-    return Promise { fulfill, reject in
-      SKTexture.preloadTextures(textures) { () -> Void in
-        fulfill()
+    if textures.count <= 0 {
+      return Promise<Void>()
+    }
+    else {
+      return Promise { fulfill, reject in
+        SKTexture.preloadTextures(textures) { () -> Void in
+          fulfill()
+        }
       }
     }
   }
@@ -140,35 +145,32 @@ class GameObject : GameSprite {
   /**
    * Given a data snapshot, inspect path components to infer and build an object
    */
-  static func factory(objId: String, snapshot: FDataSnapshot) -> Promise<GameObject!> {
-    return Promise { fulfill, reject in
-      let path = snapshot.ref.description.stringByReplacingOccurrencesOfString(Config.firebaseUrl + "/", withString: "")
-      let parts = path.componentsSeparatedByString("/")
-      let root = parts.first?.lowercaseString
-      let type = snapshot.childSnapshotForPath("type").value as? String
-      var obj:GameObject! = nil
-
-      if root == "players" && !objId.hasSuffix(Account.playerID) {
-        obj = Player(playerID: objId, snapshot: snapshot)
+  static func factory(objId: String, snapshot: FDataSnapshot) -> Promise<Void> {
+    let path = snapshot.ref.description.stringByReplacingOccurrencesOfString(Config.firebaseUrl + "/", withString: "")
+    let parts = path.componentsSeparatedByString("/")
+    let root = parts.first?.lowercaseString
+    let type = snapshot.childSnapshotForPath("type").value as? String
+    var obj:GameObject! = nil
+    
+    if root == "players" && !objId.hasSuffix(Account.playerID) {
+      obj = Player(playerID: objId, snapshot: snapshot)
+    }
+    else if root == "objects" {
+      if type == "tree" {
+        
       }
-      else if root == "objects" {
-        if type == "tree" {
-
-        }
-      }
-
-      if (obj == nil) {
-        // We don't error out because this is frequently used in chains
-        // objects might not always exist, if data is in a suboptimal state
-        fulfill(nil)
-        return
-      }
-
+    }
+    
+    
+    if (obj == nil) {
+      // We don't error out because this is frequently used in chains
+      // objects might not always exist, if data is in a suboptimal state
+      return Promise { fulfill, reject in fulfill() }
+    }
+    else {
       // Cache the object so we can find it later easily
       cache[objId] = obj
-      obj.cacheTextures().then { (o) -> Void in
-        fulfill(obj)
-      }
+      return obj.cacheTextures()
     }
   }
   /**

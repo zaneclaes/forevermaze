@@ -99,7 +99,7 @@ class IsoScene: SKScene {
     }
     let touch = self.touches.first!
     let loc = touch.locationInView(self.view)
-    if distance(loc, p2: firstTouchLocation) < 10 {
+    if distance(loc, p2: firstTouchLocation) < 3 {
       return nil
     }
     let coords = loc - firstTouchLocation

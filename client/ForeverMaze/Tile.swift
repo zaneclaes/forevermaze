@@ -80,17 +80,16 @@ class Tile : GameSprite {
   override var description:String {
     return "<Tile \(position.x)x\(position.y)>: \(emotion)"
   }
-
+  
+  private var promiseLoad:Promise<Void>? = nil
   var loaded: Bool {
-    for id in self.objectIds {
-      if GameObject.cache[id] == nil {
-        return false
-      }
-    }
-    return true
+    return (promiseLoad?.resolved)!
   }
 
   func loadObjects() -> Promise<Void> {
-    return Data.loadObjects(self.objectIds)
+    if promiseLoad == nil {
+      promiseLoad = Data.loadObjects(self.objectIds)
+    }
+    return promiseLoad!
   }
 }
