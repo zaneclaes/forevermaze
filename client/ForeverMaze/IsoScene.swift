@@ -57,6 +57,7 @@ class IsoScene: SKScene {
   var touches = Set<UITouch>()
   var firstTouchLocation = CGPointZero
   var tiles:[MapPosition:Tile] = [:]
+  var objects:[String:GameObject] = [:]
 
   init(center: MapPosition, worldSize: MapSize, size: CGSize) {
     viewIso = SKSpriteNode()
@@ -98,7 +99,7 @@ class IsoScene: SKScene {
     }
     let touch = self.touches.first!
     let loc = touch.locationInView(self.view)
-    if distance(loc, p2: firstTouchLocation) < 10 {
+    if distance(loc, p2: firstTouchLocation) < 3 {
       return nil
     }
     let coords = loc - firstTouchLocation
@@ -156,13 +157,20 @@ class IsoScene: SKScene {
       return false
     }
     self.tiles[tile.position] = tile
-    return self.addGameSprite(tile, at: tile.position, inLayer: layerIsoGround)
+    if self.addGameSprite(tile, at: tile.position, inLayer: layerIsoGround) {
+      drawObjects(tile)
+      return true
+    }
+    else {
+      return false
+    }
   }
 
   func removeTile(position: MapPosition) -> Tile? {
     let tile = self.tiles[position]
     if tile != nil {
       self.tiles.removeValueForKey(position)
+      removeObjects(tile!)
       tile!.sprite.removeFromParent()
     }
     return tile
@@ -262,6 +270,20 @@ class IsoScene: SKScene {
     }
   }
   
+  func removeObjects(tile: Tile) -> UInt {
+    let ids = self.objects.keys
+    var removed:UInt = 0
+    for id in ids {
+      let obj = self.objects[id]!
+      if obj.position == tile.position {
+        obj.sprite.removeFromParent()
+        self.objects.removeValueForKey(id)
+        removed++
+      }
+    }
+    return removed
+  }
+  
   func drawObjects(tile: Tile) -> UInt {
     var cnt:UInt = 0
     for objId in tile.objectIds {
@@ -272,6 +294,7 @@ class IsoScene: SKScene {
         continue
       }
       if addObject(obj) {
+        self.objects[obj.id] = obj
         cnt++
       }
     }
@@ -287,9 +310,7 @@ class IsoScene: SKScene {
           guard let tile = Map.tiles[position] else {
             continue
           }
-          if addTile(tile) {
-            drawObjects(tile)
-          }
+          addTile(tile)
         }
       }
     }

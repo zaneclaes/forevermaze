@@ -8,6 +8,7 @@
 
 import PromiseKit
 import Firebase
+import CocoaLumberjack
 
 extension Firebase {
   public func write(value: AnyObject!) -> Promise<Void> {
@@ -29,27 +30,20 @@ extension Firebase {
 }
 
 class Data {
+  
+  static var promiseObjects:[String:Promise<Void>] = [:]
   /**
    * Object IDs will be loaded and stored into GameObject cache
    * (not returned via the promise)
    */
   static func loadObjects(ids: [String]) -> Promise<Void> {
     var promises = Array<Promise<Void>>()
-    for id in ids {
-      if GameObject.cache[id] != nil {
-        continue
+    for id in Set(ids) {
+      if GameObject.cache[id] == nil {
+        promises.append(loadObject(id))
       }
-      let promise = loadObject(id).then { gameObject in
-        return Promise { fulfill, reject in fulfill() }
-      }
-      promises.append(promise)
     }
-    if (promises.count > 0) {
-      return Promise { fulfill, reject in fulfill() }
-    }
-    else {
-      return when(promises)
-    }
+    return promises.count > 0 ? when(promises) : Promise<Void>()
   }
   /**
    * Uses loadSnapshot to infer and create a GameObject
@@ -57,10 +51,20 @@ class Data {
    * Therefore, we can separate on the `/` character and infer
    * the type of class to use to instantiate the object.
    */
-  static func loadObject(id: String!) -> Promise<GameObject!> {
-    return loadSnapshot(id).then { (snapshot) -> Promise<GameObject!> in
-      return GameObject.factory(id, snapshot: snapshot)
+  static func loadObject(id: String!) -> Promise<Void> {
+    if self.promiseObjects[id] == nil {
+      DDLogInfo("Loading Object \(id)")
+      
+      self.promiseObjects[id] = firstly {
+        return loadSnapshot(id)
+      }.then { snapshot in
+        return GameObject.factory(id, snapshot: snapshot)
+      }.then { () -> Void in
+        promiseObjects.removeValueForKey(id)
+      }
     }
+    
+    return self.promiseObjects[id]!
   }
   /**
    * Given a path to a firebase object, get the snapshot with a timeout.
