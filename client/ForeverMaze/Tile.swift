@@ -63,6 +63,14 @@ class Tile : GameSprite {
     self.sprite.addChild(label)
   }
 
+  override func onPropertyChangedRemotely(property: String) {
+    if property == "objectIds" {
+      promiseLoad = nil
+      self.loadObjects()
+      DDLogInfo("\(self) objects changed: \(self.objectIds)")
+    }
+  }
+
   func removeObject(obj: GameObject) {
     let idx = self.objectIds.indexOf(obj.id)
     if idx >= 0 {

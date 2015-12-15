@@ -61,8 +61,6 @@ class GameObject : GameSprite {
 
   private dynamic var x: UInt = 0
   private dynamic var y: UInt = 0
-  private dynamic var width: UInt = 1
-  private dynamic var height: UInt = 1
   private dynamic var dir:Int = 0
 
   override init(snapshot: FDataSnapshot!) {
@@ -118,7 +116,7 @@ class GameObject : GameSprite {
   }
 
   var size: MapSize {
-    return MapSize(width: max(1, self.width), height: max(1, self.height))
+    return MapSize(width: 1, height: 1)
   }
 
   var position: MapPosition {
