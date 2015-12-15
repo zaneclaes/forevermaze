@@ -61,7 +61,8 @@ class GameObject : GameSprite {
 
   private dynamic var x: UInt = 0
   private dynamic var y: UInt = 0
-  private dynamic var dir:Int = 0
+  //private dynamic var dir:Int = 0
+  var direction:Direction = Direction.N
 
   override init(snapshot: FDataSnapshot!) {
     super.init(snapshot: snapshot)
@@ -102,17 +103,19 @@ class GameObject : GameSprite {
     return self.assetPrefix + self.direction.description.lowercaseString
   }
 
-  var direction:Direction {
+  private dynamic var dir:Int {
     set {
-      if self.dir != newValue.rawValue {
-        self.dir = newValue.rawValue
+      if self.direction.rawValue != newValue {
+        self.direction = Direction(rawValue: newValue)!
         self.sprite.texture = GameObject.textureCache[assetName]
         if self.sprite.texture?.size() == CGSizeZero || self.sprite.texture == nil {
           DDLogError("Texture Error: \(GameObject.textureCache)")
         }
       }
     }
-    get { return Direction(rawValue: self.dir)! }
+    get {
+      return self.direction.rawValue
+    }
   }
 
   var size: MapSize {

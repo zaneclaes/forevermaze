@@ -53,14 +53,14 @@ class Data {
    */
   static func loadObject(id: String!) -> Promise<Void> {
     if self.promiseObjects[id] == nil {
-      DDLogInfo("Loading Object \(id)")
+      DDLogDebug("Loading Object \(id)")
       
       self.promiseObjects[id] = firstly {
         return loadSnapshot(id)
       }.then { snapshot in
         return GameObject.factory(id, snapshot: snapshot)
       }.then { (gameObject) -> Void in
-        DDLogInfo("Loaded object: \(gameObject)")
+        DDLogDebug("Loaded object: \(gameObject)")
         promiseObjects.removeValueForKey(id)
       }
     }

@@ -46,20 +46,24 @@ class GameSprite : NSObject {
       for property in self.firebaseProperties {
         // Assign the initial variable from the snapshot:
         self.snapshot = snapshot
+        let oldValue = self.valueForKey(property)!
         if snapshot.hasChild(property) {
           let newValue = snapshot.childSnapshotForPath(property).value!
-          let oldValue = self.valueForKey(property)!
           if !newValue.isEqual(oldValue) {
             DDLogDebug("\(self) [Remote Value Changed]: \(property) \(oldValue) -> \(newValue)")
             self.setValue(newValue, forKey: property)
-            self.onPropertyChangedRemotely(property)
+            self.onPropertyChangedRemotely(property, oldValue: oldValue)
           }
         }
         else if self.removeValue(property) {
-          self.onPropertyChangedRemotely(property)
+          self.onPropertyChangedRemotely(property, oldValue: oldValue)
         }
       }
     })
+  }
+
+  var gameScene:GameScene {
+    return self.sprite.scene as! GameScene
   }
 
   // This is a dangerous scenario. The server does not have a representation of this object. We're setting it to nil locally.
@@ -85,7 +89,7 @@ class GameSprite : NSObject {
   }
 
   // Called when a remote change for a property is detected. Should be overwritten by children.
-  func onPropertyChangedRemotely(property: String) {
+  func onPropertyChangedRemotely(property: String, oldValue: AnyObject) {
 
   }
 

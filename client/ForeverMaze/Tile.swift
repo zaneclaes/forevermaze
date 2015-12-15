@@ -63,11 +63,13 @@ class Tile : GameSprite {
     self.sprite.addChild(label)
   }
 
-  override func onPropertyChangedRemotely(property: String) {
+  override func onPropertyChangedRemotely(property: String, oldValue: AnyObject) {
     if property == "objectIds" {
-      promiseLoad = nil
-      self.loadObjects()
-      DDLogInfo("\(self) objects changed: \(self.objectIds)")
+      let oldObjectIds = Set(oldValue as! Array<String>)
+      let addedObjectIds = Set(self.objectIds).subtract(oldObjectIds)
+      let removedObjectIds = oldObjectIds.subtract(self.objectIds)
+      let changedObjectIds = addedObjectIds.union(removedObjectIds)
+      self.gameScene.onObjectsIdsMoved(changedObjectIds)
     }
   }
 
