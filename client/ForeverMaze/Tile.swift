@@ -9,6 +9,7 @@
 import SpriteKit
 import Firebase
 import PromiseKit
+import CocoaLumberjack
 
 let NumberOfEmotions: UInt32 = 4
 
@@ -73,6 +74,24 @@ class Tile : GameSprite {
     self.objectIds.append(obj.id)
   }
 
+  func scrubObjects() {
+    var objIds = Array<String>()
+    var changed = false
+    for objId in self.objectIds {
+      let obj = GameObject.cache[objId]
+      if obj != nil && obj?.position.x != self.position.x && obj?.position.y != self.position.y {
+        DDLogWarn("Scrubbing \(objId) from \(self) because it has moved.")
+        changed = true
+      }
+      else {
+        objIds.append(objId)
+      }
+    }
+    if changed {
+      self.objectIds = objIds
+    }
+  }
+
   var emotion: Emotion {
     return Emotion(rawValue: self.e)!
   }
@@ -89,6 +108,9 @@ class Tile : GameSprite {
   func loadObjects() -> Promise<Void> {
     if promiseLoad == nil {
       promiseLoad = Data.loadObjects(self.objectIds)
+      promiseLoad!.then { () -> Void in
+        self.scrubObjects()
+      }
     }
     return promiseLoad!
   }

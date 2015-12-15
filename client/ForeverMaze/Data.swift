@@ -59,7 +59,8 @@ class Data {
         return loadSnapshot(id)
       }.then { snapshot in
         return GameObject.factory(id, snapshot: snapshot)
-      }.then { () -> Void in
+      }.then { (gameObject) -> Void in
+        DDLogInfo("Loaded object: \(gameObject)")
         promiseObjects.removeValueForKey(id)
       }
     }

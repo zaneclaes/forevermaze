@@ -55,7 +55,7 @@ enum Direction: Int {
 }
 
 class GameObject : GameSprite {
-  // Lookup cache for all gameSprites in the map, on ID
+  // Lookup cache for all gameObjects in the map, on ID
   static var cache:[String:GameObject] = [:]
   static var textureCache:[String:SKTexture] = [:]
 
@@ -73,7 +73,7 @@ class GameObject : GameSprite {
    * Write all the missing SKTextures into the textureCache 
    * Also preload them from disk to avoid any later flickering
    */
-  func cacheTextures() -> Promise<Void> {
+  func cacheTextures() -> Promise<GameObject!> {
     var textures = Array<SKTexture>()
     for dir in Direction.directions {
       let textureName = self.assetPrefix + dir.description.lowercaseString
@@ -85,12 +85,12 @@ class GameObject : GameSprite {
       textures.append(tex)
     }
     if textures.count <= 0 {
-      return Promise<Void>()
+      return Promise<GameObject!>(self)
     }
     else {
       return Promise { fulfill, reject in
         SKTexture.preloadTextures(textures) { () -> Void in
-          fulfill()
+          fulfill(self)
         }
       }
     }
@@ -145,7 +145,7 @@ class GameObject : GameSprite {
   /**
    * Given a data snapshot, inspect path components to infer and build an object
    */
-  static func factory(objId: String, snapshot: FDataSnapshot) -> Promise<Void> {
+  static func factory(objId: String, snapshot: FDataSnapshot) -> Promise<GameObject!> {
     let path = snapshot.ref.description.stringByReplacingOccurrencesOfString(Config.firebaseUrl + "/", withString: "")
     let parts = path.componentsSeparatedByString("/")
     let root = parts.first?.lowercaseString
@@ -165,7 +165,7 @@ class GameObject : GameSprite {
     if (obj == nil) {
       // We don't error out because this is frequently used in chains
       // objects might not always exist, if data is in a suboptimal state
-      return Promise { fulfill, reject in fulfill() }
+      return Promise { fulfill, reject in fulfill(nil) }
     }
     else {
       // Cache the object so we can find it later easily

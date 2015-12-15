@@ -14,13 +14,13 @@ class LocalPlayer : Player {
     guard (playerID != nil) else {
       return Promise { fulfill, reject in fulfill(nil) }
     }
-    return Data.loadSnapshot("/players/\(playerID)").then { (snapshot) -> Promise<Void> in
+    return Data.loadSnapshot("/players/\(playerID)").then { (snapshot) -> Promise<GameObject!> in
       let player = LocalPlayer(playerID: playerID, snapshot: snapshot)
       Account.player = player
       player.lastLogin = NSDate().timeIntervalSince1970
       GameObject.cache[player.id] = player
       return player.cacheTextures()
-    }.then { () -> LocalPlayer! in
+    }.then { (gameObject) -> LocalPlayer! in
       return Account.player
     }
   }
