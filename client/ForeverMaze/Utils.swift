@@ -10,6 +10,10 @@ import Foundation
 import PromiseKit
 import Firebase
 
+func clamp<T: Comparable>(value: T, lower: T, upper: T) -> T {
+  return min(max(value, lower), upper)
+}
+
 class Utils {
   // Given an object and a filtration block, return an array of all properties on the object.
   static func getProperties(obj: AnyObject!, filter: ((String, String) -> (Bool))!) -> [String] {

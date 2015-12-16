@@ -9,6 +9,7 @@
 import SpriteKit
 import Firebase
 import PromiseKit
+import CocoaLumberjack
 
 let NumberOfEmotions: UInt32 = 4
 
@@ -62,6 +63,16 @@ class Tile : GameSprite {
     self.sprite.addChild(label)
   }
 
+  override func onPropertyChangedRemotely(property: String, oldValue: AnyObject) {
+    if property == "objectIds" {
+      let oldObjectIds = Set(oldValue as! Array<String>)
+      let addedObjectIds = Set(self.objectIds).subtract(oldObjectIds)
+      let removedObjectIds = oldObjectIds.subtract(self.objectIds)
+      let changedObjectIds = addedObjectIds.union(removedObjectIds)
+      self.gameScene?.onObjectsIdsMoved(changedObjectIds)
+    }
+  }
+
   func removeObject(obj: GameObject) {
     let idx = self.objectIds.indexOf(obj.id)
     if idx >= 0 {
@@ -71,6 +82,24 @@ class Tile : GameSprite {
 
   func addObject(obj: GameObject) {
     self.objectIds.append(obj.id)
+  }
+
+  func scrubObjects() {
+    var objIds = Array<String>()
+    var changed = false
+    for objId in self.objectIds {
+      let obj = GameObject.cache[objId]
+      if obj != nil && obj?.position.x != self.position.x && obj?.position.y != self.position.y {
+        DDLogWarn("Scrubbing \(objId) from \(self) because it has moved.")
+        changed = true
+      }
+      else {
+        objIds.append(objId)
+      }
+    }
+    if changed {
+      self.objectIds = objIds
+    }
   }
 
   var emotion: Emotion {
@@ -89,6 +118,9 @@ class Tile : GameSprite {
   func loadObjects() -> Promise<Void> {
     if promiseLoad == nil {
       promiseLoad = Data.loadObjects(self.objectIds)
+      promiseLoad!.then { () -> Void in
+        self.scrubObjects()
+      }
     }
     return promiseLoad!
   }

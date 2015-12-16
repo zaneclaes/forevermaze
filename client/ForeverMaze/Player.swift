@@ -21,8 +21,12 @@ class Player : Mobile {
     self.alias = self.alias == nil ? "Player" : self.alias
   }
 
+  override var guardedProperties:[String] {
+    return super.guardedProperties + ["alias"]
+  }
+
   override var description:String {
-    return "<\(self.dynamicType) \(playerID)>: \(alias!) @\(self.position)->\(self.direction)"
+    return "<\(self.dynamicType) \(playerID)>: \(alias == nil ? "" : alias!) @\(self.position)->\(self.direction)"
   }
 
   override var id:String {

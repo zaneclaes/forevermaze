@@ -12,41 +12,33 @@ import PromiseKit
 import CocoaLumberjack
 
 enum Direction: Int {
-  case N,NE,E,SE,S,SW,W,NW
+  case N,E,S,W
 
   var description:String {
     switch self {
     case N: return "N"
-    case NE:return "NE"
     case E: return "E"
-    case SE:return "SE"
     case S: return "S"
-    case SW:return "SW"
     case W: return "W"
-    case NW:return "NW"
     }
   }
 
   var amount:(Int, Int) {
     switch self {
     case N: return (0,1)
-    case NE:return (1,1)
     case E: return (1,0)
-    case SE:return (1,-1)
     case S: return (0,-1)
-    case SW:return (-1,-1)
     case W: return (-1,0)
-    case NW:return (-1,1)
     }
   }
 
   static var directions:Array<Direction> {
-    return [N,NE,E,SE,S,SW,W,NW]
+    return [N,E,S,W]
   }
 
   init?(degrees: Int) {
-    let degreesPerDirection = Double(360 / 8)
-    var rotatedDegrees = Double(degrees) - degreesPerDirection/2
+    let degreesPerDirection = Double(360 / Direction.directions.count)
+    var rotatedDegrees = Double(degrees)
     rotatedDegrees = rotatedDegrees > 360 ? (rotatedDegrees - 360) : rotatedDegrees
     rotatedDegrees = rotatedDegrees < 0 ? (rotatedDegrees + 360) : rotatedDegrees
     let raw = Int(floor(rotatedDegrees / degreesPerDirection))
@@ -55,15 +47,14 @@ enum Direction: Int {
 }
 
 class GameObject : GameSprite {
-  // Lookup cache for all gameSprites in the map, on ID
+  // Lookup cache for all gameObjects in the map, on ID
   static var cache:[String:GameObject] = [:]
   static var textureCache:[String:SKTexture] = [:]
 
   private dynamic var x: UInt = 0
   private dynamic var y: UInt = 0
-  private dynamic var width: UInt = 1
-  private dynamic var height: UInt = 1
-  private dynamic var dir:Int = 0
+
+  dynamic var arrivalTime:NSTimeInterval = 0 // When stepping/teleporting/etc., when does the object arrive? For recipient-side animation.
 
   override init(snapshot: FDataSnapshot!) {
     super.init(snapshot: snapshot)
@@ -73,7 +64,7 @@ class GameObject : GameSprite {
    * Write all the missing SKTextures into the textureCache 
    * Also preload them from disk to avoid any later flickering
    */
-  func cacheTextures() -> Promise<Void> {
+  func cacheTextures() -> Promise<GameObject!> {
     var textures = Array<SKTexture>()
     for dir in Direction.directions {
       let textureName = self.assetPrefix + dir.description.lowercaseString
@@ -85,14 +76,20 @@ class GameObject : GameSprite {
       textures.append(tex)
     }
     if textures.count <= 0 {
-      return Promise<Void>()
+      return Promise<GameObject!>(self)
     }
     else {
       return Promise { fulfill, reject in
         SKTexture.preloadTextures(textures) { () -> Void in
-          fulfill()
+          fulfill(self)
         }
       }
+    }
+  }
+
+  override func onPropertyChangedRemotely(property: String, oldValue: AnyObject) {
+    if property == "x" || property == "y" {
+      self.gameScene?.onObjectMoved(self)
     }
   }
 
@@ -104,21 +101,36 @@ class GameObject : GameSprite {
     return self.assetPrefix + self.direction.description.lowercaseString
   }
 
+  private func updateSpriteTexture() {
+    self.sprite.texture = GameObject.textureCache[assetName]
+    if self.sprite.texture?.size() == CGSizeZero || self.sprite.texture == nil {
+      DDLogError("Texture Error: \(GameObject.textureCache)")
+    }
+  }
+
+  // `dir` is backed by Firebase, the primitive type which supports direction
+  private dynamic var dir:Int = 0 {
+    didSet {
+      if oldValue != self.dir {
+        self.updateSpriteTexture()
+      }
+    }
+  }
+
   var direction:Direction {
     set {
       if self.dir != newValue.rawValue {
         self.dir = newValue.rawValue
-        self.sprite.texture = GameObject.textureCache[assetName]
-        if self.sprite.texture?.size() == CGSizeZero || self.sprite.texture == nil {
-          DDLogError("Texture Error: \(GameObject.textureCache)")
-        }
+        self.updateSpriteTexture()
       }
     }
-    get { return Direction(rawValue: self.dir)! }
+    get {
+      return Direction(rawValue: clamp(self.dir, lower: 0, upper: Direction.directions.count - 1))!
+    }
   }
 
   var size: MapSize {
-    return MapSize(width: max(1, self.width), height: max(1, self.height))
+    return MapSize(width: 1, height: 1)
   }
 
   var position: MapPosition {
@@ -145,7 +157,7 @@ class GameObject : GameSprite {
   /**
    * Given a data snapshot, inspect path components to infer and build an object
    */
-  static func factory(objId: String, snapshot: FDataSnapshot) -> Promise<Void> {
+  static func factory(objId: String, snapshot: FDataSnapshot) -> Promise<GameObject!> {
     let path = snapshot.ref.description.stringByReplacingOccurrencesOfString(Config.firebaseUrl + "/", withString: "")
     let parts = path.componentsSeparatedByString("/")
     let root = parts.first?.lowercaseString
@@ -165,7 +177,7 @@ class GameObject : GameSprite {
     if (obj == nil) {
       // We don't error out because this is frequently used in chains
       // objects might not always exist, if data is in a suboptimal state
-      return Promise { fulfill, reject in fulfill() }
+      return Promise { fulfill, reject in fulfill(nil) }
     }
     else {
       // Cache the object so we can find it later easily

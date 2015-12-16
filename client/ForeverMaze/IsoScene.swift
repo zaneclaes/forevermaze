@@ -139,12 +139,14 @@ class IsoScene: SKScene {
    ***********************************************************************/
 
   private func addGameSprite(gameSprite:GameSprite, at: MapPosition, inLayer:SKNode) -> Bool {
-    guard gameSprite.sprite.parent == nil else {
+    guard gameSprite.sprite.parent == nil || gameSprite.sprite.parent == inLayer else {
       return false
     }
     gameSprite.sprite.position = mapPositionToIsoPoint(at, closeToCenter: gameSprite.sprite != self.playerSprite)
     gameSprite.sprite.anchorPoint = CGPoint(x:0, y:0)
-    inLayer.addChild(gameSprite.sprite)
+    if gameSprite.sprite.parent != inLayer {
+      inLayer.addChild(gameSprite.sprite)
+    }
     return true
   }
 
@@ -261,6 +263,93 @@ class IsoScene: SKScene {
   }
 
   /************************************************************************
+   * object moving (remote incoming)
+   ***********************************************************************/
+
+  private var objectsMovingTo:[String:CGPoint] = [:]
+  func animateObjectMovement(object: GameObject) {
+    let animationKey = "move"
+    object.sprite.removeActionForKey(animationKey)
+    let time =  object.arrivalTime - NSDate().timeIntervalSince1970
+    let point = mapPositionToIsoPoint(object.position, closeToCenter: true)
+    guard time > 0 else {
+      object.sprite.position = point
+      return
+    }
+
+    let alreadyMovingTo = self.objectsMovingTo[object.id]
+    if alreadyMovingTo == nil || alreadyMovingTo! != point {
+      self.objectsMovingTo[object.id] = point
+      object.sprite.runAction(SKAction.sequence([
+        SKAction.moveTo(point, duration: time),
+        SKAction.runBlock({ () -> Void in
+          self.isoOcclusionZSort()
+          self.objectsMovingTo.removeValueForKey(object.id)
+        })
+      ]), withKey: animationKey)
+    }
+  }
+
+  func onObjectMoved(object: GameObject) {
+    guard object != Account.player else {
+      // The local player is moved via checkStep()
+      return
+    }
+
+    let boundingBox:MapBox = MapBox(center: self.center, size: Config.screenTiles)
+    if !boundingBox.contains(object.position) {
+      // Not on screen? Just remove it.
+      object.sprite.removeFromParent()
+      self.objects.removeValueForKey(object.id)
+    }
+    else if self.objects.keys.contains(object.id) {
+      // Moving from one tile to another...
+      self.animateObjectMovement(object)
+    }
+    else {
+      // Newly on screen! Just add it.
+      if addObject(object) {
+        self.objects[object.id] = object
+      }
+    }
+  }
+
+  func onObjectsMoved(objects: Set<GameObject>) {
+    for gameObject in objects {
+      self.onObjectMoved(gameObject)
+    }
+  }
+
+  func onObjectsIdsMoved(objectIds: Set<String>) {
+    var loadedObjects = Set<GameObject>()
+    var pendingObjectIds = Array<String>()
+    for objectId in objectIds {
+      let gameObject = self.objects[objectId]
+      if gameObject != nil {
+        loadedObjects.insert(gameObject!)
+      }
+      else {
+        pendingObjectIds.append(objectId)
+      }
+    }
+
+    // First, do a quick-pass on the loaded objects
+    // Even though loadObjects skips double-loads, if we had a mixed-set,
+    // we'd be waiting on all objects to load before moving the existing objects.
+    self.onObjectsMoved(loadedObjects)
+
+    // Next, load the pending objects...
+    Data.loadObjects(pendingObjectIds).then { () -> Void in
+      for objectId in pendingObjectIds {
+        let gameObject = GameObject.cache[objectId]
+        if gameObject != nil {
+          self.onObjectMoved(gameObject!)
+        }
+      }
+    }
+  }
+
+  /************************************************************************
    * steps / walking
    ***********************************************************************/
   
@@ -364,11 +453,8 @@ class IsoScene: SKScene {
       self.drawTiles()
     }
     let diff = point - oldPoint
-    let dist = Double(distance((playerSprite?.position)!, p2: point))
-    let time = dist * Config.stepTime
-
-    let moveAction = SKAction.customActionWithDuration(time, actionBlock: { (node, elapsed) -> Void in
-      let percentDone = min(elapsed / CGFloat(time), 1)
+    let moveAction = SKAction.customActionWithDuration(Account.player!.stepTime, actionBlock: { (node, elapsed) -> Void in
+      let percentDone = min(elapsed / CGFloat(Account.player!.stepTime), 1)
       let pos = oldPoint + (diff * CGPoint(x: percentDone, y: percentDone))
       self.playerSprite?.position = pos
       self.viewIso.position = self.viewIsoPositionForPoint(pos)
