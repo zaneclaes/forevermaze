@@ -177,7 +177,7 @@ class GameObject : GameSprite {
     if (obj == nil) {
       // We don't error out because this is frequently used in chains
       // objects might not always exist, if data is in a suboptimal state
-      return Promise { fulfill, reject in fulfill(nil) }
+      return Promise<GameObject!>(nil)
     }
     else {
       // Cache the object so we can find it later easily

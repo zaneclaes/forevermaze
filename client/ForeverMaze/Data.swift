@@ -43,7 +43,9 @@ class Data {
         promises.append(loadObject(id))
       }
     }
-    return promises.count > 0 ? when(promises) : Promise<Void>()
+    return promises.count > 0 ? when(promises).recover { (error) -> Void in
+      DDLogError("Failed to load some objects...")
+    } : Promise<Void>()
   }
   /**
    * Uses loadSnapshot to infer and create a GameObject
@@ -52,17 +54,21 @@ class Data {
    * the type of class to use to instantiate the object.
    */
   static func loadObject(id: String!) -> Promise<Void> {
-    if self.promiseObjects[id] == nil {
-      DDLogDebug("Loading Object \(id)")
-      
-      self.promiseObjects[id] = firstly {
+    guard self.promiseObjects[id] != nil else {
+      DDLogInfo("Loading Object \(id)")
+
+      let promise:Promise<Void> = firstly {
         return loadSnapshot(id)
-      }.then { snapshot in
+      }.then { snapshot -> Promise<GameObject!> in
+        DDLogInfo("Factory: \(id)")
         return GameObject.factory(id, snapshot: snapshot)
       }.then { (gameObject) -> Void in
-        DDLogDebug("Loaded object: \(gameObject)")
+        DDLogInfo("Loaded object: \(id) -> \(gameObject)")
+      }.always { () -> Void in
         promiseObjects.removeValueForKey(id)
       }
+      self.promiseObjects[id] = promise
+      return promise
     }
     
     return self.promiseObjects[id]!
@@ -71,16 +77,20 @@ class Data {
    * Given a path to a firebase object, get the snapshot with a timeout.
    */
   static func loadSnapshot(firebasePath: String!) -> Promise<FDataSnapshot> {
-    return Promise { fulfill, reject in
-      after(life: Config.timeout).then {
-        reject(Errors.network)
-      }
-
-      let connection = Firebase(url: Config.firebaseUrl + firebasePath)
-      connection.observeEventType(.Value, withBlock: { snapshot in
+    let (promise, fulfill, reject) = Promise<FDataSnapshot>.pendingPromise()
+    let connection = Firebase(url: Config.firebaseUrl + firebasePath)
+    connection.observeEventType(.Value, withBlock: { snapshot in
+      if !promise.resolved {
         connection.removeAllObservers()
         fulfill(snapshot)
-      })
+      }
+    })
+    after(Config.timeout).then { () -> Void in
+      if !promise.resolved {
+        connection.removeAllObservers()
+        reject(Errors.network)
+      }
     }
+    return promise
   }
 }

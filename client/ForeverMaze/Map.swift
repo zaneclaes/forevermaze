@@ -174,17 +174,6 @@ struct MapBox : CustomStringConvertible {
 class MapTiles {
   var cache: [String: Tile] = [:]
 
-  func evict(key: String) {
-    guard cache.keys.contains(key) else {
-      return
-    }
-    cache.removeValueForKey(key)
-  }
-
-  func add(tile: Tile) {
-    cache["\(tile.position.x)x\(tile.position.y)"] = tile
-  }
-
   func contains(position: MapPosition) -> Bool {
     return self.cache["\(position.x)x\(position.y)"] != nil
   }
@@ -208,10 +197,10 @@ class Map {
    * If a tile is now out-of-bounds, it evicts it.
    */
   static func load(positions: Set<MapPosition>) -> Promise<Void> {
-    var removedObjectIds = Set<String>()
     //
     // Evict any old tiles...
     //
+    var removedObjectIds = Set<String>()
     var positionKeys = Set<String>()
     for pos in positions {
       positionKeys.insert("\(pos.x)x\(pos.y)")
@@ -220,10 +209,8 @@ class Map {
     for key in removedKeys {
       let cachedTile = tiles.cache[key]
       if cachedTile != nil {
-        for objectId in cachedTile!.objectIds {
-          removedObjectIds.insert(objectId)
-        }
-        tiles.evict(key)
+        removedObjectIds = removedObjectIds.union(cachedTile!.objectIds)
+        tiles.cache.removeValueForKey(key)
       }
     }
     //
@@ -238,11 +225,9 @@ class Map {
       if loadingTiles[key] == nil {
         loadingTiles[key] = Data.loadSnapshot("/tiles/\(key)").then { (snapshot) -> Promise<Void> in
           let tile = Tile(position: pos, snapshot: snapshot)
-          tiles.add(tile)
+          tiles.cache[key] = tile
           loadingTiles.removeValueForKey(key)
-          for objectId in tile.objectIds {
-            removedObjectIds.remove(objectId)
-          }
+          removedObjectIds = removedObjectIds.subtract(tile.objectIds)
           return tile.loadObjects()
         }
       }
