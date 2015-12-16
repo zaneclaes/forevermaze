@@ -157,22 +157,19 @@ class GameObject : GameSprite {
   /**
    * Given a data snapshot, inspect path components to infer and build an object
    */
-  static func factory(objId: String, snapshot: FDataSnapshot) -> Promise<GameObject!> {
-    let path = snapshot.ref.description.stringByReplacingOccurrencesOfString(Config.firebaseUrl + "/", withString: "")
+  static func factory(objId: String, snapshot: FDataSnapshot?) -> Promise<GameObject!> {
+    guard snapshot != nil else {
+      return Promise<GameObject!>(nil)
+    }
+
+    let path = snapshot!.ref.description.stringByReplacingOccurrencesOfString(Config.firebaseUrl + "/", withString: "")
     let parts = path.componentsSeparatedByString("/")
     let root = parts.first?.lowercaseString
-    let type = snapshot.childSnapshotForPath("type").value as? String
     var obj:GameObject! = nil
     
     if root == "players" && !objId.hasSuffix(Account.playerID) {
       obj = Player(playerID: objId, snapshot: snapshot)
     }
-    else if root == "objects" {
-      if type == "tree" {
-        
-      }
-    }
-    
     
     if (obj == nil) {
       // We don't error out because this is frequently used in chains

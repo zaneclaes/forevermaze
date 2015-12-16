@@ -33,7 +33,7 @@ class Utils {
       let property = properties[i]
       let propertyName = String(CString: property_getName(property), encoding: NSUTF8StringEncoding)!
       // n.b., the `attributes` array should tell us if the property is dynamic
-      // Sadly it seems proken in Swift
+      // Sadly it seems broken in Swift
       // c.f., https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
       // We should have been able to look for `,D,` to indicate @dynamic
       let attributes = String(CString: property_getAttributes(property), encoding: NSUTF8StringEncoding)!

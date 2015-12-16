@@ -16,7 +16,6 @@ private var KVOContext = 0
 class GameSprite : NSObject {
   let connection: Firebase!
   var snapshot: FDataSnapshot!
-
   var sprite = SKSpriteNode()
 
   private var properties:Array<String>
@@ -146,10 +145,11 @@ class GameSprite : NSObject {
     for property in self.properties {
       self.removeObserver(self, forKeyPath: property)
     }
+    self.properties.removeAll()
     self.connection.removeAllObservers()
   }
 
   deinit {
-    cleanup()
+    DDLogDebug("[DEALLOC] \(self)")
   }
 }

@@ -22,7 +22,6 @@
 		2B4E97EC1BFFA5DE0066D521 /* ForeverMazeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97EB1BFFA5DE0066D521 /* ForeverMazeUITests.swift */; };
 		2B5B05FD1C03FE62006E0973 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5B05FC1C03FE62006E0973 /* Utils.swift */; };
 		2B5B05FF1C041273006E0973 /* I18n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5B05FE1C041273006E0973 /* I18n.swift */; };
-		2B5B06011C041541006E0973 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5B06001C041541006E0973 /* Errors.swift */; };
 		2BB6F14B1BFFD243009DF879 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6F14A1BFFD243009DF879 /* Account.swift */; };
 		2BB6F14C1BFFD243009DF879 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6F14A1BFFD243009DF879 /* Account.swift */; };
 		2BB6F14D1BFFD243009DF879 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6F14A1BFFD243009DF879 /* Account.swift */; };
@@ -55,13 +54,12 @@
 		2BB6F17B1BFFEA0C009DF879 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6F1781BFFEA0C009DF879 /* Map.swift */; };
 		2BB884EE1C04E40F006E4570 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB884ED1C04E40F006E4570 /* Data.swift */; };
 		2BB884F11C0622DC006E4570 /* IsoScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB884F01C0622DC006E4570 /* IsoScene.swift */; };
+		2BEDFA7F1C216788001BE36D /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BEDFA7E1C216788001BE36D /* Errors.swift */; };
 		2FAF46821C0BCC7F00B1F898 /* MapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAF46811C0BCC7F00B1F898 /* MapTests.swift */; };
 		2FAF46831C0BCD0100B1F898 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB884ED1C04E40F006E4570 /* Data.swift */; };
 		2FAF46841C0BCD0100B1F898 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB884ED1C04E40F006E4570 /* Data.swift */; };
 		2FAF46851C0BCD0400B1F898 /* I18n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5B05FE1C041273006E0973 /* I18n.swift */; };
 		2FAF46861C0BCD0500B1F898 /* I18n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5B05FE1C041273006E0973 /* I18n.swift */; };
-		2FAF46871C0BCD0800B1F898 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5B06001C041541006E0973 /* Errors.swift */; };
-		2FAF46881C0BCD0800B1F898 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5B06001C041541006E0973 /* Errors.swift */; };
 		2FAF46891C0BCD0B00B1F898 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5B05FC1C03FE62006E0973 /* Utils.swift */; };
 		2FAF468A1C0BCD0B00B1F898 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5B05FC1C03FE62006E0973 /* Utils.swift */; };
 		2FAF468B1C0BCD8700B1F898 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B2A76AF1C023B6900172E27 /* FBSDKCoreKit.framework */; };
@@ -115,7 +113,6 @@
 		2B4E97ED1BFFA5DE0066D521 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2B5B05FC1C03FE62006E0973 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = ForeverMaze/Utils.swift; sourceTree = "<group>"; };
 		2B5B05FE1C041273006E0973 /* I18n.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = I18n.swift; path = ForeverMaze/I18n.swift; sourceTree = "<group>"; };
-		2B5B06001C041541006E0973 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		2BB6F13D1BFFCC03009DF879 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		2BB6F14A1BFFD243009DF879 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Account.swift; path = ForeverMaze/Account.swift; sourceTree = "<group>"; };
 		2BB6F14E1BFFD272009DF879 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Config.swift; path = ForeverMaze/Config.swift; sourceTree = "<group>"; };
@@ -129,6 +126,7 @@
 		2BB6F1781BFFEA0C009DF879 /* Map.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
 		2BB884ED1C04E40F006E4570 /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Data.swift; path = ForeverMaze/Data.swift; sourceTree = "<group>"; };
 		2BB884F01C0622DC006E4570 /* IsoScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IsoScene.swift; sourceTree = "<group>"; };
+		2BEDFA7E1C216788001BE36D /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Errors.swift; path = ForeverMaze/Errors.swift; sourceTree = "<group>"; };
 		2FAF46811C0BCC7F00B1F898 /* MapTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapTests.swift; sourceTree = "<group>"; };
 		2FAF46911C0BCDC000B1F898 /* ForeverMazeTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ForeverMazeTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		2FAF46941C0C188C00B1F898 /* String+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
@@ -241,7 +239,7 @@
 				2BB6F14A1BFFD243009DF879 /* Account.swift */,
 				2B5B05FC1C03FE62006E0973 /* Utils.swift */,
 				2B5B05FE1C041273006E0973 /* I18n.swift */,
-				2B5B06001C041541006E0973 /* Errors.swift */,
+				2BEDFA7E1C216788001BE36D /* Errors.swift */,
 				2BB884ED1C04E40F006E4570 /* Data.swift */,
 			);
 			name = Singletons;
@@ -645,10 +643,10 @@
 				2B4E97CC1BFFA5DD0066D521 /* GameScene.swift in Sources */,
 				2BB6F15C1BFFDCAA009DF879 /* GameObject.swift in Sources */,
 				2BB6F1651BFFE371009DF879 /* LocalPlayer.swift in Sources */,
+				2BEDFA7F1C216788001BE36D /* Errors.swift in Sources */,
 				2B4E97CE1BFFA5DD0066D521 /* GameViewController.swift in Sources */,
 				2B4E97C81BFFA5DD0066D521 /* AppDelegate.swift in Sources */,
 				2BB6F16B1BFFE407009DF879 /* Tile.swift in Sources */,
-				2B5B06011C041541006E0973 /* Errors.swift in Sources */,
 				2BB6F14F1BFFD272009DF879 /* Config.swift in Sources */,
 				2BB6F1571BFFDB62009DF879 /* Player.swift in Sources */,
 				2BB6F1751BFFE4D2009DF879 /* Static.swift in Sources */,
@@ -660,7 +658,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FAF46921C0BCDC000B1F898 /* ForeverMazeTests-Bridging-Header.h in Sources */,
-				2FAF46871C0BCD0800B1F898 /* Errors.swift in Sources */,
 				2BB6F1661BFFE371009DF879 /* LocalPlayer.swift in Sources */,
 				2FAF46821C0BCC7F00B1F898 /* MapTests.swift in Sources */,
 				2FAF46851C0BCD0400B1F898 /* I18n.swift in Sources */,
@@ -689,7 +686,6 @@
 				2BB6F16D1BFFE407009DF879 /* Tile.swift in Sources */,
 				2FAF468A1C0BCD0B00B1F898 /* Utils.swift in Sources */,
 				2BB6F14D1BFFD243009DF879 /* Account.swift in Sources */,
-				2FAF46881C0BCD0800B1F898 /* Errors.swift in Sources */,
 				2FAF46861C0BCD0500B1F898 /* I18n.swift in Sources */,
 				2BB6F1621BFFDCB4009DF879 /* Mobile.swift in Sources */,
 				2FAF46841C0BCD0100B1F898 /* Data.swift in Sources */,

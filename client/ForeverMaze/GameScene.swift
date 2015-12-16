@@ -44,10 +44,4 @@ class GameScene: IsoScene {
       DDLogError("World Error \(error)")
     }
   }
-
-  /*Map.rebuild().then { () -> Void in
-  DDLogInfo("Rebuilt World")
-  }.error { (error) -> Void in
-  DDLogError("World Error \(error)")
-  }*/
 }

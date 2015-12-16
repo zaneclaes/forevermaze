@@ -56,7 +56,7 @@ class IsoScene: SKScene {
   let tileSize = (width:32, height:32)
   var touches = Set<UITouch>()
   var firstTouchLocation = CGPointZero
-  var tiles:[MapPosition:Tile] = [:]
+  var tiles:[String:Tile] = [:]
   var objects:[String:GameObject] = [:]
 
   init(center: MapPosition, worldSize: MapSize, size: CGSize) {
@@ -155,10 +155,10 @@ class IsoScene: SKScene {
   }
 
   func addTile(tile:Tile) -> Bool {
-    if self.tiles[tile.position] != nil {
+    if self.tiles[tile.position.description] != nil {
       return false
     }
-    self.tiles[tile.position] = tile
+    self.tiles[tile.position.description] = tile
     if self.addGameSprite(tile, at: tile.position, inLayer: layerIsoGround) {
       drawObjects(tile)
       return true
@@ -168,14 +168,13 @@ class IsoScene: SKScene {
     }
   }
 
-  func removeTile(position: MapPosition) -> Tile? {
-    let tile = self.tiles[position]
-    if tile != nil {
-      self.tiles.removeValueForKey(position)
-      removeObjects(tile!)
-      tile!.sprite.removeFromParent()
+  func removeTile(position: MapPosition) -> Void {
+    guard let tile = self.tiles[position.description] else {
+      return
     }
-    return tile
+    tile.sprite.removeFromParent()
+    self.tiles.removeValueForKey(position.description)
+    tile.cleanup()
   }
 
   var center: MapPosition {
@@ -382,20 +381,6 @@ class IsoScene: SKScene {
     }
   }
   
-  func removeObjects(tile: Tile) -> UInt {
-    let ids = self.objects.keys
-    var removed:UInt = 0
-    for id in ids {
-      let obj = self.objects[id]!
-      if obj.position == tile.position {
-        obj.sprite.removeFromParent()
-        self.objects.removeValueForKey(id)
-        removed++
-      }
-    }
-    return removed
-  }
-  
   func drawObjects(tile: Tile) -> UInt {
     var cnt:UInt = 0
     for objId in tile.objectIds {
@@ -413,9 +398,20 @@ class IsoScene: SKScene {
     return cnt
   }
 
+  func unloadOffScreenObjects() {
+    for obj in self.objects.values {
+      if !self.isPositionOnScreen(obj.position) {
+        obj.sprite.removeFromParent()
+        GameObject.cache.removeValueForKey(obj.id)
+        self.objects.removeValueForKey(obj.id)
+        obj.cleanup()
+      }
+    }
+  }
+
   func drawTiles() {
     for tile in self.tiles.values {
-      if !Map.tiles.contains(tile.position) {
+      if !self.isPositionOnScreen(tile.position) {
         removeTile(tile.position)
       }
     }
@@ -427,6 +423,7 @@ class IsoScene: SKScene {
 
   private func onMoved() {
     Map.load(self.onScreenPositions).then { () -> Void in
+      self.unloadOffScreenObjects()
       self.drawTiles()
     }
   }

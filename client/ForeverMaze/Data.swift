@@ -27,6 +27,7 @@ extension Firebase {
 
     after(Config.timeout).then { () -> Void in
       if !promise.resolved {
+        DDLogWarn("[TIMEOUT] [FIREBASE-WRITE] \(self) -> \(value)")
         reject(Errors.network)
       }
     }
@@ -81,8 +82,8 @@ class Data {
   /**
    * Given a path to a firebase object, get the snapshot with a timeout.
    */
-  static func loadSnapshot(firebasePath: String!) -> Promise<FDataSnapshot> {
-    let (promise, fulfill, reject) = Promise<FDataSnapshot>.pendingPromise()
+  static func loadSnapshot(firebasePath: String!) -> Promise<FDataSnapshot?> {
+    let (promise, fulfill, _) = Promise<FDataSnapshot?>.pendingPromise()
     let connection = Firebase(url: Config.firebaseUrl + firebasePath)
     connection.observeEventType(.Value, withBlock: { snapshot in
       if !promise.resolved {
@@ -92,8 +93,10 @@ class Data {
     })
     after(Config.timeout).then { () -> Void in
       if !promise.resolved {
+        DDLogWarn("[TIMEOUT] [FIREBASE-READ] \(firebasePath)")
         connection.removeAllObservers()
-        reject(Errors.network)
+        fulfill(nil)
+        //reject(Errors.network)
       }
     }
     return promise

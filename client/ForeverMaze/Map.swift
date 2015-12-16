@@ -197,10 +197,8 @@ class Map {
    * If a tile is now out-of-bounds, it evicts it.
    */
   static func load(positions: Set<MapPosition>) -> Promise<Void> {
-    //
+
     // Evict any old tiles...
-    //
-    var removedObjectIds = Set<String>()
     var positionKeys = Set<String>()
     for pos in positions {
       positionKeys.insert("\(pos.x)x\(pos.y)")
@@ -209,13 +207,11 @@ class Map {
     for key in removedKeys {
       let cachedTile = tiles.cache[key]
       if cachedTile != nil {
-        removedObjectIds = removedObjectIds.union(cachedTile!.objectIds)
         tiles.cache.removeValueForKey(key)
       }
     }
-    //
+
     // Now load any new tiles...
-    //
     var promises = Array<Promise<Void>>()
     for pos in positions {
       let key = "\(pos.x)x\(pos.y)"
@@ -224,24 +220,17 @@ class Map {
       }
       if loadingTiles[key] == nil {
         loadingTiles[key] = Data.loadSnapshot("/tiles/\(key)").then { (snapshot) -> Promise<Void> in
-          let tile = Tile(position: pos, snapshot: snapshot)
-          tiles.cache[key] = tile
+          guard snapshot != nil else {
+            return Promise<Void>()
+          }
+          tiles.cache[key] = Tile(position: pos, snapshot: snapshot!)
           loadingTiles.removeValueForKey(key)
-          removedObjectIds = removedObjectIds.subtract(tile.objectIds)
-          return tile.loadObjects()
+          return tiles.cache[key]!.loadObjects()
         }
       }
-      //DDLogInfo("Caching \(key)")
       promises.append(loadingTiles[key]!)
     }
-    //
-    // Uncache + Cache objects, done as a sentinal so that the `remove` commands above can complete.
-    //
-    return (promises.count > 0 ? when(promises) : Promise<Void>()).then { () -> Void in
-      for id in removedObjectIds {
-        GameObject.cache.removeValueForKey(id)
-      }
-    }
+    return (promises.count > 0 ? when(promises) : Promise<Void>())
   }
   /**
    * Reset & randomize the world
