@@ -12,41 +12,33 @@ import PromiseKit
 import CocoaLumberjack
 
 enum Direction: Int {
-  case N,NE,E,SE,S,SW,W,NW
+  case N,E,S,W
 
   var description:String {
     switch self {
     case N: return "N"
-    case NE:return "NE"
     case E: return "E"
-    case SE:return "SE"
     case S: return "S"
-    case SW:return "SW"
     case W: return "W"
-    case NW:return "NW"
     }
   }
 
   var amount:(Int, Int) {
     switch self {
     case N: return (0,1)
-    case NE:return (1,1)
     case E: return (1,0)
-    case SE:return (1,-1)
     case S: return (0,-1)
-    case SW:return (-1,-1)
     case W: return (-1,0)
-    case NW:return (-1,1)
     }
   }
 
   static var directions:Array<Direction> {
-    return [N,NE,E,SE,S,SW,W,NW]
+    return [N,E,S,W]
   }
 
   init?(degrees: Int) {
-    let degreesPerDirection = Double(360 / 8)
-    var rotatedDegrees = Double(degrees) - degreesPerDirection/2
+    let degreesPerDirection = Double(360 / Direction.directions.count)
+    var rotatedDegrees = Double(degrees)
     rotatedDegrees = rotatedDegrees > 360 ? (rotatedDegrees - 360) : rotatedDegrees
     rotatedDegrees = rotatedDegrees < 0 ? (rotatedDegrees + 360) : rotatedDegrees
     let raw = Int(floor(rotatedDegrees / degreesPerDirection))
@@ -133,7 +125,7 @@ class GameObject : GameSprite {
       }
     }
     get {
-      return Direction(rawValue: self.dir)!
+      return Direction(rawValue: clamp(self.dir, lower: 0, upper: Direction.directions.count - 1))!
     }
   }
 
