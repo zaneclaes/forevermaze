@@ -188,7 +188,6 @@ class MapTiles {
   }
 }
 class Map {
-  static var tiles = MapTiles()
   static var loadingTiles:[String:Promise<Void>] = [:]
 
   /**
@@ -196,26 +195,12 @@ class Map {
    * If a tile already exists, it does not reload it.
    * If a tile is now out-of-bounds, it evicts it.
    */
-  static func load(positions: Set<MapPosition>) -> Promise<Void> {
-
-    // Evict any old tiles...
-    var positionKeys = Set<String>()
-    for pos in positions {
-      positionKeys.insert("\(pos.x)x\(pos.y)")
-    }
-    let removedKeys = Set(tiles.cache.keys).subtract(positionKeys)
-    for key in removedKeys {
-      let cachedTile = tiles.cache[key]
-      if cachedTile != nil {
-        tiles.cache.removeValueForKey(key)
-      }
-    }
-
-    // Now load any new tiles...
+  static func load(positions: Set<MapPosition>, var existingTiles: [String: Tile]) -> Promise<[String:Tile]> {
+    // Load any new tiles...
     var promises = Array<Promise<Void>>()
     for pos in positions {
       let key = "\(pos.x)x\(pos.y)"
-      if tiles.contains(pos) {
+      if existingTiles[key] != nil {
         continue
       }
       if loadingTiles[key] == nil {
@@ -223,14 +208,16 @@ class Map {
           guard snapshot != nil else {
             return Promise<Void>()
           }
-          tiles.cache[key] = Tile(position: pos, snapshot: snapshot!)
+          existingTiles[key] = Tile(position: pos, snapshot: snapshot!)
           loadingTiles.removeValueForKey(key)
-          return tiles.cache[key]!.loadObjects()
+          return existingTiles[key]!.loadObjects()
         }
       }
       promises.append(loadingTiles[key]!)
     }
-    return (promises.count > 0 ? when(promises) : Promise<Void>())
+    return (promises.count > 0 ? when(promises) : Promise<Void>()).then { () -> [String:Tile] in
+      return existingTiles
+    }
   }
   /**
    * Reset & randomize the world

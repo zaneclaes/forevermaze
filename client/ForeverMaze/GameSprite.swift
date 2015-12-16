@@ -151,5 +151,6 @@ class GameSprite : NSObject {
 
   deinit {
     DDLogDebug("[DEALLOC] \(self)")
+    self.cleanup()
   }
 }

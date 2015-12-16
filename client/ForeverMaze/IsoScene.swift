@@ -155,10 +155,6 @@ class IsoScene: SKScene {
   }
 
   func addTile(tile:Tile) -> Bool {
-    if self.tiles[tile.position.description] != nil {
-      return false
-    }
-    self.tiles[tile.position.description] = tile
     if self.addGameSprite(tile, at: tile.position, inLayer: layerIsoGround) {
       drawObjects(tile)
       return true
@@ -414,15 +410,16 @@ class IsoScene: SKScene {
       if !self.isPositionOnScreen(tile.position) {
         removeTile(tile.position)
       }
-    }
-    for tile in Map.tiles.cache.values {
-      addTile(tile)
+      else {
+        addTile(tile)
+      }
     }
     self.isoOcclusionZSort()
   }
 
   private func onMoved() {
-    Map.load(self.onScreenPositions).then { () -> Void in
+    Map.load(self.onScreenPositions, existingTiles: self.tiles).then { (tiles) -> Void in
+      self.tiles = tiles
       self.unloadOffScreenObjects()
       self.drawTiles()
     }
