@@ -47,11 +47,11 @@ class IsoScene: SKScene {
     fatalError("init(coder:) has not been implemented")
   }
 
-  var center: MapPosition
   let worldSize: MapSize
   let viewIso:SKSpriteNode
   let layerIsoGround:SKNode
   let layerIsoObjects:SKNode
+  var onScreenPositions = Set<MapPosition>()
   var playerSprite:SKSpriteNode? = nil
   let tileSize = (width:32, height:32)
   var touches = Set<UITouch>()
@@ -178,19 +178,20 @@ class IsoScene: SKScene {
     return tile
   }
 
-  func getOnScreenPositions() -> Set<MapPosition> {
-    var positions = Set<MapPosition>()
-    let area = Int(ceilf(Float(self.size.height + self.size.width) / Float(self.tileSize.width)))
-    let start = self.center - MapPosition(xIndex: area/2, yIndex: area/2)
-    for (var xOffset = 0; xOffset < area; xOffset++) {
-      for (var yOffset = 0; yOffset < area; yOffset++) {
-        let pos = MapPosition(xIndex: start.xIndex + xOffset, yIndex: start.yIndex + yOffset)
-        if self.isPositionOnScreen(pos) {
-          positions.insert(pos)
+  var center: MapPosition {
+    didSet {
+      self.onScreenPositions.removeAll()
+      let area = Int(ceilf(Float(self.size.height + self.size.width) / Float(self.tileSize.width)))
+      let start = self.center - MapPosition(xIndex: area/2, yIndex: area/2)
+      for (var xOffset = 0; xOffset < area; xOffset++) {
+        for (var yOffset = 0; yOffset < area; yOffset++) {
+          let pos = MapPosition(xIndex: start.xIndex + xOffset, yIndex: start.yIndex + yOffset)
+          if self.isPositionOnScreen(pos) {
+            self.onScreenPositions.insert(pos)
+          }
         }
       }
     }
-    return positions
   }
 
   /************************************************************************
@@ -425,17 +426,9 @@ class IsoScene: SKScene {
   }
 
   private func onMoved() {
-    Map.load(self.getOnScreenPositions()).then { () -> Void in
+    Map.load(self.onScreenPositions).then { () -> Void in
       self.drawTiles()
     }
-    /*
-    let qualityOfServiceClass = QOS_CLASS_BACKGROUND
-    let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
-    dispatch_async(backgroundQueue, {
-      Map.load(self.getOnScreenPositions()).then { () -> Void in
-        dispatch_async(dispatch_get_main_queue(), self.drawTiles)
-      }
-    })*/
   }
 
   private func checkStep() {

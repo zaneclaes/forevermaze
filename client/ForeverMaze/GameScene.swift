@@ -28,14 +28,14 @@ class GameScene: IsoScene {
     label.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y: CGRectGetMidY(self.scene!.frame))
     self.addChild(label)
 
-    Map.load(self.getOnScreenPositions()).then { () -> Void in
+    self.center = (Account.player?.position)!
+    Map.load(self.onScreenPositions).then { () -> Void in
       DDLogInfo("Loaded.")
       
       self.playerSprite = Account.player!.sprite
       self.addObject(Account.player!)
       DDLogInfo("Player @ \(Account.player!.sprite.position)")
 
-      self.center = (Account.player?.position)!
       self.drawTiles()
 
       label.removeFromParent()
