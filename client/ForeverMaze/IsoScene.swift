@@ -266,8 +266,36 @@ class IsoScene: SKScene {
    * object moving (remote incoming)
    ***********************************************************************/
 
-  var objectsMovingTo:[String:MapPosition] = [:]
+  private var objectsMovingTo:[String:CGPoint] = [:]
+  func animateObjectMovement(object: GameObject) {
+    let animationKey = "move"
+    object.sprite.removeActionForKey(animationKey)
+    let time =  object.arrivalTime - NSDate().timeIntervalSince1970
+    let point = mapPositionToIsoPoint(object.position, closeToCenter: true)
+    guard time > 0 else {
+      object.sprite.position = point
+      return
+    }
+
+    let alreadyMovingTo = self.objectsMovingTo[object.id]
+    if alreadyMovingTo == nil || alreadyMovingTo! != point {
+      self.objectsMovingTo[object.id] = point
+      object.sprite.runAction(SKAction.sequence([
+        SKAction.moveTo(point, duration: time),
+        SKAction.runBlock({ () -> Void in
+          self.isoOcclusionZSort()
+          self.objectsMovingTo.removeValueForKey(object.id)
+        })
+      ]), withKey: animationKey)
+    }
+  }
+
   func onObjectMoved(object: GameObject) {
+    guard object != Account.player else {
+      // The local player is moved via checkStep()
+      return
+    }
+
     let boundingBox:MapBox = MapBox(center: self.center, size: Config.screenTiles)
     if !boundingBox.contains(object.position) {
       // Not on screen? Just remove it.
@@ -276,24 +304,7 @@ class IsoScene: SKScene {
     }
     else if self.objects.keys.contains(object.id) {
       // Moving from one tile to another...
-      let alreadyMovingTo = self.objectsMovingTo[object.id]
-      if alreadyMovingTo == nil || alreadyMovingTo! != object.position {
-        self.objectsMovingTo[object.id] = object.position
-        object.sprite.removeActionForKey("step")
-        let point = mapPositionToIsoPoint(object.position)
-        let dist = Double(distance(object.sprite.position, p2: point))
-        let time = dist * Config.stepTime
-        let action = SKAction.moveTo(point, duration: time)
-
-        object.sprite.runAction(SKAction.sequence([
-          action,
-          SKAction.runBlock(self.isoOcclusionZSort),
-          SKAction.runBlock({ () -> Void in
-            self.objectsMovingTo.removeValueForKey(object.id)
-          })
-        ]), withKey: "step")
-        DDLogDebug("[MOVING] \(object) exists")
-      }
+      self.animateObjectMovement(object)
     }
     else {
       // Newly on screen! Just add it.
@@ -442,11 +453,8 @@ class IsoScene: SKScene {
       self.drawTiles()
     }
     let diff = point - oldPoint
-    let dist = Double(distance((playerSprite?.position)!, p2: point))
-    let time = dist * Config.stepTime
-
-    let moveAction = SKAction.customActionWithDuration(time, actionBlock: { (node, elapsed) -> Void in
-      let percentDone = min(elapsed / CGFloat(time), 1)
+    let moveAction = SKAction.customActionWithDuration(Account.player!.stepTime, actionBlock: { (node, elapsed) -> Void in
+      let percentDone = min(elapsed / CGFloat(Account.player!.stepTime), 1)
       let pos = oldPoint + (diff * CGPoint(x: percentDone, y: percentDone))
       self.playerSprite?.position = pos
       self.viewIso.position = self.viewIsoPositionForPoint(pos)

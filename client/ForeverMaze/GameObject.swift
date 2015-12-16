@@ -61,8 +61,8 @@ class GameObject : GameSprite {
 
   private dynamic var x: UInt = 0
   private dynamic var y: UInt = 0
-  //private dynamic var dir:Int = 0
-  var direction:Direction = Direction.N
+
+  dynamic var arrivalTime:NSTimeInterval = 0 // When stepping/teleporting/etc., when does the object arrive? For recipient-side animation.
 
   override init(snapshot: FDataSnapshot!) {
     super.init(snapshot: snapshot)
@@ -95,6 +95,12 @@ class GameObject : GameSprite {
     }
   }
 
+  override func onPropertyChangedRemotely(property: String, oldValue: AnyObject) {
+    if property == "x" || property == "y" {
+      self.gameScene?.onObjectMoved(self)
+    }
+  }
+
   var assetPrefix:String {
     return "iso_3d_droid_"
   }
@@ -103,18 +109,31 @@ class GameObject : GameSprite {
     return self.assetPrefix + self.direction.description.lowercaseString
   }
 
-  private dynamic var dir:Int {
+  private func updateSpriteTexture() {
+    self.sprite.texture = GameObject.textureCache[assetName]
+    if self.sprite.texture?.size() == CGSizeZero || self.sprite.texture == nil {
+      DDLogError("Texture Error: \(GameObject.textureCache)")
+    }
+  }
+
+  // `dir` is backed by Firebase, the primitive type which supports direction
+  private dynamic var dir:Int = 0 {
+    didSet {
+      if oldValue != self.dir {
+        self.updateSpriteTexture()
+      }
+    }
+  }
+
+  var direction:Direction {
     set {
-      if self.direction.rawValue != newValue {
-        self.direction = Direction(rawValue: newValue)!
-        self.sprite.texture = GameObject.textureCache[assetName]
-        if self.sprite.texture?.size() == CGSizeZero || self.sprite.texture == nil {
-          DDLogError("Texture Error: \(GameObject.textureCache)")
-        }
+      if self.dir != newValue.rawValue {
+        self.dir = newValue.rawValue
+        self.updateSpriteTexture()
       }
     }
     get {
-      return self.direction.rawValue
+      return Direction(rawValue: self.dir)!
     }
   }
 

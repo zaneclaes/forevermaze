@@ -62,8 +62,8 @@ class GameSprite : NSObject {
     })
   }
 
-  var gameScene:GameScene {
-    return self.sprite.scene as! GameScene
+  var gameScene:GameScene? {
+    return self.sprite.scene as? GameScene
   }
 
   // This is a dangerous scenario. The server does not have a representation of this object. We're setting it to nil locally.
@@ -78,6 +78,9 @@ class GameSprite : NSObject {
     var newValue:AnyObject? = nil
     if type.rangeOfString("NSArray") != nil {
       newValue = []
+    }
+    else if type.rangeOfString("Number") != nil {
+      newValue = 0
     }
     if newValue == nil || !val!.isEqual(newValue) {
       self.setValue(newValue, forKey: property)

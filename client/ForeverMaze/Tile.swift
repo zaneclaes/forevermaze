@@ -69,7 +69,7 @@ class Tile : GameSprite {
       let addedObjectIds = Set(self.objectIds).subtract(oldObjectIds)
       let removedObjectIds = oldObjectIds.subtract(self.objectIds)
       let changedObjectIds = addedObjectIds.union(removedObjectIds)
-      self.gameScene.onObjectsIdsMoved(changedObjectIds)
+      self.gameScene?.onObjectsIdsMoved(changedObjectIds)
     }
   }
 
