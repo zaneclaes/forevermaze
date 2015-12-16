@@ -12,20 +12,26 @@ import CocoaLumberjack
 
 extension Firebase {
   public func write(value: AnyObject!) -> Promise<Void> {
-    return Promise { fulfill, reject in
-      after(life: Config.timeout).then {
-        reject(Errors.network)
-      }
+    let (promise, fulfill, reject) = Promise<Void>.pendingPromise()
 
-      self.setValue(value, withCompletionBlock: { (error, firebase) -> Void in
+    self.setValue(value, withCompletionBlock: { (error, firebase) -> Void in
+      if !promise.resolved {
         if error == nil {
           fulfill()
         }
         else {
           reject(error)
         }
-      })
+      }
+    })
+
+    after(Config.timeout).then { () -> Void in
+      if !promise.resolved {
+        reject(Errors.network)
+      }
     }
+
+    return promise
   }
 }
 
@@ -43,9 +49,7 @@ class Data {
         promises.append(loadObject(id))
       }
     }
-    return promises.count > 0 ? when(promises).recover { (error) -> Void in
-      DDLogError("Failed to load some objects...")
-    } : Promise<Void>()
+    return promises.count > 0 ? when(promises) : Promise<Void>()
   }
   /**
    * Uses loadSnapshot to infer and create a GameObject
@@ -55,17 +59,18 @@ class Data {
    */
   static func loadObject(id: String!) -> Promise<Void> {
     guard self.promiseObjects[id] != nil else {
-      DDLogInfo("Loading Object \(id)")
+      DDLogDebug("Loading Object \(id)")
 
       let promise:Promise<Void> = firstly {
         return loadSnapshot(id)
       }.then { snapshot -> Promise<GameObject!> in
-        DDLogInfo("Factory: \(id)")
         return GameObject.factory(id, snapshot: snapshot)
       }.then { (gameObject) -> Void in
-        DDLogInfo("Loaded object: \(id) -> \(gameObject)")
+        DDLogDebug("Loaded object: \(id) -> \(gameObject)")
       }.always { () -> Void in
         promiseObjects.removeValueForKey(id)
+      }.recover { (error) -> Void in
+        DDLogError("Failed to load \(id)...")
       }
       self.promiseObjects[id] = promise
       return promise
