@@ -178,27 +178,50 @@ class IsoScene: SKScene {
     return tile
   }
 
+  func getOnScreenPositions() -> Set<MapPosition> {
+    var positions = Set<MapPosition>()
+    let area = Int(ceilf(Float(self.size.height + self.size.width) / Float(self.tileSize.width)))
+    let start = self.center - MapPosition(xIndex: area/2, yIndex: area/2)
+    for (var xOffset = 0; xOffset < area; xOffset++) {
+      for (var yOffset = 0; yOffset < area; yOffset++) {
+        let pos = MapPosition(xIndex: start.xIndex + xOffset, yIndex: start.yIndex + yOffset)
+        if self.isPositionOnScreen(pos) {
+          positions.insert(pos)
+        }
+      }
+    }
+    return positions
+  }
+
   /************************************************************************
    * point/position math
    ***********************************************************************/
+
+  func isPositionOnScreen(position: MapPosition) -> Bool {
+    let bufferPx = CGFloat(Config.tileBuffer * tileSize.width)
+    let maxDist = CGSizeMake(self.size.width / 2 + bufferPx, self.size.height / 2 + bufferPx)
+    let testPos = MapPosition(x: 50, y: 50)
+    let offset = position - self.center + testPos
+    let dist = self.mapPositionToIsoPoint(offset) - self.mapPositionToIsoPoint(testPos) + CGPoint(x: tileSize.width/2, y: tileSize.height/2)
+    return abs(dist.x) < maxDist.width && abs(dist.y) < maxDist.height
+  }
 
   func mapPositionToIsoPoint(pos:MapPosition, closeToCenter:Bool) -> CGPoint {
     // Since positions can wrap around the world, we choose the point which is closest to our current center.
     var xPos = Int(pos.x)
     var yPos = Int(pos.y)
     if closeToCenter {
-      let halfW = Config.screenTiles.width/2
-      if self.center.x >= (self.worldSize.width - halfW) && pos.x < halfW {
+      let buffer = UInt(self.size.width / CGFloat(self.tileSize.width))
+      if self.center.x >= (self.worldSize.width - buffer) && pos.x < buffer {
         xPos += Int(self.worldSize.width)
       }
-      else if self.center.x <= halfW && pos.x >= (self.worldSize.width - halfW) {
+      else if self.center.x <= buffer && pos.x >= (self.worldSize.width - buffer) {
         xPos = pos.xIndex
       }
-      let halfH = Config.screenTiles.height/2
-      if self.center.y >= (self.worldSize.height - halfH) && pos.y < halfH {
+      if self.center.y >= (self.worldSize.height - buffer) && pos.y < buffer {
         yPos += Int(self.worldSize.height)
       }
-      else if self.center.y <= halfH && pos.y >= (self.worldSize.height - halfH) {
+      else if self.center.y <= buffer && pos.y >= (self.worldSize.height - buffer) {
         yPos = pos.yIndex
       }
     }
@@ -296,8 +319,7 @@ class IsoScene: SKScene {
       return
     }
 
-    let boundingBox:MapBox = MapBox(center: self.center, size: Config.screenTiles)
-    if !boundingBox.contains(object.position) {
+    if !self.isPositionOnScreen(object.position) {
       // Not on screen? Just remove it.
       object.sprite.removeFromParent()
       self.objects.removeValueForKey(object.id)
@@ -352,7 +374,7 @@ class IsoScene: SKScene {
   /************************************************************************
    * steps / walking
    ***********************************************************************/
-  
+
   func clearTiles() {
     while self.tiles.values.count > 0 {
       removeTile(self.tiles.values.first!.position)
@@ -391,34 +413,29 @@ class IsoScene: SKScene {
   }
 
   func drawTiles() {
-    let boundingBox:MapBox = MapBox(center: self.center, size: Config.screenTiles)
-    for i in 0..<Int(boundingBox.size.width) {
-      for j in 0..<Int(boundingBox.size.height) {
-        let position = boundingBox.origin + (i,j)
-        if Map.tiles.contains(position) {
-          guard let tile = Map.tiles[position] else {
-            continue
-          }
-          addTile(tile)
-        }
-      }
-    }
     for tile in self.tiles.values {
-      if !boundingBox.contains(tile.position) {
+      if !Map.tiles.contains(tile.position) {
         removeTile(tile.position)
       }
+    }
+    for tile in Map.tiles.cache.values {
+      addTile(tile)
     }
     self.isoOcclusionZSort()
   }
 
   private func onMoved() {
+    Map.load(self.getOnScreenPositions()).then { () -> Void in
+      self.drawTiles()
+    }
+    /*
     let qualityOfServiceClass = QOS_CLASS_BACKGROUND
     let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
     dispatch_async(backgroundQueue, {
-      Map.load(Account.player!.position).then { () -> Void in
+      Map.load(self.getOnScreenPositions()).then { () -> Void in
         dispatch_async(dispatch_get_main_queue(), self.drawTiles)
       }
-    })
+    })*/
   }
 
   private func checkStep() {

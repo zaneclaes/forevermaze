@@ -175,7 +175,14 @@ class MapTiles {
   var cache: [String: Tile] = [:]
 
   func evict(key: String) {
+    guard cache.keys.contains(key) else {
+      return
+    }
     cache.removeValueForKey(key)
+  }
+
+  func add(tile: Tile) {
+    cache["\(tile.position.x)x\(tile.position.y)"] = tile
   }
 
   func contains(position: MapPosition) -> Bool {
@@ -193,27 +200,23 @@ class MapTiles {
 }
 class Map {
   static var tiles = MapTiles()
+  static var loadingTiles = Set<String>()
 
   /**
    * Load the map into the tiles array based upon Config.screenTiles
    * If a tile already exists, it does not reload it.
    * If a tile is now out-of-bounds, it evicts it.
    */
-  static func load(center: MapPosition) -> Promise<Void> {
-    let boundingBox:MapBox = MapBox(center: center, size: Config.screenTiles)
+  static func load(positions: Set<MapPosition>) -> Promise<Void> {
     var removedObjectIds = Set<String>()
-    DDLogDebug("Loading @ \(boundingBox) around \(center)")
     //
     // Evict any old tiles...
     //
     let keys = tiles.cache.keys
     for key in keys {
-      let tile = tiles[key]
-      if tile == nil {
-        continue
-      }
-      if !boundingBox.contains(tile!.position) {
-        for objectId in tile!.objectIds {
+      let cachedTile = tiles[key]
+      if cachedTile != nil && !positions.contains(cachedTile.position) {
+        for objectId in cachedTile!.objectIds {
           removedObjectIds.insert(objectId)
         }
         tiles.evict(key)
@@ -224,32 +227,33 @@ class Map {
     // Now load any new tiles...
     //
     var promises = Array<Promise<Void>>()
-    for (var x = boundingBox.origin.xIndex; x < Int(boundingBox.size.width) + boundingBox.origin.xIndex; x++) {
-      for (var y = boundingBox.origin.yIndex; y < Int(boundingBox.size.height) + boundingBox.origin.yIndex; y++) {
-        let pos = MapPosition(xIndex: x, yIndex: y)
-        let key = "\(pos.x)x\(pos.y)"
-        if tiles[pos] != nil {
-          continue
-        }
-        let promise = Data.loadSnapshot("/tiles/\(key)").then { (snapshot) -> Promise<Void> in
-          let tile = Tile(position: pos, snapshot: snapshot)
-          tiles[pos] = tile
-          for objectId in tile.objectIds {
-            removedObjectIds.remove(objectId)
-          }
-          return tile.loadObjects()
-        }
-        DDLogDebug("Caching \(key)")
-        promises.append(promise)
+    for pos in positions {
+      let key = "\(pos.x)x\(pos.y)"
+      if tiles[pos] != nil || loadingTiles.contains(key) {
+        continue
       }
+      loadingTiles.insert(key)
+      let promise = Data.loadSnapshot("/tiles/\(key)").then { (snapshot) -> Promise<Void> in
+        let tile = Tile(position: pos, snapshot: snapshot)
+        tiles.add(tile)
+        loadingTiles.remove(key)
+        for objectId in tile.objectIds {
+          removedObjectIds.remove(objectId)
+        }
+        return Promise<Void>() // tile.loadObjects()
+      }
+      DDLogDebug("Caching \(key)")
+      promises.append(promise)
     }
     //
-    // Uncache + Cache objects
+    // Uncache + Cache objects, done as a sentinal so that the `remove` commands above can complete.
     //
-    for id in removedObjectIds {
-      GameObject.cache.removeValueForKey(id)
-    }
-
+    promises.append(Promise { fulfill, reject in
+      for id in removedObjectIds {
+        GameObject.cache.removeValueForKey(id)
+      }
+      fulfill()
+    })
     return when(promises)
   }
   /**
