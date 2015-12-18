@@ -93,6 +93,7 @@ class IsoScene: SKScene {
    * Touches & Controls
    ***********************************************************************/
   var dPadDirection:Direction? {
+    //return Direction.N
     if self.touches.count != 1 || firstTouchLocation.x > self.size.width/2 {
       // We must have exactly one touch that started on the left side of the screen
       return nil
@@ -155,7 +156,12 @@ class IsoScene: SKScene {
   }
 
   func addTile(tile:Tile) -> Bool {
+    let key = tile.position.description
+    guard self.tiles[key] == nil else {
+      return false
+    }
     if self.addGameSprite(tile, at: tile.position, inLayer: layerIsoGround) {
+      self.tiles[tile.position.description] = tile
       drawObjects(tile)
       return true
     }
@@ -164,13 +170,9 @@ class IsoScene: SKScene {
     }
   }
 
-  func removeTile(position: MapPosition) -> Void {
-    guard let tile = self.tiles[position.description] else {
-      return
-    }
-    tile.sprite.removeFromParent()
-    self.tiles.removeValueForKey(position.description)
+  func removeTile(tile: Tile) -> Void {
     tile.cleanup()
+    self.tiles.removeValueForKey(tile.position.description)
   }
 
   var center: MapPosition {
@@ -317,7 +319,7 @@ class IsoScene: SKScene {
 
     if !self.isPositionOnScreen(object.position) {
       // Not on screen? Just remove it.
-      object.sprite.removeFromParent()
+      object.cleanup()
       self.objects.removeValueForKey(object.id)
     }
     else if self.objects.keys.contains(object.id) {
@@ -371,12 +373,6 @@ class IsoScene: SKScene {
    * steps / walking
    ***********************************************************************/
 
-  func clearTiles() {
-    while self.tiles.values.count > 0 {
-      removeTile(self.tiles.values.first!.position)
-    }
-  }
-  
   func drawObjects(tile: Tile) -> UInt {
     var cnt:UInt = 0
     for objId in tile.objectIds {
@@ -397,20 +393,19 @@ class IsoScene: SKScene {
   func unloadOffScreenObjects() {
     for obj in self.objects.values {
       if !self.isPositionOnScreen(obj.position) {
-        obj.sprite.removeFromParent()
+        obj.cleanup()
         GameObject.cache.removeValueForKey(obj.id)
         self.objects.removeValueForKey(obj.id)
-        obj.cleanup()
       }
     }
   }
 
-  func drawTiles() {
-    for tile in self.tiles.values {
+  func drawTiles(newTiles: [String:Tile]) {
+    for tile in newTiles.values {
       if !self.isPositionOnScreen(tile.position) {
-        removeTile(tile.position)
+        removeTile(tile)
       }
-      else {
+      else if tile.sprite.parent == nil {
         addTile(tile)
       }
     }
@@ -419,9 +414,8 @@ class IsoScene: SKScene {
 
   private func onMoved() {
     Map.load(self.onScreenPositions, existingTiles: self.tiles).then { (tiles) -> Void in
-      self.tiles = tiles
       self.unloadOffScreenObjects()
-      self.drawTiles()
+      self.drawTiles(tiles)
     }
   }
 
@@ -453,8 +447,13 @@ class IsoScene: SKScene {
       oldPoint = teleportPoint
       
       // Redraw the world, otherwise we just teleported into nothingness.
-      self.clearTiles()
-      self.drawTiles()
+      for tile in self.tiles.values {
+        tile.sprite.position = mapPositionToIsoPoint(tile.position, closeToCenter: true)
+      }
+      for obj in self.objects.values {
+        obj.sprite.position = mapPositionToIsoPoint(obj.position, closeToCenter: true)
+      }
+      self.isoOcclusionZSort()
     }
     let diff = point - oldPoint
     let moveAction = SKAction.customActionWithDuration(Account.player!.stepTime, actionBlock: { (node, elapsed) -> Void in

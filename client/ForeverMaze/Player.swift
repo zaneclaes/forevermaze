@@ -14,6 +14,7 @@ class Player : Mobile {
   let playerID: String!
   dynamic var alias: String! = nil
   dynamic var lastLogin: NSNumber? = nil
+  dynamic var online: Bool = false
 
   init (playerID: String!, snapshot: FDataSnapshot!) {
     self.playerID = playerID

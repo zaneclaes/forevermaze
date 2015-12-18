@@ -81,6 +81,9 @@ class GameSprite : NSObject {
     else if type.rangeOfString("Number") != nil {
       newValue = 0
     }
+    else if type.rangeOfString("Bool") != nil {
+      newValue = false
+    }
     if newValue == nil || !val!.isEqual(newValue) {
       self.setValue(newValue, forKey: property)
       return true
@@ -147,10 +150,11 @@ class GameSprite : NSObject {
     }
     self.properties.removeAll()
     self.connection.removeAllObservers()
+    self.sprite.removeFromParent()
   }
 
   deinit {
+    cleanup()
     DDLogDebug("[DEALLOC] \(self)")
-    self.cleanup()
   }
 }

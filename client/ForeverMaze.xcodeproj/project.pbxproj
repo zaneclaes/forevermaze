@@ -13,6 +13,8 @@
 		2B2A76B41C023B6900172E27 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B2A76B11C023B6900172E27 /* FBSDKShareKit.framework */; };
 		2B2A76B81C023E5900172E27 /* robots.atlasc in Resources */ = {isa = PBXBuildFile; fileRef = 2B2A76B71C023E5900172E27 /* robots.atlasc */; };
 		2B2A76BA1C0240A300172E27 /* AccountScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2A76B91C0240A300172E27 /* AccountScene.swift */; };
+		2B4B5D7D1C239E1F00E5C7F9 /* Threading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4B5D7C1C239E1F00E5C7F9 /* Threading.swift */; };
+		2B4B5D7F1C23A40500E5C7F9 /* Timing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4B5D7E1C23A40500E5C7F9 /* Timing.swift */; };
 		2B4E97C81BFFA5DD0066D521 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97C71BFFA5DD0066D521 /* AppDelegate.swift */; };
 		2B4E97CC1BFFA5DD0066D521 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */; };
 		2B4E97CE1BFFA5DD0066D521 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97CD1BFFA5DD0066D521 /* GameViewController.swift */; };
@@ -98,6 +100,8 @@
 		2B2A76B11C023B6900172E27 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = Frameworks/FBSDKShareKit.framework; sourceTree = "<group>"; };
 		2B2A76B71C023E5900172E27 /* robots.atlasc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = robots.atlasc; path = Resources/robots.atlasc; sourceTree = SOURCE_ROOT; };
 		2B2A76B91C0240A300172E27 /* AccountScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountScene.swift; sourceTree = "<group>"; };
+		2B4B5D7C1C239E1F00E5C7F9 /* Threading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Threading.swift; sourceTree = "<group>"; };
+		2B4B5D7E1C23A40500E5C7F9 /* Timing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timing.swift; sourceTree = "<group>"; };
 		2B4E97C41BFFA5DD0066D521 /* ForeverMaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ForeverMaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B4E97C71BFFA5DD0066D521 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -336,6 +340,8 @@
 			isa = PBXGroup;
 			children = (
 				2FAF46941C0C188C00B1F898 /* String+Extensions.swift */,
+				2B4B5D7C1C239E1F00E5C7F9 /* Threading.swift */,
+				2B4B5D7E1C23A40500E5C7F9 /* Timing.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -649,6 +655,8 @@
 				2BB6F16B1BFFE407009DF879 /* Tile.swift in Sources */,
 				2BB6F14F1BFFD272009DF879 /* Config.swift in Sources */,
 				2BB6F1571BFFDB62009DF879 /* Player.swift in Sources */,
+				2B4B5D7F1C23A40500E5C7F9 /* Timing.swift in Sources */,
+				2B4B5D7D1C239E1F00E5C7F9 /* Threading.swift in Sources */,
 				2BB6F1751BFFE4D2009DF879 /* Static.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -85,16 +85,14 @@ class Data {
   static func loadSnapshot(firebasePath: String!) -> Promise<FDataSnapshot?> {
     let (promise, fulfill, _) = Promise<FDataSnapshot?>.pendingPromise()
     let connection = Firebase(url: Config.firebaseUrl + firebasePath)
-    connection.observeEventType(.Value, withBlock: { snapshot in
+    connection.observeSingleEventOfType(.Value, withBlock: { snapshot in
       if !promise.resolved {
-        connection.removeAllObservers()
         fulfill(snapshot)
       }
     })
     after(Config.timeout).then { () -> Void in
       if !promise.resolved {
         DDLogWarn("[TIMEOUT] [FIREBASE-READ] \(firebasePath)")
-        connection.removeAllObservers()
         fulfill(nil)
         //reject(Errors.network)
       }

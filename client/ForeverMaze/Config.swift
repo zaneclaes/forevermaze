@@ -15,10 +15,10 @@ import PromiseKit
 class Config {
   static let firebaseUrl:String = "https://forevermaze.firebaseio.com"
   static let device = Device()
-  static let timeout:NSTimeInterval = 10
+  static let timeout:NSTimeInterval = 30
   static let baseErrorDomain = NSBundle.mainBundle().bundleIdentifier
   static let stepTime = 0.2
-  static let tileBuffer = 10
+  static let tileBuffer = 0
   static var worldSize = MapSize(width: 100, height: 100)
   static var remote:FDataSnapshot!
 

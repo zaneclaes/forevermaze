@@ -171,25 +171,8 @@ struct MapBox : CustomStringConvertible {
 /************************************************************************
  * Main Map Interface
  ***********************************************************************/
-class MapTiles {
-  var cache: [String: Tile] = [:]
-
-  func contains(position: MapPosition) -> Bool {
-    return self.cache["\(position.x)x\(position.y)"] != nil
-  }
-
-  subscript(position: MapPosition) -> Tile! {
-    get { return self.cache["\(position.x)x\(position.y)"]        }
-    set { self.cache["\(position.x)x\(position.y)"] = newValue    }
-  }
-
-  subscript(key: String) -> Tile! {
-    return self.cache[key]
-  }
-}
 class Map {
   static var loadingTiles:[String:Promise<Void>] = [:]
-
   /**
    * Load the map into the tiles array based upon Config.screenTiles
    * If a tile already exists, it does not reload it.
@@ -199,12 +182,13 @@ class Map {
     // Load any new tiles...
     var promises = Array<Promise<Void>>()
     for pos in positions {
-      let key = "\(pos.x)x\(pos.y)"
+      let key = pos.description
       if existingTiles[key] != nil {
         continue
       }
-      if loadingTiles[key] == nil {
-        loadingTiles[key] = Data.loadSnapshot("/tiles/\(key)").then { (snapshot) -> Promise<Void> in
+      var promise = loadingTiles[key]
+      if promise == nil {
+        promise = Data.loadSnapshot("/tiles/\(key)").then { (snapshot) -> Promise<Void> in
           guard snapshot != nil else {
             return Promise<Void>()
           }
@@ -212,8 +196,9 @@ class Map {
           loadingTiles.removeValueForKey(key)
           return existingTiles[key]!.loadObjects()
         }
+        loadingTiles[key] = promise
       }
-      promises.append(loadingTiles[key]!)
+      promises.append(promise!)
     }
     return (promises.count > 0 ? when(promises) : Promise<Void>()).then { () -> [String:Tile] in
       return existingTiles
