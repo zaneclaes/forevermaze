@@ -14,7 +14,6 @@
 		2B2A76B81C023E5900172E27 /* robots.atlasc in Resources */ = {isa = PBXBuildFile; fileRef = 2B2A76B71C023E5900172E27 /* robots.atlasc */; };
 		2B2A76BA1C0240A300172E27 /* AccountScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2A76B91C0240A300172E27 /* AccountScene.swift */; };
 		2B4B5D7D1C239E1F00E5C7F9 /* Threading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4B5D7C1C239E1F00E5C7F9 /* Threading.swift */; };
-		2B4B5D7F1C23A40500E5C7F9 /* Timing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4B5D7E1C23A40500E5C7F9 /* Timing.swift */; };
 		2B4E97C81BFFA5DD0066D521 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97C71BFFA5DD0066D521 /* AppDelegate.swift */; };
 		2B4E97CC1BFFA5DD0066D521 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */; };
 		2B4E97CE1BFFA5DD0066D521 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E97CD1BFFA5DD0066D521 /* GameViewController.swift */; };
@@ -101,7 +100,6 @@
 		2B2A76B71C023E5900172E27 /* robots.atlasc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = robots.atlasc; path = Resources/robots.atlasc; sourceTree = SOURCE_ROOT; };
 		2B2A76B91C0240A300172E27 /* AccountScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountScene.swift; sourceTree = "<group>"; };
 		2B4B5D7C1C239E1F00E5C7F9 /* Threading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Threading.swift; sourceTree = "<group>"; };
-		2B4B5D7E1C23A40500E5C7F9 /* Timing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timing.swift; sourceTree = "<group>"; };
 		2B4E97C41BFFA5DD0066D521 /* ForeverMaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ForeverMaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B4E97C71BFFA5DD0066D521 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -115,7 +113,7 @@
 		2B4E97E71BFFA5DE0066D521 /* ForeverMazeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ForeverMazeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B4E97EB1BFFA5DE0066D521 /* ForeverMazeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeverMazeUITests.swift; sourceTree = "<group>"; };
 		2B4E97ED1BFFA5DE0066D521 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2B5B05FC1C03FE62006E0973 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = ForeverMaze/Utils.swift; sourceTree = "<group>"; };
+		2B5B05FC1C03FE62006E0973 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		2B5B05FE1C041273006E0973 /* I18n.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = I18n.swift; path = ForeverMaze/I18n.swift; sourceTree = "<group>"; };
 		2BB6F13D1BFFCC03009DF879 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		2BB6F14A1BFFD243009DF879 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Account.swift; path = ForeverMaze/Account.swift; sourceTree = "<group>"; };
@@ -241,7 +239,6 @@
 			children = (
 				2BB6F14E1BFFD272009DF879 /* Config.swift */,
 				2BB6F14A1BFFD243009DF879 /* Account.swift */,
-				2B5B05FC1C03FE62006E0973 /* Utils.swift */,
 				2B5B05FE1C041273006E0973 /* I18n.swift */,
 				2BEDFA7E1C216788001BE36D /* Errors.swift */,
 				2BB884ED1C04E40F006E4570 /* Data.swift */,
@@ -341,7 +338,7 @@
 			children = (
 				2FAF46941C0C188C00B1F898 /* String+Extensions.swift */,
 				2B4B5D7C1C239E1F00E5C7F9 /* Threading.swift */,
-				2B4B5D7E1C23A40500E5C7F9 /* Timing.swift */,
+				2B5B05FC1C03FE62006E0973 /* Utils.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -655,7 +652,6 @@
 				2BB6F16B1BFFE407009DF879 /* Tile.swift in Sources */,
 				2BB6F14F1BFFD272009DF879 /* Config.swift in Sources */,
 				2BB6F1571BFFDB62009DF879 /* Player.swift in Sources */,
-				2B4B5D7F1C23A40500E5C7F9 /* Timing.swift in Sources */,
 				2B4B5D7D1C239E1F00E5C7F9 /* Threading.swift in Sources */,
 				2BB6F1751BFFE4D2009DF879 /* Static.swift in Sources */,
 			);

@@ -109,7 +109,7 @@ class GameSprite : NSObject {
   }
 
   var firebaseProperties:[String] {
-    return Utils.getProperties(self, filter: { (name, attributes) -> (Bool) in
+    return getProperties(self, filter: { (name, attributes) -> (Bool) in
       if self.localProperties.contains(name) {
         return true
       }
