@@ -26,7 +26,6 @@ class LocalPlayer : Player {
       Account.player = player
       player.lastLogin = NSDate().timeIntervalSince1970
       player.online = true
-      GameObject.cache[player.id] = player
       return player.cacheTextures()
     }.then { (gameObject) -> LocalPlayer! in
       return Account.player

@@ -88,7 +88,7 @@ class Tile : GameSprite {
     var objIds = Array<String>()
     var changed = false
     for objId in self.objectIds {
-      let obj = GameObject.cache[objId]
+      let obj = self.gameScene?.objects[objId]
       if obj != nil && obj?.position.x != self.position.x && obj?.position.y != self.position.y {
         DDLogWarn("Scrubbing \(objId) from \(self) because it has moved.")
         changed = true
@@ -108,20 +108,5 @@ class Tile : GameSprite {
 
   override var description:String {
     return "<Tile \(position.x)x\(position.y)>: \(emotion)"
-  }
-  
-  private var promiseLoad:Promise<Void>? = nil
-  var loaded: Bool {
-    return (promiseLoad?.resolved)!
-  }
-
-  func loadObjects() -> Promise<Void> {
-    if promiseLoad == nil {
-      promiseLoad = Data.loadObjects(self.objectIds)
-      promiseLoad!.then { () -> Void in
-        self.scrubObjects()
-      }
-    }
-    return promiseLoad!
   }
 }

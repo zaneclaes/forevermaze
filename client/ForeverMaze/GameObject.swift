@@ -48,13 +48,10 @@ enum Direction: Int {
 
 class GameObject : GameSprite {
   // Lookup cache for all gameObjects in the map, on ID
-  static var cache:[String:GameObject] = [:]
   static var textureCache:[String:SKTexture] = [:]
 
   private dynamic var x: UInt = 0
   private dynamic var y: UInt = 0
-
-  dynamic var arrivalTime:NSTimeInterval = 0 // When stepping/teleporting/etc., when does the object arrive? For recipient-side animation.
 
   override init(snapshot: FDataSnapshot!) {
     super.init(snapshot: snapshot)
@@ -99,6 +96,10 @@ class GameObject : GameSprite {
 
   var assetName:String {
     return self.assetPrefix + self.direction.description.lowercaseString
+  }
+
+  var movememntTime:NSTimeInterval {
+    return Config.stepTime
   }
 
   private func updateSpriteTexture() {
@@ -178,7 +179,6 @@ class GameObject : GameSprite {
     }
     else {
       // Cache the object so we can find it later easily
-      cache[objId] = obj
       return obj.cacheTextures()
     }
   }
@@ -186,8 +186,12 @@ class GameObject : GameSprite {
    * Cleanup also uncaches textures from the static textureCache when they're not needed.
    */
   override func cleanup() {
+    guard self.gameScene != nil else {
+      super.cleanup()
+      return
+    }
     var texturesStillInUse = self.assetPrefix == Account.player?.assetPrefix
-    for (_, obj) in GameObject.cache {
+    for (_, obj) in (self.gameScene?.objects)! {
       if obj.assetPrefix == self.assetPrefix {
         texturesStillInUse = true
         break

@@ -10,10 +10,6 @@ import SpriteKit
 
 class Mobile : GameObject {
 
-  var stepTime:NSTimeInterval {
-    return Config.stepTime
-  }
-
   func move(xDist: Int, yDist: Int) {
     self.position = self.position + (xDist, yDist)
   }
@@ -21,7 +17,6 @@ class Mobile : GameObject {
   func step(direction: Direction) {
     let (x,y) = direction.amount
     self.move(x, yDist: y)
-    self.arrivalTime = NSDate().timeIntervalSince1970 + self.stepTime
   }
 
   func step() {

@@ -117,11 +117,16 @@ class IsoScene: SKScene {
     if gameSprite.sprite.parent != inLayer {
       inLayer.addChild(gameSprite.sprite)
     }
+    self.isoOcclusionZSort()
     return true
   }
 
   func addObject(obj:GameObject) -> Bool {
-    return self.addGameSprite(obj, at: obj.position, inLayer: layerIsoObjects)
+    guard self.addGameSprite(obj, at: obj.position, inLayer: layerIsoObjects) else {
+      return false
+    }
+    self.objects[obj.id] = obj;
+    return true;
   }
 
   func addTile(tile:Tile) -> Bool {
@@ -131,7 +136,18 @@ class IsoScene: SKScene {
     }
     if self.addGameSprite(tile, at: tile.position, inLayer: layerIsoGround) {
       self.tiles[tile.position.description] = tile
-      drawObjects(tile)
+      for objId in tile.objectIds {
+        if self.objects[objId] != nil || objId.hasSuffix((Account.player?.playerID)!) {
+          continue
+        }
+        Data.loadObject(objId).then { (gameObject) -> Void in
+          guard gameObject != nil else {
+            DDLogWarn("Failed to load object \(objId)")
+            return
+          }
+          self.addObject(gameObject!)
+        }
+      }
       return true
     }
     else {
@@ -259,16 +275,12 @@ class IsoScene: SKScene {
   private var objectsMovingTo:[String:CGPoint] = [:]
   func animateObjectMovement(object: GameObject) {
     let animationKey = "move"
-    object.sprite.removeActionForKey(animationKey)
-    let time =  object.arrivalTime - NSDate().timeIntervalSince1970
+    let time = object.movememntTime
     let point = mapPositionToIsoPoint(object.position, closeToCenter: true)
-    guard time > 0 else {
-      object.sprite.position = point
-      return
-    }
 
     let alreadyMovingTo = self.objectsMovingTo[object.id]
     if alreadyMovingTo == nil || alreadyMovingTo! != point {
+      object.sprite.removeActionForKey(animationKey)
       self.objectsMovingTo[object.id] = point
       object.sprite.runAction(SKAction.sequence([
         SKAction.moveTo(point, duration: time),
@@ -297,9 +309,7 @@ class IsoScene: SKScene {
     }
     else {
       // Newly on screen! Just add it.
-      if addObject(object) {
-        self.objects[object.id] = object
-      }
+      addObject(object);
     }
   }
 
@@ -311,14 +321,15 @@ class IsoScene: SKScene {
 
   func onObjectsIdsMoved(objectIds: Set<String>) {
     var loadedObjects = Set<GameObject>()
-    var pendingObjectIds = Array<String>()
     for objectId in objectIds {
       let gameObject = self.objects[objectId]
       if gameObject != nil {
         loadedObjects.insert(gameObject!)
       }
       else {
-        pendingObjectIds.append(objectId)
+        Data.loadObject(objectId).then { (gameObject) -> Void in
+          self.onObjectMoved(gameObject)
+        }
       }
     }
 
@@ -326,38 +337,11 @@ class IsoScene: SKScene {
     // Even though loadObjects skips double-loads, if we had a mixed-set,
     // we'd be waiting on all objects to load before moving the existing objects.
     self.onObjectsMoved(loadedObjects)
-
-    // Next, load the pending objects...
-    Data.loadObjects(pendingObjectIds).then { () -> Void in
-      for objectId in pendingObjectIds {
-        let gameObject = GameObject.cache[objectId]
-        if gameObject != nil {
-          self.onObjectMoved(gameObject!)
-        }
-      }
-    }
   }
 
   /************************************************************************
    * steps / walking
    ***********************************************************************/
-
-  func drawObjects(tile: Tile) -> UInt {
-    var cnt:UInt = 0
-    for objId in tile.objectIds {
-      guard let obj = GameObject.cache[objId] else {
-        continue
-      }
-      if obj.id.hasSuffix((Account.player?.playerID)!) {
-        continue
-      }
-      if addObject(obj) {
-        self.objects[obj.id] = obj
-        cnt++
-      }
-    }
-    return cnt
-  }
 
   //
   // Main `loadTiles` function removes anything offscreen, and loads anything onscreen
@@ -375,7 +359,6 @@ class IsoScene: SKScene {
     for obj in self.objects.values {
       if !self.isPositionOnScreen(obj.position) {
         obj.cleanup()
-        GameObject.cache.removeValueForKey(obj.id)
         self.objects.removeValueForKey(obj.id)
       }
     }
@@ -391,21 +374,17 @@ class IsoScene: SKScene {
         continue
       }
       var tile:Tile! = nil
-      let promise = Data.loadSnapshot("/tiles/\(key)").then { (snapshot) -> Promise<Void> in
+      let promise = Data.loadSnapshot("/tiles/\(key)").then { (snapshot) -> Void in
         guard snapshot != nil else {
-          return Promise<Void>()
+          DDLogWarn("Missing Tile \(key)")
+          return
         }
         tile = Tile(position: pos, snapshot: snapshot!)
-        return tile.loadObjects()
-      }.then { () -> Void in
-        if tile != nil {
-          if !self.isPositionOnScreen(tile.position) {
-            self.removeTile(tile)
-          }
-          else if tile.sprite.parent == nil {
-            self.addTile(tile)
-            self.isoOcclusionZSort()
-          }
+        if !self.isPositionOnScreen(tile.position) {
+          self.removeTile(tile)
+        }
+        else if tile.sprite.parent == nil {
+          self.addTile(tile)
         }
         self.loadingTiles.removeValueForKey(key)!
       }
@@ -452,8 +431,8 @@ class IsoScene: SKScene {
       self.isoOcclusionZSort()
     }
     let diff = point - oldPoint
-    let moveAction = SKAction.customActionWithDuration(Account.player!.stepTime, actionBlock: { (node, elapsed) -> Void in
-      let percentDone = min(elapsed / CGFloat(Account.player!.stepTime), 1)
+    let moveAction = SKAction.customActionWithDuration(Account.player!.movememntTime, actionBlock: { (node, elapsed) -> Void in
+      let percentDone = min(elapsed / CGFloat(Account.player!.movememntTime), 1)
       let pos = oldPoint + (diff * CGPoint(x: percentDone, y: percentDone))
       self.playerSprite?.position = pos
       self.viewIso.position = self.viewIsoPositionForPoint(pos)
