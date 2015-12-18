@@ -18,7 +18,7 @@ class Config {
   static let timeout:NSTimeInterval = 30
   static let baseErrorDomain = NSBundle.mainBundle().bundleIdentifier
   static let stepTime = 0.2
-  static let tileBuffer = 0
+  static let tileBuffer = 10
   static var worldSize = MapSize(width: 100, height: 100)
   static var remote:FDataSnapshot!
 

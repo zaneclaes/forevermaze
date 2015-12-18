@@ -29,14 +29,12 @@ class GameScene: IsoScene {
     self.addChild(label)
 
     self.center = (Account.player?.position)!
-    Map.load(self.onScreenPositions, existingTiles: self.tiles).then { (tiles) -> Void in
+    when(self.loadTiles()).then { (tiles) -> Void in
       DDLogInfo("Loaded.")
       
       self.playerSprite = Account.player!.sprite
       self.addObject(Account.player!)
       DDLogInfo("Player @ \(Account.player!.sprite.position)")
-
-      self.drawTiles(tiles)
 
       label.removeFromParent()
     }.error { (error) -> Void in

@@ -8,38 +8,7 @@
 
 import SpriteKit
 import CocoaLumberjack
-
-func + (left: CGPoint, right: CGPoint) -> CGPoint {
-  return CGPoint(x: left.x + right.x, y: left.y + right.y)
-}
-
-func - (left: CGPoint, right: CGPoint) -> CGPoint {
-  return CGPoint(x: left.x - right.x, y: left.y - right.y)
-}
-
-func * (point: CGPoint, scalar: CGPoint) -> CGPoint {
-  return CGPoint(x: point.x * scalar.x, y: point.y * scalar.y)
-}
-
-func / (point: CGPoint, scalar: CGPoint) -> CGPoint {
-  return CGPoint(x: point.x / scalar.x, y: point.y / scalar.y)
-}
-
-func distance(p1:CGPoint, p2:CGPoint) -> CGFloat {
-  return CGFloat(hypotf(Float(p1.x) - Float(p2.x), Float(p1.y) - Float(p2.y)))
-}
-
-func round(point:CGPoint) -> CGPoint {
-  return CGPoint(x: round(point.x), y: round(point.y))
-}
-
-func floor(point:CGPoint) -> CGPoint {
-  return CGPoint(x: floor(point.x), y: floor(point.y))
-}
-
-func ceil(point:CGPoint) -> CGPoint {
-  return CGPoint(x: ceil(point.x), y: ceil(point.y))
-}
+import PromiseKit
 
 class IsoScene: SKScene {
 
@@ -390,7 +359,19 @@ class IsoScene: SKScene {
     return cnt
   }
 
-  func unloadOffScreenObjects() {
+  //
+  // Main `loadTiles` function removes anything offscreen, and loads anything onscreen
+  //
+  var loadingTiles:[String:Promise<Void>] = [:]
+  func loadTiles() -> [Promise<Void>] {
+    var promises:[Promise<Void>] = []
+
+    // Start by unloading anything off-screen
+    for tile in self.tiles.values {
+      if !self.isPositionOnScreen(tile.position) {
+        removeTile(tile)
+      }
+    }
     for obj in self.objects.values {
       if !self.isPositionOnScreen(obj.position) {
         obj.cleanup()
@@ -398,25 +379,40 @@ class IsoScene: SKScene {
         self.objects.removeValueForKey(obj.id)
       }
     }
-  }
 
-  func drawTiles(newTiles: [String:Tile]) {
-    for tile in newTiles.values {
-      if !self.isPositionOnScreen(tile.position) {
-        removeTile(tile)
+    // Then load any new tiles
+    for pos in self.onScreenPositions {
+      let key = pos.description
+      if self.tiles[key] != nil {
+        continue
       }
-      else if tile.sprite.parent == nil {
-        addTile(tile)
+      if self.loadingTiles[key] != nil {
+        promises.append(self.loadingTiles[key]!)
+        continue
       }
+      var tile:Tile! = nil
+      let promise = Data.loadSnapshot("/tiles/\(key)").then { (snapshot) -> Promise<Void> in
+        guard snapshot != nil else {
+          return Promise<Void>()
+        }
+        tile = Tile(position: pos, snapshot: snapshot!)
+        return tile.loadObjects()
+      }.then { () -> Void in
+        if tile != nil {
+          if !self.isPositionOnScreen(tile.position) {
+            self.removeTile(tile)
+          }
+          else if tile.sprite.parent == nil {
+            self.addTile(tile)
+            self.isoOcclusionZSort()
+          }
+        }
+        self.loadingTiles.removeValueForKey(key)!
+      }
+      promises.append(promise)
+      loadingTiles[key] = promise
     }
-    self.isoOcclusionZSort()
-  }
-
-  private func onMoved() {
-    Map.load(self.onScreenPositions, existingTiles: self.tiles).then { (tiles) -> Void in
-      self.unloadOffScreenObjects()
-      self.drawTiles(tiles)
-    }
+    return promises
   }
 
   private func checkStep() {
@@ -430,7 +426,7 @@ class IsoScene: SKScene {
     Account.player!.direction = dir!
     Account.player!.step()
     self.center = (Account.player?.position)!
-    self.onMoved()
+    self.loadTiles()
     
     let point = self.mapPositionToIsoPoint(self.center)
     let wrapX = (self.center.x == 0 && oldPos.x == self.worldSize.width - 1) ||
