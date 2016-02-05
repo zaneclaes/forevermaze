@@ -81,6 +81,11 @@ class GameStatic : NSObject {
       }
     }
   }
+  
+  func assignScale() {
+    self.sprite.yScale = Config.objectScale
+    self.sprite.xScale = self.sprite.xScale < 0 ? -Config.objectScale : Config.objectScale
+  }
 
   var isLoading:Bool {
     return !self.loading.fulfilled

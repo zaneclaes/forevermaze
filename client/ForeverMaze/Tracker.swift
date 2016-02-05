@@ -57,6 +57,9 @@ class Tracker : SKNode {
     }
     else {
       self.texture = mobile.sprite.texture!
+      unmaskedPicture.xScale = 0.5
+      unmaskedPicture.yScale = 0.5
+      background.fillColor = UIColor(red: 0.24, green: 0.2, blue: 0.36, alpha: 1)
     }
     self.addChild(picture)
     
@@ -109,7 +112,8 @@ class Tracker : SKNode {
       }
       return
     }
-    let vector = mobile.sprite.position - Account.player!.sprite.position
+    // Convert coordinates to space so that we ignore changes in Z position (i.e., jumping)
+    let vector = mobile.gameScene!.coordinateToPosition(mobile.coordinate) - mobile.gameScene!.coordinateToPosition(Account.player!.coordinate)
     let slope = vector.x==0 ? 1 : vector.y / vector.x
     let pad = Int(Tracker.diameter * 2/3)
     let xRange = NSMakeRange(pad, Int(mobile.gameScene!.size.width) - pad)

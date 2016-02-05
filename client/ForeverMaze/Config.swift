@@ -25,6 +25,7 @@ class Config {
   static let baseErrorDomain = NSBundle.mainBundle().bundleIdentifier
   static let stepTime = 0.4
   static let tileBuffer = 5
+  static let objectScale:CGFloat = UIDevice.currentDevice().userInterfaceIdiom == .Phone ? 0.5 : 1
   static let flipTileCost = 10
   static let minOtherPlayerSpawnDistance:UInt = 20
   static var worldSize = MapSize(width: 100, height: 100)

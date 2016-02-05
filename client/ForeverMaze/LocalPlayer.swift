@@ -200,8 +200,8 @@ class LocalPlayer : Player {
       self.updateAdjacentTilesLockedStates()
     }
     
-    let squash = SKAction.scaleXTo(self.sprite.xScale, y: 0.66, duration: 0.05)
-    let expand = SKAction.scaleXTo(self.sprite.xScale, y: 1, duration: 0.05)
+    let squash = SKAction.scaleXTo(self.sprite.xScale, y: CGFloat(0.66) * Config.objectScale, duration: 0.05)
+    let expand = SKAction.scaleXTo(self.sprite.xScale, y: Config.objectScale, duration: 0.05)
     let jump = SKAction.moveByX(0, y: 20, duration: 0.15)
     let emoji = SKAction.runBlock { () -> Void in
       self.emoji = self.emoji + 1

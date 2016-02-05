@@ -60,7 +60,9 @@ enum Emotion: Int {
 }
 
 class Tile : GameStatic {
+  static let size = (width:88, height:88)
   static let yOrigin:CGFloat = 68
+  
   let coordinate: Coordinate
   private dynamic var e:Int = 0
   dynamic var objectIds:Array<String> = []
@@ -92,6 +94,7 @@ class Tile : GameStatic {
   func updateTexture() {
     self.sprite.texture = Config.worldAtlas.textureNamed("tile_\(self.emotion.description.lowercaseString)")
     self.icon.texture = Config.worldAtlas.textureNamed("icon_\(self.emotion.description.lowercaseString)")
+    self.assignScale()
   }
 
   func updateLockedState() {
@@ -167,7 +170,7 @@ class Tile : GameStatic {
   func playUnlockAnimation() {
     let path = NSBundle.mainBundle().pathForResource("unlock-\(self.emotion.description.lowercaseString)", ofType: "sks")!
     let particle = NSKeyedUnarchiver.unarchiveObjectWithFile(path) as! SKEmitterNode
-    particle.position = CGPointMake(0, self.sprite.size.height/2)
+    particle.position = CGPointMake(0, CGFloat(Tile.size.height))
     particle.name = "unlockParticles"
     //particle.targetNode = self.gameScene
     particle.zPosition = 10000

@@ -12,8 +12,7 @@ import PromiseKit
 
 class IsoScene: SKScene {
   
-  static let tileSize = (width:90, height:90)
-  static let tileOffset = CGPointMake(0, -Tile.yOrigin) // Tiles have a different origin
+  static let tileOffset = CGPointMake(0, -Tile.yOrigin * Config.objectScale) // Tiles have a different origin
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
@@ -175,6 +174,10 @@ class IsoScene: SKScene {
     tile.cleanup()
     self.tiles.removeValueForKey(tile.coordinate.description)
   }
+  
+  static var tileSize:CGSize {
+    return CGSizeMake(CGFloat(Tile.size.width) * Config.objectScale, CGFloat(Tile.size.height) * Config.objectScale)
+  }
 
   var center: Coordinate {
     didSet {
@@ -197,7 +200,7 @@ class IsoScene: SKScene {
    ***********************************************************************/
 
   func isCoordinateOnScreen(position: Coordinate, includeBuffer: Bool) -> Bool {
-    let bufferPx = includeBuffer ? CGFloat(Config.tileBuffer * IsoScene.tileSize.width) : 0
+    let bufferPx = includeBuffer ? CGFloat(Config.tileBuffer) * IsoScene.tileSize.width : 0
     let maxDist = CGSizeMake(self.size.width / 2 + bufferPx, self.size.height / 2 + bufferPx)
     let testCoord = Coordinate(x: 50, y: 50)
     let offset = position - self.center + testCoord
@@ -225,7 +228,7 @@ class IsoScene: SKScene {
       }
     }
     
-    let pixels = CGPoint(x: xPos * IsoScene.tileSize.width, y: yPos*IsoScene.tileSize.height)
+    let pixels = CGPoint(x: CGFloat(xPos) * IsoScene.tileSize.width, y: CGFloat(yPos)*IsoScene.tileSize.height)
     let point = CGPoint(x:((pixels.x + pixels.y)), y: (pixels.y - pixels.x)/2)
     return point
   }

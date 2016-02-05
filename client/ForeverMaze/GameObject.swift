@@ -23,7 +23,8 @@ class GameObject : GameStatic {
   func draw() -> Promise<GameObject!> {
     return Animation.preload(assetName).then { (animation) -> Promise<GameObject!> in
       self.currentAnimationKey = ""
-      self.sprite = self.animation!.createSprite(.Idle, direction: self.direction)
+      self.sprite = self.animation!.createSprite(.Idle, direction: .S)
+      self.assignScale()
       self.updateAnimation()
       return Promise<GameObject!>(self)
     }
@@ -51,7 +52,7 @@ class GameObject : GameStatic {
       self.sprite.removeActionForKey(Animation.actionKey)
       self.sprite.runAction(self.animation!.getAction(group, direction: direction, speed: self.speed), withKey: Animation.actionKey)
     }
-    self.sprite.xScale = isReversedAnimation ? -1 : 1
+    self.sprite.xScale = isReversedAnimation ? -Config.objectScale : Config.objectScale
   }
   
   func updateAnimation() {
