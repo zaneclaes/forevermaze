@@ -37,6 +37,10 @@ class GameScene: IsoScene {
 
   override func didMoveToView(view: SKView) {
     super.didMoveToView(view)
+    
+    guard !loaded && Account.player!.sprite.parent == nil else {
+      return
+    }
 
     let label = SKLabelNode(text: I18n.t("menu.loading"))
     label.fontName = Config.font
@@ -54,6 +58,7 @@ class GameScene: IsoScene {
       
       self.playerSprite = Account.player!.sprite
       self.addObject(Account.player!)
+      self.viewIso.position = self.viewIsoPositionForPoint(Account.player!.sprite.position)
       DDLogInfo("Player @ \(Account.player!.sprite.position)")
 
       if Account.player!.depressionCoordinate != nil {
@@ -175,6 +180,7 @@ class GameScene: IsoScene {
       self.depression.step()
       self.onObjectMoved(self.depression)
     }
+    layerUI.repositionTrackers()
     super.update(currentTime)
   }
 }

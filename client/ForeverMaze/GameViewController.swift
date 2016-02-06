@@ -10,6 +10,8 @@ import UIKit
 import SpriteKit
 
 class GameViewController: UIViewController {
+  
+  let menuScene = MenuScene(size: UIScreen.mainScreen().bounds.size)
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -23,9 +25,8 @@ class GameViewController: UIViewController {
     guard skView.scene == nil || !skView.scene!.isKindOfClass(MenuScene) else {
       return
     }
-    let scene = MenuScene(size: view.bounds.size)
-    scene.scaleMode = .ResizeFill
-    skView.presentScene(scene)    
+    menuScene.scaleMode = .ResizeFill
+    skView.presentScene(menuScene)
   }
   
   var skView:SKView {

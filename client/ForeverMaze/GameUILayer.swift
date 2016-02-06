@@ -12,9 +12,10 @@ import CocoaLumberjack
 
 class GameUILayer : SKSpriteNode {
   let uiZ:CGFloat = 1000
-  let buttonChangeTile = SgButton(normalTexture: Config.worldAtlas.textureNamed("button_up"), highlightedTexture: Config.worldAtlas.textureNamed("button_down"))
-  let labelEmoji = SKLabelNode(text: "😀 x 0")
-  let labelLevel = SKLabelNode(fontNamed: Config.font)
+  let buttonChangeTile = SgButton(normalTexture: Config.worldAtlas.textureNamed("button_up"),
+                                  highlightedTexture: Config.worldAtlas.textureNamed("button_down"))
+  let banner = SKSpriteNode(texture: Config.worldAtlas.textureNamed("banner"))
+  let labelBanner = SKLabelNode(text: "😀 x 0")
   var trackers = Array<Tracker>()
 
   required init?(coder aDecoder: NSCoder) {
@@ -50,19 +51,19 @@ class GameUILayer : SKSpriteNode {
       self.updateUI()
     }
     self.addChild(buttonChangeTile)
-
-    labelEmoji.color = SKColor.whiteColor()
-    labelEmoji.fontName = Config.font
-    labelEmoji.fontSize = 24
-    labelEmoji.zPosition = 1
-    labelEmoji.position = CGPoint(x: size.width/2, y: size.height - sidePad - labelEmoji.frame.size.height)
-    self.addChild(labelEmoji)
     
-    labelLevel.color = .whiteColor()
-    labelLevel.fontSize = 24
-    labelLevel.zPosition = 1
-    labelLevel.position = CGPointMake(size.width - 50, labelEmoji.position.y)
-    addChild(labelLevel)
+    banner.position = CGPoint(x: size.width/2, y: size.height - sidePad - labelBanner.frame.size.height)
+    banner.zPosition = 1
+    banner.xScale = 0.66
+    banner.yScale = banner.xScale
+    addChild(banner)
+
+    labelBanner.color = SKColor.whiteColor()
+    labelBanner.fontName = Config.font
+    labelBanner.fontSize = 14
+    labelBanner.zPosition = 2
+    labelBanner.position = banner.position + CGPointMake(0, 1)
+    self.addChild(labelBanner)
   }
 
   func addTracker(mobile: Mobile) {
@@ -87,8 +88,7 @@ class GameUILayer : SKSpriteNode {
     let facing = Account.player!.coordinate + Account.player!.direction.amount
     let tile = self.gameScene.tiles[facing.description]
     buttonChangeTile.hidden = tile == nil || tile!.unlocked || tile!.unlockable || Account.player!.emoji < Config.flipTileCost
-    labelEmoji.text = "😀 x \(Account.player!.emoji)"
-    labelLevel.text = "\(I18n.t("game.level"))\(Account.player!.currentLevel+1)"
+    labelBanner.text = "\(I18n.t("game.level"))\(Account.player!.currentLevel+1) 😀 x\(Account.player!.emoji)"
     repositionTrackers()
   }
 
@@ -99,7 +99,7 @@ class GameUILayer : SKSpriteNode {
     label.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2 + 80)
     self.addChild(label)
 
-    let move = SKAction.moveTo(CGPointMake(label.position.x, labelEmoji.position.y), duration: 1)
+    let move = SKAction.moveTo(CGPointMake(label.position.x, labelBanner.position.y), duration: 1)
     let remove = SKAction.runBlock(label.removeFromParent)
     label.runAction(SKAction.sequence([move, remove]))
 

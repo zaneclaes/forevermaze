@@ -10,13 +10,11 @@ import SpriteKit
 import PromiseKit
 import CocoaLumberjack
 
-class MenuScene: SKScene {
+class MenuScene: InterfaceScene {
   let gameScene:GameScene = GameScene(size: UIScreen.mainScreen().bounds.size)
-  let background = SKSpriteNode(imageNamed: "background")
-  let particle = NSKeyedUnarchiver.unarchiveObjectWithFile(NSBundle.mainBundle().pathForResource("snow", ofType: "sks")!) as! SKEmitterNode
+  let aboutScene:AboutScene = AboutScene(size: UIScreen.mainScreen().bounds.size)
+  
   let labelLoading = SKLabelNode(text: I18n.t("menu.loading"))
-  let banner = SKSpriteNode(texture: Config.worldAtlas.textureNamed("banner"))
-  let labelFM = SKLabelNode(text: "ForeverMaze")
   let buttonResume = MenuButton(title: I18n.t("menu.resume"))
   let buttonLogin = MenuButton(title: I18n.t("menu.login"))
   let buttonAbout = MenuButton(title: I18n.t("menu.about"))
@@ -26,35 +24,20 @@ class MenuScene: SKScene {
   let depression = Depression()
   
   override func didMoveToView(view: SKView) {
+    super.didMoveToView(view)
+    
+    guard labelLoading.parent == nil else {
+      return
+    }
+    
     let objectZ:CGFloat = 1000
     let mid = CGPoint(x: CGRectGetMidX(self.scene!.frame), y: CGRectGetMidY(self.scene!.frame))
-    background.position = mid
-    background.xScale = max( Config.objectScale, 0.6 )
-    background.yScale = max( Config.objectScale, 0.6 )
-    background.zPosition = -2
-    self.addChild(background)
-    
-    self.particle.position = CGPointMake(mid.x, CGRectGetMaxY(self.scene!.frame) + 40)
-    self.particle.name = "snow"
-    self.particle.zPosition = -1
-    self.addChild(self.particle)
     
     labelLoading.fontName = Config.font
     labelLoading.fontSize = 24
     labelLoading.color = SKColor.whiteColor()
     labelLoading.position = CGPoint(x: mid.x, y: 10)
     self.addChild(labelLoading)
-    
-    banner.position = CGPoint(x: mid.x, y: self.scene!.frame.size.height/3*2)
-    banner.zPosition = objectZ + 1.0
-    addChild(banner)
-    
-    labelFM.fontName = Config.font
-    labelFM.fontSize = 28
-    labelFM.color = SKColor.whiteColor()
-    labelFM.position = banner.position + CGPointMake(0, -1)
-    labelFM.zPosition = objectZ + 2.0
-    self.addChild(labelFM)
     
     var lastWasX = false
     let playerPosition = CGPoint(x: self.scene!.frame.size.width/5*4, y: self.scene!.frame.size.height/4)
@@ -98,7 +81,7 @@ class MenuScene: SKScene {
     buttonResume.zPosition = objectZ
     buttonResume.emotion = Emotion.Anger
     buttonResume.buttonFunc = { (button) -> Void in
-      self.pushGameScene()      
+      self.replaceScene(self.gameScene)
     }
     self.addChild(buttonResume)
     
@@ -116,6 +99,7 @@ class MenuScene: SKScene {
     buttonAbout.zPosition = objectZ
     buttonAbout.emotion = Emotion.Fear
     buttonAbout.buttonFunc = { (button) -> Void in
+      self.pushScene(self.aboutScene)
     }
     self.addChild(buttonAbout)
     
@@ -194,12 +178,6 @@ class MenuScene: SKScene {
     }
   }
 
-  func pushGameScene() {
-    let transition = SKTransition.crossFadeWithDuration(1.5)
-    gameScene.scaleMode = SKSceneScaleMode.AspectFill
-    self.scene!.view!.presentScene(gameScene, transition: transition)
-  }
-
   func login() {
     guard !isLoading else {
       return
@@ -208,7 +186,7 @@ class MenuScene: SKScene {
 
     Account.login().then { (playerID) -> Void in
       DDLogInfo("PLAYER ID \(playerID)")
-      self.pushGameScene()
+      self.replaceScene(self.gameScene)
     }.always {
       self.isLoading = false
     }.error { (error) -> Void in

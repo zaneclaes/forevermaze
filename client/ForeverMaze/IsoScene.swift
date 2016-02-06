@@ -42,6 +42,9 @@ class IsoScene: SKScene {
   }
 
   override func didMoveToView(view: SKView) {
+    guard viewIso.parent == nil else {
+      return
+    }
     let deviceScale = CGFloat(1.0) //self.size.width/667
     let maxPos = coordinateToPosition(Coordinate(x: self.worldSize.width, y: self.worldSize.height))
 

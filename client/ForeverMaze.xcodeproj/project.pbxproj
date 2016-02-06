@@ -98,6 +98,9 @@
 		2FB6EB801C5E9B7A00BE6F02 /* Threading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4B5D7C1C239E1F00E5C7F9 /* Threading.swift */; };
 		2FB6EB811C5EE65900BE6F02 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4BD69E1C45786400CA699B /* Level.swift */; };
 		2FB6EB821C5EE65900BE6F02 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4BD69E1C45786400CA699B /* Level.swift */; };
+		2FE234771C664AB9001F9553 /* AboutScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE234761C664AB9001F9553 /* AboutScene.swift */; };
+		2FE234791C664AC7001F9553 /* Dialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE234781C664AC7001F9553 /* Dialog.swift */; };
+		2FE2347B1C664B95001F9553 /* InterfaceScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE2347A1C664B95001F9553 /* InterfaceScene.swift */; };
 		2FE456211C5E531200E90B75 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FE456201C5E531200E90B75 /* Localizable.strings */; };
 		2FE456231C5E601400E90B75 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FE456221C5E601400E90B75 /* images.xcassets */; };
 		2FE456251C5E608A00E90B75 /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE456241C5E608A00E90B75 /* MenuButton.swift */; };
@@ -210,6 +213,9 @@
 		2FB6EB711C5E6EAB00BE6F02 /* depression.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = depression.sks; sourceTree = "<group>"; };
 		2FB6EB731C5E876100BE6F02 /* sparkle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = sparkle.sks; sourceTree = "<group>"; };
 		2FB6EB771C5E87A700BE6F02 /* snow.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = snow.sks; sourceTree = "<group>"; };
+		2FE234761C664AB9001F9553 /* AboutScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutScene.swift; sourceTree = "<group>"; };
+		2FE234781C664AC7001F9553 /* Dialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
+		2FE2347A1C664B95001F9553 /* InterfaceScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterfaceScene.swift; sourceTree = "<group>"; };
 		2FE456201C5E531200E90B75 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		2FE456221C5E601400E90B75 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = images.xcassets; path = Resources/images.xcassets; sourceTree = SOURCE_ROOT; };
 		2FE456241C5E608A00E90B75 /* MenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
@@ -442,6 +448,8 @@
 				2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */,
 				2B2A76B91C0240A300172E27 /* MenuScene.swift */,
 				2BB884F01C0622DC006E4570 /* IsoScene.swift */,
+				2FE234761C664AB9001F9553 /* AboutScene.swift */,
+				2FE2347A1C664B95001F9553 /* InterfaceScene.swift */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -453,6 +461,7 @@
 				2B732B831C3E373C00295D0D /* SgButton.swift */,
 				2B55507D1C4E8F2500742CC7 /* Tracker.swift */,
 				2FE456241C5E608A00E90B75 /* MenuButton.swift */,
+				2FE234781C664AC7001F9553 /* Dialog.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -896,6 +905,7 @@
 				2B5B05FF1C041273006E0973 /* I18n.swift in Sources */,
 				2B5B05FD1C03FE62006E0973 /* Utils.swift in Sources */,
 				2BB884EE1C04E40F006E4570 /* Data.swift in Sources */,
+				2FE2347B1C664B95001F9553 /* InterfaceScene.swift in Sources */,
 				2B4E97CC1BFFA5DD0066D521 /* GameScene.swift in Sources */,
 				2BB6F15C1BFFDCAA009DF879 /* GameObject.swift in Sources */,
 				2BB6F1651BFFE371009DF879 /* LocalPlayer.swift in Sources */,
@@ -903,7 +913,9 @@
 				2B4E97CE1BFFA5DD0066D521 /* GameViewController.swift in Sources */,
 				2B4E97C81BFFA5DD0066D521 /* AppDelegate.swift in Sources */,
 				2B55507E1C4E8F2500742CC7 /* Tracker.swift in Sources */,
+				2FE234791C664AC7001F9553 /* Dialog.swift in Sources */,
 				2BB6F16B1BFFE407009DF879 /* Tile.swift in Sources */,
+				2FE234771C664AB9001F9553 /* AboutScene.swift in Sources */,
 				2FE456251C5E608A00E90B75 /* MenuButton.swift in Sources */,
 				2B732B821C3E353D00295D0D /* GameUILayer.swift in Sources */,
 				2BB6F14F1BFFD272009DF879 /* Config.swift in Sources */,
