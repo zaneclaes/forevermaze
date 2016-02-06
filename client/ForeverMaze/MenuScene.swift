@@ -125,7 +125,7 @@ class MenuScene: InterfaceScene {
   }
   
   func addTile(coordinate: Coordinate, locked: Bool, center: CGPoint) -> Tile {
-    let tile = Tile(coordinate: coordinate, unlocked: !locked)
+    let tile = Tile(coordinate: coordinate, state: locked ? TileState.Locked : TileState.Unlocked)
     tile.sprite.position = gameScene.coordinateToPosition(coordinate, closeToCenter: true) + center
     tile.sprite.zPosition = gameScene.zPositionForYPosition(tile.sprite.position.y, zIndex: 0)
     tile.loading.then { (obj) -> Void in

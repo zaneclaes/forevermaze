@@ -13,6 +13,10 @@ import CocoaLumberjack
 
 let NumberOfEmotions: UInt32 = 4
 
+enum TileState: Int {
+  case Online, Unlocked, Unlockable, Locked
+}
+
 enum Emotion: Int {
   case Happiness, Sadness, Anger, Fear
 
@@ -44,10 +48,8 @@ enum Emotion: Int {
   }
 
   var lockedColor:UIColor {
-    var r:CGFloat = 0, g:CGFloat = 0, b:CGFloat = 0, a:CGFloat = 0
     let m:CGFloat = 0.25
-    self.unlockedColor.getRed(&r, green: &g, blue: &b, alpha: &a)
-    return UIColor(colorLiteralRed: Float(r * m), green: Float(g * m), blue: Float(b * m), alpha: Float(a))
+    return UIColor(red: m, green: m, blue: m, alpha: 1)
   }
 
   static var emotions:Array<Emotion> {
@@ -67,11 +69,12 @@ class Tile : GameStatic {
   private dynamic var e:Int = 0
   dynamic var objectIds:Array<String> = []
   let icon = SKSpriteNode(texture: Config.worldAtlas.textureNamed("icon_happiness"))
-  private var _unlocked:Bool
+  var dropshadow:SKSpriteNode?
+  private let state: TileState
 
-  init(coordinate: Coordinate, unlocked: Bool) {
+  init(coordinate: Coordinate, state: TileState) {
     self.coordinate = coordinate
-    _unlocked = unlocked
+    self.state = state
     super.init(firebasePath: "/tiles/\(coordinate.x)x\(coordinate.y)")
     
     let emotion = Emotion.random()
@@ -83,28 +86,58 @@ class Tile : GameStatic {
       self.updateLockedState()
     }
     
+    
     self.icon.hidden = true
     self.icon.position = CGPointMake(0,Tile.yOrigin + self.icon.frame.size.height/3)
-    self.sprite.addChild(self.icon)
+    sprite.addChild(self.icon)
+  }
+  
+  var hasDropshadow:Bool = false {
+    didSet {
+      if hasDropshadow {
+        if dropshadow == nil {
+          dropshadow = SKSpriteNode(texture: sprite.texture)
+          dropshadow!.color = .blackColor()
+          dropshadow!.alpha = 0.8
+          dropshadow!.zPosition = -0.1
+          dropshadow!.position = CGPointMake(0, -12)
+          dropshadow!.colorBlendFactor = 1.0
+          sprite.addChild(dropshadow!)
+        }
+        dropshadow!.hidden = false
+      }
+      else {
+        if dropshadow != nil {
+          dropshadow!.hidden = true
+        }
+      }
+    }
   }
   
   var unlocked:Bool {
-    guard Account.player != nil else {
-      return _unlocked
+    if state == .Online && Account.player != nil {
+      return Account.player!.hasUnlockedTileAt(self.coordinate)
     }
-    return Account.player!.hasUnlockedTileAt(self.coordinate)
+    else {
+      return state == .Unlocked
+    }
   }
 
   var unlockable:Bool {
-    guard Account.player != nil else {
-      return true
+    if state == .Online && Account.player != nil {
+      return Account.player!.canUnlockTile(self)
     }
-    return Account.player!.canUnlockTile(self)
+    else {
+      return state == .Unlockable
+    }
   }
   
   func updateTexture() {
     self.sprite.texture = Config.worldAtlas.textureNamed("tile_\(self.emotion.description.lowercaseString)")
     self.icon.texture = Config.worldAtlas.textureNamed("icon_\(self.emotion.description.lowercaseString)")
+    if dropshadow != nil {
+      self.dropshadow!.texture = self.sprite.texture
+    }
     self.assignScale()
   }
 

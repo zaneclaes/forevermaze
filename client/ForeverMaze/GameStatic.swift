@@ -34,6 +34,12 @@ class GameStatic : NSObject {
     load()
   }
   
+  var scale:CGFloat = Config.objectScale {
+    didSet {
+      self.assignScale()
+    }
+  }
+  
   //
   // When we detect that a value is changed remotely, check if it differs from the
   // local value. If so, trigger a method so subclasses can respond to the value change.
@@ -87,8 +93,8 @@ class GameStatic : NSObject {
   }
   
   func assignScale() {
-    self.sprite.yScale = Config.objectScale
-    self.sprite.xScale = self.sprite.xScale < 0 ? -Config.objectScale : Config.objectScale
+    self.sprite.yScale = scale
+    self.sprite.xScale = self.sprite.xScale < 0 ? -scale : scale
   }
 
   var isLoading:Bool {
@@ -134,7 +140,7 @@ class GameStatic : NSObject {
 
   // Properties which are not observed
   var localProperties:[String] {
-    return ["snapshot","sprite","loaded","writing"]
+    return ["snapshot","sprite","loaded","writing","scale"]
   }
 
   // Properties which may not be nilled

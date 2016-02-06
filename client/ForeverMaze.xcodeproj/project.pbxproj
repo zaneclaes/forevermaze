@@ -101,6 +101,8 @@
 		2FE234771C664AB9001F9553 /* AboutScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE234761C664AB9001F9553 /* AboutScene.swift */; };
 		2FE234791C664AC7001F9553 /* Dialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE234781C664AC7001F9553 /* Dialog.swift */; };
 		2FE2347B1C664B95001F9553 /* InterfaceScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE2347A1C664B95001F9553 /* InterfaceScene.swift */; };
+		2FE2347D1C6660D4001F9553 /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE2347C1C6660D4001F9553 /* Container.swift */; };
+		2FE2347F1C66714B001F9553 /* SKMultilineLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE2347E1C66714B001F9553 /* SKMultilineLabel.swift */; };
 		2FE456211C5E531200E90B75 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FE456201C5E531200E90B75 /* Localizable.strings */; };
 		2FE456231C5E601400E90B75 /* images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FE456221C5E601400E90B75 /* images.xcassets */; };
 		2FE456251C5E608A00E90B75 /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE456241C5E608A00E90B75 /* MenuButton.swift */; };
@@ -216,6 +218,8 @@
 		2FE234761C664AB9001F9553 /* AboutScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutScene.swift; sourceTree = "<group>"; };
 		2FE234781C664AC7001F9553 /* Dialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
 		2FE2347A1C664B95001F9553 /* InterfaceScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterfaceScene.swift; sourceTree = "<group>"; };
+		2FE2347C1C6660D4001F9553 /* Container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
+		2FE2347E1C66714B001F9553 /* SKMultilineLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKMultilineLabel.swift; sourceTree = "<group>"; };
 		2FE456201C5E531200E90B75 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		2FE456221C5E601400E90B75 /* images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = images.xcassets; path = Resources/images.xcassets; sourceTree = SOURCE_ROOT; };
 		2FE456241C5E608A00E90B75 /* MenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
@@ -462,6 +466,8 @@
 				2B55507D1C4E8F2500742CC7 /* Tracker.swift */,
 				2FE456241C5E608A00E90B75 /* MenuButton.swift */,
 				2FE234781C664AC7001F9553 /* Dialog.swift */,
+				2FE2347C1C6660D4001F9553 /* Container.swift */,
+				2FE2347E1C66714B001F9553 /* SKMultilineLabel.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -895,6 +901,7 @@
 				2B2A76BA1C0240A300172E27 /* MenuScene.swift in Sources */,
 				2BB6F1601BFFDCB4009DF879 /* Mobile.swift in Sources */,
 				2B732B841C3E373C00295D0D /* SgButton.swift in Sources */,
+				2FE2347F1C66714B001F9553 /* SKMultilineLabel.swift in Sources */,
 				2B732BA01C4100FB00295D0D /* Depression.swift in Sources */,
 				2BB6F1701BFFE499009DF879 /* GameStatic.swift in Sources */,
 				2B4BD69F1C45786400CA699B /* Level.swift in Sources */,
@@ -922,6 +929,7 @@
 				2BB6F1571BFFDB62009DF879 /* Player.swift in Sources */,
 				2F22D4241C4D74BE00CAA56F /* Animation.swift in Sources */,
 				2B4B5D7D1C239E1F00E5C7F9 /* Threading.swift in Sources */,
+				2FE2347D1C6660D4001F9553 /* Container.swift in Sources */,
 				2F22D42A1C4DCDF000CAA56F /* Direction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
