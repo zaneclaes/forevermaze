@@ -67,11 +67,16 @@ class Tile : GameStatic {
   private dynamic var e:Int = 0
   dynamic var objectIds:Array<String> = []
   let icon = SKSpriteNode(texture: Config.worldAtlas.textureNamed("icon_happiness"))
+  private var _unlocked:Bool
 
-  init(coordinate: Coordinate) {
+  init(coordinate: Coordinate, unlocked: Bool) {
     self.coordinate = coordinate
+    _unlocked = unlocked
     super.init(firebasePath: "/tiles/\(coordinate.x)x\(coordinate.y)")
-    self.sprite = SKSpriteNode(texture: Config.worldAtlas.textureNamed("tile_happiness"))
+    
+    let emotion = Emotion.random()
+    icon.texture = Config.worldAtlas.textureNamed("icon_\(emotion.description.lowercaseString)")
+    self.sprite = SKSpriteNode(texture: Config.worldAtlas.textureNamed("tile_\(emotion.description.lowercaseString)"))
     self.sprite.colorBlendFactor = 1.0
     self.loading.then { (snapshot) -> Void in
       self.updateTexture()
@@ -82,12 +87,18 @@ class Tile : GameStatic {
     self.icon.position = CGPointMake(0,Tile.yOrigin + self.icon.frame.size.height/3)
     self.sprite.addChild(self.icon)
   }
-
+  
   var unlocked:Bool {
+    guard Account.player != nil else {
+      return _unlocked
+    }
     return Account.player!.hasUnlockedTileAt(self.coordinate)
   }
 
   var unlockable:Bool {
+    guard Account.player != nil else {
+      return true
+    }
     return Account.player!.canUnlockTile(self)
   }
   

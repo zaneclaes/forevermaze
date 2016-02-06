@@ -364,7 +364,7 @@ class IsoScene: SKScene {
         promises.append(self.loadingTiles[key]!)
         continue
       }
-      let tile:Tile! = Tile(coordinate: coord)
+      let tile:Tile! = Tile(coordinate: coord, unlocked: true)
       let promise = tile.loading.then { (snapshot) -> Void in
         guard snapshot != nil else {
           DDLogWarn("Missing Tile \(key)")

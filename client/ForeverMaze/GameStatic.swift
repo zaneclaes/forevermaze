@@ -28,17 +28,21 @@ class GameStatic : NSObject {
     super.init()
 
     guard self.connection != nil else {
+      loadFulfill(nil)
       return
     }
-
-    //
-    // When we detect that a value is changed remotely, check if it differs from the
-    // local value. If so, trigger a method so subclasses can respond to the value change.
-    //
+    load()
+  }
+  
+  //
+  // When we detect that a value is changed remotely, check if it differs from the
+  // local value. If so, trigger a method so subclasses can respond to the value change.
+  //
+  func load() {
     self.connection.observeEventType(.Value, withBlock: { snapshot in
       // Assign the initial variables from the snapshot:
       self.snapshot = snapshot
-
+      
       if !self.loading.resolved {
         for property in self.firebaseProperties {
           // Assign the initial variable from the snapshot:
@@ -46,7 +50,7 @@ class GameStatic : NSObject {
             let val = snapshot.childSnapshotForPath(property).value
             self.setValue(val, forKey: property)
           }
-
+          
           // Begin KVO:
           self.addProperty(property)
         }
@@ -72,11 +76,11 @@ class GameStatic : NSObject {
         }
       }
     })
-
+    
     // Basic timeout...
     after(Config.timeout).then { () -> Void in
       if !self.loading.resolved {
-        DDLogWarn("[TIMEOUT] [FIREBASE-READ] \(firebasePath)")
+        DDLogWarn("[TIMEOUT] [FIREBASE-READ] \(self.connection.description)")
         self.loadFulfill(nil)
       }
     }

@@ -23,11 +23,16 @@ class GameScene: IsoScene {
 
   init(size: CGSize) {
     layerUI = GameUILayer(size: size)
-    super.init(center: (Account.player?.coordinate)!, worldSize: Config.worldSize, size: size)
+    let coord = Account.player?.coordinate
+    let center = coord != nil ? coord! : Coordinate(x: 0, y: 0)
+    super.init(center: center, worldSize: Config.worldSize, size: size)
     
+    background.xScale = max( Config.objectScale, 0.6 )
+    background.yScale = max( Config.objectScale, 0.6 )
     background.zPosition = -1000
-    self.addChild(background)
-    self.addChild(layerUI)
+    
+    addChild(background)
+    addChild(layerUI)
   }
 
   override func didMoveToView(view: SKView) {
