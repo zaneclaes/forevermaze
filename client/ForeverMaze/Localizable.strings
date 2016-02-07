@@ -6,6 +6,7 @@
   Copyright © 2016 inZania LLC. All rights reserved.
 */
 "menu.ok" = "Ok";
+"menu.cancel" = "Cancel";
 "menu.login" = "Login";
 "menu.logout" = "Logout";
 "menu.resume" = "Resume";
@@ -16,10 +17,16 @@
 "menu.allPlayers" = "Everyone";
 "menu.friends" = "Friends";
 "menu.nobody" = "Nobody Found!";
+"menu.share" = "Share";
 
 "dialog.gameOver.title" = "Game Over";
 "dialog.gameOver.body" = "Depression has caught up to you.";
 "dialog.nextLevel.body" = "You found %{name}!";
+"dialog.sharePrompt.title" = "Share ForeverMaze?";
+"dialog.sharePrompt.body" = "ForeverMaze is more fun with friends. The more friends you have, the more paths you can build.";
+
+"share.title" = "ForeverMaze | Battle Depression with Friends";
+"share.body" = "Use the four emotions to build bridges to your friends, escaping depression and discovering happiness along the way.";
 
 "game.level" = "Level ";
 

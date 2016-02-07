@@ -38,6 +38,12 @@ class Depression : Mobile {
     set {
       self.sprite.hidden = newValue
       self.particle.hidden = newValue
+      if newValue {
+        self.particle.removeFromParent()
+      }
+      else if self.particle.parent == nil {
+        self.sprite.addChild(self.particle)
+      }
     }
     get {
       return self.sprite.hidden

@@ -189,6 +189,20 @@ class Account {
     }
     return loading
   }
+  
+  static func prepareHighScores(players:[Player], max: Int = 0, includeLocalPlayer:Bool = true) -> [Player] {
+    var plyrs = players
+    if includeLocalPlayer && Account.player != nil {
+      plyrs.append(Account.player!)
+    }
+    plyrs.sortInPlace { (playerA, playerB) -> Bool in
+      return playerB.score < playerA.score
+    }
+    while max > 0 && plyrs.count > max {
+      plyrs.removeLast()
+    }
+    return players
+  }
   /**
    * Get all actual friend data (convert FBIDs to player IDs)
    */
@@ -211,27 +225,21 @@ class Account {
       return Promise<[Player]>(players)
     }
     return when(promises).then { () -> [Player] in
-      if includeLocalPlayer {
-        players.append(Account.player!)
-      }
-      players.sortInPlace { (playerA, playerB) -> Bool in
-        return playerB.score < playerA.score
-      }
-      return players
+      return self.prepareHighScores(players, max: max, includeLocalPlayer: includeLocalPlayer)
     }
   }
   
   /**
    * Load the array of high scoring players
    */
-  static func loadHighScorers() -> Promise<[Player]> {
+  static func loadHighScorers(includeLocalPlayer:Bool = true) -> Promise<[Player]> {
     var promises = Array<Promise<Void>>()
     var players = [Player]()
     return Data.loadSnapshot("/highScorePlayerIDs").then { (snapshot) -> Promise<Void> in
       // Make sure the local player is stashed in playerIDs
       let playerIDs = snapshot == nil ? Array<String>() : snapshot!.value as! Array<String>
       for playerID in playerIDs {
-        if playerID.hasSuffix(Account.player!.playerID) {
+        if Account.player != nil && playerID.hasSuffix(Account.player!.playerID) {
           continue
         }
         let player = Player(playerID: playerID)
@@ -241,14 +249,7 @@ class Account {
       }
       return promises.count > 0 ? when(promises) : Promise<Void>()
     }.then { () -> [Player] in
-      players.append(Account.player!)
-      players.sortInPlace({ (playerA, playerB) -> Bool in
-        return playerB.score < playerA.score
-      })
-      while players.count > Config.maxHighScores {
-        players.removeLast()
-      }
-      return players
+      return self.prepareHighScores(players, max: Config.maxHighScores, includeLocalPlayer: includeLocalPlayer)
     }
   }
 
@@ -260,6 +261,9 @@ class Account {
   }
   
   static var facebookFriends:[NSDictionary] {
+    guard self.me != nil && self.me["friends"] != nil else {
+      return []
+    }
     let friendsData = self.me["friends"] as! NSDictionary
     return friendsData["data"] as! [NSDictionary]
   }

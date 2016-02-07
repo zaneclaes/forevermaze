@@ -128,6 +128,29 @@ class MenuScene: InterfaceScene {
     load()
   }
   
+  func maybePromptShare() {
+    let now = NSDate().timeIntervalSince1970
+    let age = now - NSUserDefaults.standardUserDefaults().doubleForKey("lastSharePrompt")
+    guard age >= (60 * 60 * 24 * 3) && arc4random_uniform(4) == 0 else {
+      return
+    }
+    let alert = UIAlertView(
+      title: I18n.t("dialog.sharePrompt.title"),
+      message: I18n.t("dialog.sharePrompt.body"),
+      delegate: nil,
+      cancelButtonTitle: I18n.t("menu.cancel"),
+      otherButtonTitles: I18n.t("menu.ok")
+    )
+    alert.promise().then { (button) -> Void in
+      guard button != alert.cancelButtonIndex else {
+        return
+      }
+      Share.shareOnFacebook()
+    }
+    NSUserDefaults.standardUserDefaults().setDouble(now, forKey: "lastSharePrompt")
+    NSUserDefaults.standardUserDefaults().synchronize()
+  }
+  
   func addTile(coordinate: Coordinate, locked: Bool, center: CGPoint) -> Tile {
     let tile = Tile(coordinate: coordinate, state: locked ? TileState.Unlockable : TileState.Unlocked)
     tile.sprite.position = gameScene.coordinateToPosition(coordinate, closeToCenter: true) + center - CGPointMake(0, Tile.yOrigin * Config.objectScale)

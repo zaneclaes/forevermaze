@@ -37,7 +37,7 @@ class ScoreNode : AvatarNode {
     labelScore.fontSize = 11
     labelScore.xScale = 1 / self.xScale
     labelScore.yScale = 1 / self.yScale
-    labelScore.position = CGPointMake(0, labelName.position.y - 28)
+    labelScore.position = CGPointMake(0, labelName.position.y - 14 * 1/Config.objectScale)
     addChild(labelScore)
 
   }

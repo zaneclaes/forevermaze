@@ -9,7 +9,7 @@
 import SpriteKit
 
 class Container : SKSpriteNode {
-  static let tileScale:CGFloat = 0.15
+  static let tileScale:CGFloat = 0.3 * Config.objectScale
   static let padding = CGFloat(Tile.size.width) * Container.tileScale * 1.5
   
   let testScene:IsoScene = IsoScene(center: Coordinate(x: 50, y: 50), worldSize: Config.worldSize, size: UIScreen.mainScreen().bounds.size)
@@ -36,15 +36,13 @@ class Container : SKSpriteNode {
     var coord = testScene.center
     let offset = CGPointMake(-size.width/2, -size.height/2)
     
-    let buildLeft = SKAction.runBlock { () -> Void in
+    let build = SKAction.runBlock { () -> Void in
       while (pos.y) < minimumSize.height/2 {
         let tile = self.addTile(coord, offset: offset)
         pos = tile.sprite.position
         coord = coord + (xDir ? -1 : 0, xDir ? 0 : 1)
         xDir = !xDir
       }
-    }
-    let buildTop = SKAction.runBlock { () -> Void in
       coord = coord + (1, -1)
       while (pos.x + tileSize.width) < minimumSize.width / 2 {
         let tile = self.addTile(coord, offset: offset)
@@ -52,16 +50,12 @@ class Container : SKSpriteNode {
         coord = coord + (xDir ? 1 : 0, xDir ? 0 : 1)
         xDir = !xDir
       }
-    }
-    let buildRight = SKAction.runBlock { () -> Void in
       while pos.y >= offset.y {
         let tile = self.addTile(coord, offset: offset)
         pos = tile.sprite.position
         coord = coord + (xDir ? 1 : 0, xDir ? 0 : -1)
         xDir = !xDir
       }
-    }
-    let buildBottom = SKAction.runBlock { () -> Void in
       coord = coord + (-1, 1)
       while pos.x >= offset.x {
         let tile = self.addTile(coord, offset: offset)
@@ -70,7 +64,7 @@ class Container : SKSpriteNode {
         xDir = !xDir
       }
     }
-    runAction(SKAction.sequence([buildLeft, buildTop, buildRight, buildBottom]))
+    runAction(build)
   }
   
   var contentSize:CGSize {

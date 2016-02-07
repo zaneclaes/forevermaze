@@ -66,6 +66,7 @@
 		2F22D42A1C4DCDF000CAA56F /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F22D4291C4DCDF000CAA56F /* Direction.swift */; };
 		2F349AF11C66EDC4000BAF0E /* ScoreNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F349AF01C66EDC4000BAF0E /* ScoreNode.swift */; };
 		2F349AF31C66EEF6000BAF0E /* AvatarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F349AF21C66EEF6000BAF0E /* AvatarNode.swift */; };
+		2F85BB5A1C67C67400F89E64 /* Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F85BB591C67C67400F89E64 /* Share.swift */; };
 		2FAF46821C0BCC7F00B1F898 /* MapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAF46811C0BCC7F00B1F898 /* MapTests.swift */; };
 		2FAF46831C0BCD0100B1F898 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB884ED1C04E40F006E4570 /* Data.swift */; };
 		2FAF46841C0BCD0100B1F898 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB884ED1C04E40F006E4570 /* Data.swift */; };
@@ -209,6 +210,7 @@
 		2F22D4291C4DCDF000CAA56F /* Direction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
 		2F349AF01C66EDC4000BAF0E /* ScoreNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreNode.swift; sourceTree = "<group>"; };
 		2F349AF21C66EEF6000BAF0E /* AvatarNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvatarNode.swift; sourceTree = "<group>"; };
+		2F85BB591C67C67400F89E64 /* Share.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Share.swift; path = ForeverMaze/Share.swift; sourceTree = "<group>"; };
 		2FAF46811C0BCC7F00B1F898 /* MapTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapTests.swift; sourceTree = "<group>"; };
 		2FAF46911C0BCDC000B1F898 /* ForeverMazeTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ForeverMazeTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		2FAF46941C0C188C00B1F898 /* String+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 				2B5B05FE1C041273006E0973 /* I18n.swift */,
 				2BEDFA7E1C216788001BE36D /* Errors.swift */,
 				2BB884ED1C04E40F006E4570 /* Data.swift */,
+				2F85BB591C67C67400F89E64 /* Share.swift */,
 			);
 			name = Singletons;
 			path = ..;
@@ -946,6 +949,7 @@
 				2F22D4241C4D74BE00CAA56F /* Animation.swift in Sources */,
 				2B4B5D7D1C239E1F00E5C7F9 /* Threading.swift in Sources */,
 				2FE2347D1C6660D4001F9553 /* Container.swift in Sources */,
+				2F85BB5A1C67C67400F89E64 /* Share.swift in Sources */,
 				2F22D42A1C4DCDF000CAA56F /* Direction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

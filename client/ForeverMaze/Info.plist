@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLSchemes</key>
+	<array>
+		<string>fbshareextension</string>
+		<string>fbapi20150629</string>
+		<string>fbauth2</string>
+		<string>fbapi</string>
+	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
@@ -45,6 +52,8 @@
 	<array>
 		<string>fbapi</string>
 		<string>fbauth2</string>
+		<string>fbapi20150629</string>
+		<string>fbshareextension</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

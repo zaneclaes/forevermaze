@@ -13,6 +13,8 @@ import PromiseKit
 class AboutScene: InterfaceScene {
   
   let container = Container(minimumSize: CGSizeMake(UIScreen.mainScreen().bounds.width * 4/5, UIScreen.mainScreen().bounds.height * 3/5))
+  let buttonWebsite = MenuButton(title: "Forever\nMaze.com", fontSize: 12, dark: true)
+  let buttonShare = MenuButton(title: I18n.t("menu.share"), fontSize: 12, dark: true)
   
   override func didMoveToView(view: SKView) {
     super.didMoveToView(view)
@@ -27,7 +29,7 @@ class AboutScene: InterfaceScene {
     let label = SKMultilineLabel(
       text: aboutText,
       labelWidth: Int(container.frame.size.width - Container.padding*2),
-      pos: CGPointMake(self.size.width/2, self.size.height/2 + container.frame.size.height/2 - Container.padding - 40),
+      pos: CGPointMake(self.size.width/2, CGRectGetMaxY(container.frame) - Container.padding - 40),
       fontName: Config.bodyFont,
       fontSize: 14,
       fontColor: .blackColor(),
@@ -37,5 +39,24 @@ class AboutScene: InterfaceScene {
     )
     addChild(label)
     
+    buttonWebsite.position = CGPoint(
+      x: self.frame.size.width/2 - buttonWebsite.frame.size.width/2,
+      y: CGRectGetMinY(container.frame) + Container.padding + 40
+    )
+    buttonWebsite.emotion = Emotion.Anger
+    buttonWebsite.buttonFunc = { (button) -> Void in
+      UIApplication.sharedApplication().openURL(NSURL(string: "http://ForeverMaze.com")!)
+    }
+    addChild(buttonWebsite)
+    
+    buttonShare.position = CGPoint(
+      x: self.frame.size.width/2 + buttonWebsite.frame.size.width/2,
+      y: CGRectGetMinY(container.frame) + Container.padding + 40
+    )
+    buttonShare.emotion = Emotion.Happiness
+    buttonShare.buttonFunc = { (button) -> Void in
+      Share.shareOnFacebook()
+    }
+    addChild(buttonShare)
   }
 }

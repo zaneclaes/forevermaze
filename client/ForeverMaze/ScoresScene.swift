@@ -26,6 +26,9 @@ class ScoresScene: InterfaceScene {
   
   override func didMoveToView(view: SKView) {
     super.didMoveToView(view)
+    guard labelLoading.parent == nil else {
+      return
+    }
     
     labelTitle.text = I18n.t("menu.scores")
     
@@ -62,6 +65,14 @@ class ScoresScene: InterfaceScene {
     addChild(buttonFriends)
     
     playerGroup = Account.facebookFriends.count > 0 ? .Friends : .AllPlayers
+  }
+  
+  override func popScene() {
+    super.popScene()
+    if self.previousScene is MenuScene {
+      let menu = self.previousScene as! MenuScene
+      menu.maybePromptShare()
+    }
   }
   
   var playerGroup:PlayerGroup = .AllPlayers {
