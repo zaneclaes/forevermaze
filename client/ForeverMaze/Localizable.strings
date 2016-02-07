@@ -13,6 +13,13 @@
 "menu.scores" = "Scores";
 "menu.loading" = "Loading...";
 "menu.back" = "Back";
+"menu.allPlayers" = "Everyone";
+"menu.friends" = "Friends";
+"menu.nobody" = "Nobody Found!";
+
+"dialog.gameOver.title" = "Game Over";
+"dialog.gameOver.body" = "Depression has caught up to you.";
+"dialog.nextLevel.body" = "You found %{name}!";
 
 "game.level" = "Level ";
 

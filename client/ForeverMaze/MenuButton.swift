@@ -23,14 +23,25 @@ class MenuButton : SgButton {
     }
   }
   
+  override func containsPoint(p: CGPoint) -> Bool {
+    let yPad = CGFloat(20)
+    let hitRect = CGRectMake(
+      self.frame.origin.x,
+      self.frame.origin.y + yPad,
+      self.frame.size.width,
+      self.frame.size.height - yPad*2
+    )
+    return CGRectContainsPoint(hitRect, p)
+  }
+
   init(title: String) {
     super.init(normalImageNamed: "menu_button", highlightedImageNamed: "menu_button_highlighted", disabledImageNamed: "menu_button_disabled")
     icon.position = CGPointMake(-self.frame.size.width/2 + 44, 0)
     icon.hidden = true
     icon.zPosition = 10000
-    self.setString(ButtonState.Normal, string: title, fontName: Config.font, fontSize: 18, stringColor: .whiteColor(), backgroundColor: .clearColor(), size: nil, cornerRadius: nil)
-    self.setString(ButtonState.Highlighted, string: title, fontName: Config.font, fontSize: 18, stringColor: .yellowColor(), backgroundColor: .clearColor(), size: nil, cornerRadius: nil)
-    self.setString(ButtonState.Disabled, string: title, fontName: Config.font, fontSize: 18, stringColor: .grayColor(), backgroundColor: .clearColor(), size: nil, cornerRadius: nil)
+    self.setString(ButtonState.Normal, string: title, fontName: Config.headerFont, fontSize: 18, stringColor: .whiteColor(), backgroundColor: .clearColor(), size: nil, cornerRadius: nil)
+    self.setString(ButtonState.Highlighted, string: title, fontName: Config.headerFont, fontSize: 18, stringColor: .yellowColor(), backgroundColor: .clearColor(), size: nil, cornerRadius: nil)
+    self.setString(ButtonState.Disabled, string: title, fontName: Config.headerFont, fontSize: 18, stringColor: .grayColor(), backgroundColor: .clearColor(), size: nil, cornerRadius: nil)
     addChild(icon)
   }
   

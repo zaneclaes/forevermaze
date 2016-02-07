@@ -23,7 +23,11 @@ class GameObject : GameStatic {
   func draw() -> Promise<GameObject!> {
     return Animation.preload(assetName).then { (animation) -> Promise<GameObject!> in
       self.currentAnimationKey = ""
-      self.sprite = self.animation!.createSprite(.Idle, direction: .S)
+      let texture = self.animation!.getTexture(.Idle, direction: self.direction)
+      self.sprite.xScale = 1
+      self.sprite.yScale = 1
+      self.sprite.texture = texture
+      self.sprite.size = texture.size()
       self.assignScale()
       self.updateAnimation()
       return Promise<GameObject!>(self)

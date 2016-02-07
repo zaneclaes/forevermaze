@@ -41,7 +41,7 @@ class InterfaceScene: SKScene {
     banner.zPosition = 1001
     addChild(banner)
     
-    labelTitle.fontName = Config.font
+    labelTitle.fontName = Config.headerFont
     labelTitle.fontSize = 28
     labelTitle.color = SKColor.whiteColor()
     labelTitle.position = banner.position + CGPointMake(0, 0)
@@ -51,7 +51,10 @@ class InterfaceScene: SKScene {
     buttonBack.position = mid
     buttonBack.hidden = self.previousScene == nil
     buttonBack.zPosition = 1000
-    buttonBack.position = CGPointMake(scene!.frame.size.width - buttonBack.frame.size.width / 2 + 10, scene!.frame.size.height - buttonBack.frame.size.height/2 - 10)
+    buttonBack.position = CGPointMake(
+      scene!.frame.size.width - buttonBack.frame.size.width / 2 + 10,
+      scene!.frame.size.height - buttonBack.frame.size.height/2
+    )
     buttonBack.emotion = Emotion.Sadness
     buttonBack.buttonFunc = { (button) -> Void in
       self.popScene()
@@ -66,16 +69,14 @@ class InterfaceScene: SKScene {
   }
   
   func replaceScene(scene: SKScene) {
-    let transition = SKTransition.crossFadeWithDuration(1.5)
     scene.scaleMode = SKSceneScaleMode.AspectFill
-    self.scene!.view!.presentScene(scene, transition: transition)
+    self.scene!.view!.presentScene(scene, transition: Config.sceneTransition)
   }
   
   func pushScene(scene: InterfaceScene) {
-    let transition = SKTransition.crossFadeWithDuration(1.5)
     scene.scaleMode = SKSceneScaleMode.AspectFill
     scene.previousScene = self
-    self.scene!.view!.presentScene(scene, transition: transition)
+    self.scene!.view!.presentScene(scene, transition: Config.sceneTransition)
   }
   
   func popScene() {
@@ -83,8 +84,7 @@ class InterfaceScene: SKScene {
       return
     }
     let scene = self.previousScene!
-    let transition = SKTransition.crossFadeWithDuration(1.5)
     scene.scaleMode = SKSceneScaleMode.AspectFill
-    self.scene!.view!.presentScene(scene, transition: transition)
+    self.scene!.view!.presentScene(scene, transition: Config.sceneTransition)
   }
 }

@@ -69,26 +69,35 @@ class Tile : GameStatic {
   private dynamic var e:Int = 0
   dynamic var objectIds:Array<String> = []
   let icon = SKSpriteNode(texture: Config.worldAtlas.textureNamed("icon_happiness"))
-  var dropshadow:SKSpriteNode?
+  private var dropshadow:SKSpriteNode?
   private let state: TileState
+  private var _emotion:Emotion
 
   init(coordinate: Coordinate, state: TileState) {
     self.coordinate = coordinate
     self.state = state
-    super.init(firebasePath: "/tiles/\(coordinate.x)x\(coordinate.y)")
+    _emotion = Emotion.random()
+    super.init(firebasePath: state == .Online ? "/tiles/\(coordinate.x)x\(coordinate.y)" : nil)
     
-    let emotion = Emotion.random()
-    icon.texture = Config.worldAtlas.textureNamed("icon_\(emotion.description.lowercaseString)")
-    self.sprite = SKSpriteNode(texture: Config.worldAtlas.textureNamed("tile_\(emotion.description.lowercaseString)"))
-    self.sprite.colorBlendFactor = 1.0
-    self.loading.then { (snapshot) -> Void in
-      self.updateTexture()
-      self.updateLockedState()
+    sprite.colorBlendFactor = 1.0
+    updateTexture()
+    sprite.xScale = 1
+    sprite.yScale = 1
+    sprite.size = sprite.texture!.size()
+    assignScale()
+    updateLockedState()
+    if state == .Online {
+      loading.then { (snapshot) -> Void in
+        self.updateTexture()
+        self.updateLockedState()
+      }
+    }
+    else {
+      loadFulfill(nil)
     }
     
-    
-    self.icon.hidden = true
-    self.icon.position = CGPointMake(0,Tile.yOrigin + self.icon.frame.size.height/3)
+    icon.hidden = true
+    icon.position = CGPointMake(0,Tile.yOrigin + self.icon.frame.size.height/3)
     sprite.addChild(self.icon)
   }
   
@@ -133,26 +142,26 @@ class Tile : GameStatic {
   }
   
   func updateTexture() {
-    self.sprite.texture = Config.worldAtlas.textureNamed("tile_\(self.emotion.description.lowercaseString)")
-    self.icon.texture = Config.worldAtlas.textureNamed("icon_\(self.emotion.description.lowercaseString)")
+    sprite.texture = Config.worldAtlas.textureNamed("tile_\(self.emotion.description.lowercaseString)")
+    icon.texture = Config.worldAtlas.textureNamed("icon_\(self.emotion.description.lowercaseString)")
     if dropshadow != nil {
-      self.dropshadow!.texture = self.sprite.texture
+      dropshadow!.texture = sprite.texture
     }
-    self.assignScale()
+    assignScale()
   }
 
   func updateLockedState() {
     if unlocked {
-      self.sprite.color = .whiteColor()
-      self.icon.hidden = true
+      sprite.color = .whiteColor()
+      icon.hidden = true
     }
     else if unlockable {
-      self.sprite.color = self.emotion.lockedColor
-      self.icon.hidden = false
+      sprite.color = self.emotion.lockedColor
+      icon.hidden = false
     }
     else {
-      self.sprite.color = UIColor.clearColor()
-      self.icon.hidden = true
+      sprite.color = UIColor.clearColor()
+      icon.hidden = true
     }
   }
 
@@ -202,12 +211,17 @@ class Tile : GameStatic {
 
   var emotion: Emotion {
     set {
-      self.e = newValue.rawValue
+      if state == .Online {
+        self.e = newValue.rawValue
+      }
+      else {
+        _emotion = newValue
+      }
       self.updateTexture()
       self.updateLockedState()
     }
     get {
-      return Emotion(rawValue: self.e)!
+      return state == .Online ? Emotion(rawValue: self.e)! : _emotion
     }
   }
 

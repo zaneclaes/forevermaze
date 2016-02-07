@@ -189,6 +189,68 @@ class Account {
     }
     return loading
   }
+  /**
+   * Get all actual friend data (convert FBIDs to player IDs)
+   */
+  static func loadFriends(max: Int = 0, includeLocalPlayer:Bool = true) -> Promise<[Player]> {
+    var promises = Array<Promise<Void>>()
+    var players = [Player]()
+    let friends = facebookFriends
+    for friendData in friends {
+      let fbid = friendData["id"] as! String
+      let friendID = "facebook:\(fbid)"
+      let player = Player(playerID: friendID)
+      promises.append(player.loading.then { (snapshot) -> Void in
+        players.append(player)
+      })
+      if max > 0 && promises.count >= max {
+        break
+      }
+    }
+    guard promises.count > 0 else {
+      return Promise<[Player]>(players)
+    }
+    return when(promises).then { () -> [Player] in
+      if includeLocalPlayer {
+        players.append(Account.player!)
+      }
+      players.sortInPlace { (playerA, playerB) -> Bool in
+        return playerB.score < playerA.score
+      }
+      return players
+    }
+  }
+  
+  /**
+   * Load the array of high scoring players
+   */
+  static func loadHighScorers() -> Promise<[Player]> {
+    var promises = Array<Promise<Void>>()
+    var players = [Player]()
+    return Data.loadSnapshot("/highScorePlayerIDs").then { (snapshot) -> Promise<Void> in
+      // Make sure the local player is stashed in playerIDs
+      let playerIDs = snapshot == nil ? Array<String>() : snapshot!.value as! Array<String>
+      for playerID in playerIDs {
+        if playerID.hasSuffix(Account.player!.playerID) {
+          continue
+        }
+        let player = Player(playerID: playerID)
+        promises.append(player.loading.then { (snapshot) -> Void in
+          players.append(player)
+        })
+      }
+      return promises.count > 0 ? when(promises) : Promise<Void>()
+    }.then { () -> [Player] in
+      players.append(Account.player!)
+      players.sortInPlace({ (playerA, playerB) -> Bool in
+        return playerB.score < playerA.score
+      })
+      while players.count > Config.maxHighScores {
+        players.removeLast()
+      }
+      return players
+    }
+  }
 
   static func logout() {
     DDLogDebug("[ACCOUNT] Logged out.")

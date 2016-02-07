@@ -33,6 +33,16 @@ class Depression : Mobile {
     super.updateAnimation()
     self.particle.xScale = self.sprite.xScale
   }
+  
+  var hidden:Bool {
+    set {
+      self.sprite.hidden = newValue
+      self.particle.hidden = newValue
+    }
+    get {
+      return self.sprite.hidden
+    }
+  }
 
   override func step() {
     super.step(self.coordinate.getDirection(Account.player!.coordinate))

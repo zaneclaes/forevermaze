@@ -16,18 +16,21 @@ import SpriteKit
 class Config {
 
   static let debug:Bool = false
-  static let godMode:Bool = true
+  static let godMode:Bool = false
   static let firebaseUrl:String = "https://forevermaze.firebaseio.com"
   static let worldAtlas = SKTextureAtlas(named: "world")
-  static let font:String = "AvenirNext-Bold"
+  static let headerFont:String = "AvenirNext-Bold"
+  static let bodyFont:String = "AvenirNext"
   static let device = Device()
   static let timeout:NSTimeInterval = 30
   static let baseErrorDomain = NSBundle.mainBundle().bundleIdentifier
   static let stepTime = 0.4
   static let tileBuffer = 5
   static let objectScale:CGFloat = UIDevice.currentDevice().userInterfaceIdiom == .Phone ? 0.5 : 1
-  static let flipTileCost = 10
+  static let flipTileCost = 15
+  static let maxHighScores = 100
   static let minOtherPlayerSpawnDistance:UInt = 20
+  static let sceneTransition = SKTransition.crossFadeWithDuration(1)
   static var worldSize = MapSize(width: 100, height: 100)
   static var remote:FDataSnapshot!
   static var levels = Array<Level>()

@@ -44,11 +44,24 @@ class GameUILayer : SKSpriteNode {
       for e in emotions {
         if Account.player!.canUnlockEmotion(e) {
           tile!.emotion = e
+          tile!.playUnlockAnimation()
           break
         }
       }
       Account.player!.emoji -= Config.flipTileCost
       self.updateUI()
+      
+      let label = SKLabelNode(text: "😀")
+      label.fontName = Config.headerFont
+      label.fontSize = 36
+      label.position = self.labelBanner.position - CGPointMake(0, 40)
+      self.addChild(label)
+      
+      let move = SKAction.moveTo(CGPointMake(self.frame.size.width/2, self.frame.size.height/2 + 80), duration: 1)
+      let remove = SKAction.runBlock(label.removeFromParent)
+      label.runAction(SKAction.sequence([move, remove]))
+      
+      label.runAction(SKAction.fadeAlphaTo(0, duration: 0.75))
     }
     self.addChild(buttonChangeTile)
     
@@ -59,7 +72,7 @@ class GameUILayer : SKSpriteNode {
     addChild(banner)
 
     labelBanner.color = SKColor.whiteColor()
-    labelBanner.fontName = Config.font
+    labelBanner.fontName = Config.headerFont
     labelBanner.fontSize = 14
     labelBanner.zPosition = 2
     labelBanner.position = banner.position + CGPointMake(0, 1)
@@ -94,7 +107,7 @@ class GameUILayer : SKSpriteNode {
 
   func runEmojiAnimation(emotion: Emotion) {
     let label = SKLabelNode(text: emotion.emoji)
-    label.fontName = Config.font
+    label.fontName = Config.headerFont
     label.fontSize = 36
     label.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2 + 80)
     self.addChild(label)

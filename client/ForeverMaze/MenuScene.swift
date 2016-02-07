@@ -11,8 +11,9 @@ import PromiseKit
 import CocoaLumberjack
 
 class MenuScene: InterfaceScene {
-  let gameScene:GameScene = GameScene(size: UIScreen.mainScreen().bounds.size)
-  let aboutScene:AboutScene = AboutScene(size: UIScreen.mainScreen().bounds.size)
+  let gameScene = GameScene(size: UIScreen.mainScreen().bounds.size)
+  let aboutScene = AboutScene(size: UIScreen.mainScreen().bounds.size)
+  let scoresScene = ScoresScene(size: UIScreen.mainScreen().bounds.size)
   
   let labelLoading = SKLabelNode(text: I18n.t("menu.loading"))
   let buttonResume = MenuButton(title: I18n.t("menu.resume"))
@@ -22,10 +23,12 @@ class MenuScene: InterfaceScene {
   let buttonLogout = MenuButton(title: I18n.t("menu.logout"))
   let player = LocalPlayer(playerID: nil)
   let depression = Depression()
+  var tiles = [Tile]()
   
   override func didMoveToView(view: SKView) {
     super.didMoveToView(view)
     
+    gameScene.menuScene = self
     guard labelLoading.parent == nil else {
       return
     }
@@ -33,7 +36,7 @@ class MenuScene: InterfaceScene {
     let objectZ:CGFloat = 1000
     let mid = CGPoint(x: CGRectGetMidX(self.scene!.frame), y: CGRectGetMidY(self.scene!.frame))
     
-    labelLoading.fontName = Config.font
+    labelLoading.fontName = Config.headerFont
     labelLoading.fontSize = 24
     labelLoading.color = SKColor.whiteColor()
     labelLoading.position = CGPoint(x: mid.x, y: 10)
@@ -108,6 +111,7 @@ class MenuScene: InterfaceScene {
     buttonScores.zPosition = objectZ
     buttonScores.emotion = Emotion.Happiness
     buttonScores.buttonFunc = { (button) -> Void in
+      self.pushScene(self.scoresScene)
     }
     self.addChild(buttonScores)
     
@@ -125,17 +129,17 @@ class MenuScene: InterfaceScene {
   }
   
   func addTile(coordinate: Coordinate, locked: Bool, center: CGPoint) -> Tile {
-    let tile = Tile(coordinate: coordinate, state: locked ? TileState.Locked : TileState.Unlocked)
-    tile.sprite.position = gameScene.coordinateToPosition(coordinate, closeToCenter: true) + center
+    let tile = Tile(coordinate: coordinate, state: locked ? TileState.Unlockable : TileState.Unlocked)
+    tile.sprite.position = gameScene.coordinateToPosition(coordinate, closeToCenter: true) + center - CGPointMake(0, Tile.yOrigin * Config.objectScale)
     tile.sprite.zPosition = gameScene.zPositionForYPosition(tile.sprite.position.y, zIndex: 0)
     tile.loading.then { (obj) -> Void in
       if locked {
-        tile.sprite.color = tile.emotion.lockedColor
         tile.icon.hidden = true
         tile.icon.position = CGPointMake(0, tile.icon.frame.size.height/2 - 8)
       }
     }
     addChild(tile.sprite)
+    tiles.append(tile)
     return tile
   }
   
@@ -193,5 +197,9 @@ class MenuScene: InterfaceScene {
       Errors.show(error as NSError)
       DDLogError("LOGIN ERR \(error)")
     }
+  }
+  
+  deinit {
+    tiles.removeAll()
   }
 }

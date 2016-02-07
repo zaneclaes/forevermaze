@@ -9,18 +9,40 @@
 import Foundation
 import Firebase
 
-class Level {
+class Level : NSObject {
+  let snapshot:FDataSnapshot!
   let levelNumber:UInt
-  let depressionSpeedMultiplier:Double
-  let depressionSpawnDistance:Int
-  let depressionSpawnAfterTiles:Int
-  let numOtherPlayers:Int
+  var depressionSpeedMultiplier:Double = 0.1
+  var depressionSpawnDistance:Int = 20
+  var depressionSpawnAfterTiles:Int = 10
+  var numOtherPlayers:Int = 8
 
   init(snapshot: FDataSnapshot!, number: UInt) {
+    self.snapshot = snapshot
     self.levelNumber = number
-    self.depressionSpeedMultiplier = snapshot.childSnapshotForPath("depressionSpeedMultiplier").value as! Double
-    self.depressionSpawnDistance = snapshot.childSnapshotForPath("depressionSpawnDistance").value as! Int
-    self.depressionSpawnAfterTiles = snapshot.childSnapshotForPath("depressionSpawnAfterTiles").value as! Int
-    self.numOtherPlayers = snapshot.childSnapshotForPath("numOtherPlayers").value as! Int
+    super.init()
+    self.depressionSpeedMultiplier = getValue("depressionSpeedMultiplier") as! Double
+    self.depressionSpawnDistance = getValue("depressionSpawnDistance") as! Int
+    self.depressionSpawnAfterTiles = getValue("depressionSpawnAfterTiles") as! Int
+    self.numOtherPlayers = getValue("numOtherPlayers") as! Int
+  }
+  
+  var previousLevel:Level {
+    let prev = Int(self.levelNumber) - 1
+    return Config.levels[max(0,prev)]
+  }
+  
+  func getValue(key: String) -> AnyObject {
+    let val = snapshot.childSnapshotForPath(key)
+    let value = val == nil || val.value == nil || val.value is NSNull ? nil : val.value
+    guard value != nil else {
+      if self.levelNumber == 0 {
+        return self.valueForKey("\(key)")!
+      }
+      else {
+        return previousLevel.getValue(key)
+      }
+    }
+    return value
   }
 }

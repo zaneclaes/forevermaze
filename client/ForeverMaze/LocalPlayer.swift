@@ -176,6 +176,16 @@ class LocalPlayer : Player {
       }
     }
   }
+  
+  func reset() {
+    self.depressionPos = ""
+    self.numAnger = 0
+    self.numSadness = 0
+    self.numHappiness = 0
+    self.numFear = 0
+    self.unlockedTiles = Array<String>()
+    self.adjacentPositions = [:]
+  }
 
   func unlockTile(tile: Tile) -> Bool {
     guard self.unlockedTiles.indexOf(tile.coordinate.description) == nil else {
@@ -213,5 +223,30 @@ class LocalPlayer : Player {
     self.sprite.runAction(SKAction.sequence([squash, expand, jump, emoji, fall]), withKey: Animation.unlockKey)
     
     return true
+  }
+  
+  /**
+   * Selectively save the high scores array if the current player is in it
+   */
+  func saveHighScore() -> Promise<[Player]> {
+    var players:[Player] = []
+    return Account.loadHighScorers().then { (p) -> Promise<Void> in
+      players = p
+      var playerIDs = [String]()
+      var shouldWrite = false
+      for player in players {
+        playerIDs.append(player.playerID)
+        shouldWrite = shouldWrite || player.playerID == self.playerID
+      }
+      if shouldWrite {
+        let fb = Firebase(url: Config.firebaseUrl + "/highScorePlayerIDs")
+        return fb.write(playerIDs)
+      }
+      else {
+        return Promise<Void>()
+      }
+    }.then { () -> [Player] in
+      return players
+    }
   }
 }

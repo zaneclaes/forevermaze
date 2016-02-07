@@ -66,10 +66,14 @@ class Animation {
     return "\(group.description.lowercaseString)_\(Animation.normalizeDirection(direction).description.lowercaseString)"
   }
   
-  func createSprite(group: AnimationGroup, direction: Direction) -> SKSpriteNode {
+  func getTexture(group: AnimationGroup, direction: Direction) -> SKTexture {
     let key = getKey(group, direction: direction)
     let textures = frames[key]!
-    let node = SKSpriteNode(texture: textures.first)
+    return textures.first!
+  }
+  
+  func createSprite(group: AnimationGroup, direction: Direction) -> SKSpriteNode {
+    let node = SKSpriteNode(texture: self.getTexture(group, direction: direction))
     node.anchorPoint = CGPointMake(0.5, 0)
     return node
   }

@@ -211,7 +211,7 @@ class IsoScene: SKScene {
     return abs(dist.x) < maxDist.width && abs(dist.y) < maxDist.height
   }
 
-  func coordinateToPosition(pos:Coordinate, closeToCenter:Bool) -> CGPoint {
+  func coordinateToPosition(pos:Coordinate, closeToCenter:Bool = false) -> CGPoint {
     // Since positions can wrap around the world, we choose the point which is closest to our current center.
     var xPos = Int(pos.x)
     var yPos = Int(pos.y)
@@ -234,10 +234,6 @@ class IsoScene: SKScene {
     let pixels = CGPoint(x: CGFloat(xPos) * IsoScene.tileSize.width, y: CGFloat(yPos)*IsoScene.tileSize.height)
     let point = CGPoint(x:((pixels.x + pixels.y)), y: (pixels.y - pixels.x)/2)
     return point
-  }
-  
-  func coordinateToPosition(coord:Coordinate) -> CGPoint {
-    return self.coordinateToPosition(coord, closeToCenter: false)
   }
   
   /************************************************************************

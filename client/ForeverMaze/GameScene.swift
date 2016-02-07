@@ -14,8 +14,13 @@ class GameScene: IsoScene {
 
   let background:SKSpriteNode = SKSpriteNode(imageNamed: "background")
   let layerUI:GameUILayer
+  let layerDialogs:DialogLayer
   let depression:Depression = Depression()
+  let gameOverDialog = Dialog(title: I18n.t("dialog.gameOver.title"), body: I18n.t("dialog.gameOver.body"))
   var loaded:Bool = false
+  var gameOver:NSTimeInterval = 0
+  var nextLevel:NSTimeInterval = 0
+  var menuScene:MenuScene?
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
@@ -23,6 +28,7 @@ class GameScene: IsoScene {
 
   init(size: CGSize) {
     layerUI = GameUILayer(size: size)
+    layerDialogs = DialogLayer(size: size)
     let coord = Account.player?.coordinate
     let center = coord != nil ? coord! : Coordinate(x: 0, y: 0)
     super.init(center: center, worldSize: Config.worldSize, size: size)
@@ -33,6 +39,7 @@ class GameScene: IsoScene {
     
     addChild(background)
     addChild(layerUI)
+    addChild(layerDialogs)
   }
 
   override func didMoveToView(view: SKView) {
@@ -43,14 +50,16 @@ class GameScene: IsoScene {
     }
 
     let label = SKLabelNode(text: I18n.t("menu.loading"))
-    label.fontName = Config.font
+    label.fontName = Config.headerFont
     label.fontSize = 36
     label.color = SKColor.whiteColor()
     label.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y: CGRectGetMidY(self.scene!.frame))
     self.addChild(label)
 
     self.center = (Account.player?.coordinate)!
-    Account.getOtherPlayers(Account.player!.level.numOtherPlayers).then { (otherPlayers) -> Promise<Void> in
+    Account.player!.draw().then { (player) -> Promise<[String:Player]> in
+      return Account.getOtherPlayers(Account.player!.level.numOtherPlayers)
+    }.then { (otherPlayers) -> Promise<Void> in
       self.otherPlayers = otherPlayers
       return when(self.loadTiles())
     }.then { (tiles) -> Promise<Void> in
@@ -93,14 +102,7 @@ class GameScene: IsoScene {
   }
   
   func prepareNextLevel() {
-    Account.player!.depressionPos = ""
-    Account.player!.emoji = 0
-    Account.player!.numAnger = 0
-    Account.player!.numSadness = 0
-    Account.player!.numHappiness = 0
-    Account.player!.numFear = 0
-    Account.player!.unlockedTiles = Array<String>()
-    Account.player!.adjacentPositions = [:]
+    Account.player!.reset()
     Account.player!.unlockTile(self.tiles[Account.player!.coordinate.description]!)
     Account.player!.addUnlockedAdjacentCoordinates(Account.player!.coordinate)
     for tile in tiles.values {
@@ -117,13 +119,35 @@ class GameScene: IsoScene {
   }
 
   func onGameOver() {
+    guard gameOver == 0 else {
+      return
+    }
+    gameOver = NSDate().timeIntervalSince1970
+    
+    Account.player!.score = Account.player!.score + UInt(Account.player!.emoji)
+    Account.player!.emoji = 0
     Account.player!.currentLevel = 0
+    Account.player!.saveHighScore()
     prepareNextLevel()
+    presentDialog(gameOverDialog)
   }
   
-  func onBeatLevel() {
+  func onBeatLevel(otherPlayer: Player) {
+    guard nextLevel == 0 else {
+      return
+    }
+    nextLevel = NSDate().timeIntervalSince1970
     Account.player!.currentLevel += 1
     prepareNextLevel()
+    
+    let body = I18n.t("dialog.nextLevel.body").stringByReplacingOccurrencesOfString("%{name}", withString: otherPlayer.alias!)
+    let dialog = Dialog(title: "\(I18n.t("game.level"))\(Account.player!.currentLevel+1)", body: body)
+    presentDialog(dialog)
+  }
+  
+  func presentDialog(dialog: Dialog) {
+    touches.removeAll()
+    layerDialogs.present(dialog)
   }
 
   func checkEndLevel() -> Bool {
@@ -134,11 +158,57 @@ class GameScene: IsoScene {
     }
     for player in otherPlayers.values {
       if Account.player!.coordinate == player.coordinate {
-        onBeatLevel()
+        onBeatLevel(player)
         return true
       }
     }
     return false
+  }
+  
+  override func updateTouches(touches: Set<UITouch>) {
+    guard layerDialogs.dialogs.count == 0 else {
+      return
+    }
+    super.updateTouches(touches)
+  }
+  
+  private var touchingDialog = false
+  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    guard layerDialogs.dialogs.count == 0 else {
+      touchingDialog = true
+      return
+    }
+    super.touchesBegan(touches, withEvent: event)
+  }
+  
+  func resetUI() {
+    touchingDialog = false
+    nextLevel = 0
+    gameOver = 0
+    while layerDialogs.dismiss() {}
+  }
+  
+  override func endTouches(touches: Set<UITouch>) {
+    guard gameOver == 0 else {
+      let elapsed = NSDate().timeIntervalSince1970 - gameOver
+      if elapsed >= 0.5 && touchingDialog {
+        resetUI()
+        
+        let scene = ScoresScene(size: self.size)
+        scene.previousScene = self.menuScene!
+        scene.scaleMode = SKSceneScaleMode.AspectFill
+        self.scene!.view!.presentScene(scene, transition: Config.sceneTransition)
+      }
+      return
+    }
+    guard layerDialogs.dialogs.count <= 0 else {
+      if layerDialogs.timeSinceLastPresentation >= 0.5 && touchingDialog {
+        resetUI()
+      }
+      return
+    }
+    touchingDialog = false
+    super.endTouches(touches)
   }
   
   override func loadObject(path: String) -> Promise<GameObject!> {
@@ -172,10 +242,10 @@ class GameScene: IsoScene {
   }
 
   override func update(currentTime: CFTimeInterval) {
-    guard self.loaded else {
+    guard self.loaded && gameOver == 0 else {
       return
     }
-    self.depression.sprite.hidden = Account.player!.depressionCoordinate == nil
+    self.depression.hidden = Account.player!.depressionCoordinate == nil    
     if Account.player!.depressionCoordinate != nil && !self.isObjectMoving(self.depression) {
       self.depression.step()
       self.onObjectMoved(self.depression)

@@ -24,6 +24,7 @@ class Player : Mobile {
   dynamic var emoji:Int = 0
   dynamic var currentLevel:Int = 0
   dynamic var depressionPos:String = ""
+  dynamic var score:UInt = 0
 
   init (playerID: String!) {
     self.playerID = playerID
@@ -65,7 +66,7 @@ class Player : Mobile {
     }
     if self.depressionPos.rangeOfString("x") == nil && Account.player!.numUnlockedTiles > Account.player!.level.depressionSpawnAfterTiles {
       // Spawn depression.
-      let dist = self.level.depressionSpawnDistance / 2
+      let dist = Int(self.level.depressionSpawnDistance / 2)
       let x = (arc4random_uniform(2) == 0 ? 1 : -1) * dist
       let y = (arc4random_uniform(2) == 0 ? 1 : -1) * dist
       let pos = Coordinate(xIndex: x + self.coordinate.xIndex, yIndex: y + self.coordinate.yIndex)

@@ -10,10 +10,11 @@ import SpriteKit
 
 class Container : SKSpriteNode {
   static let tileScale:CGFloat = 0.15
-  static let padding = CGFloat(Tile.size.width) * Container.tileScale
+  static let padding = CGFloat(Tile.size.width) * Container.tileScale * 1.5
   
-  let gameScene:GameScene = GameScene(size: UIScreen.mainScreen().bounds.size)
+  let testScene:IsoScene = IsoScene(center: Coordinate(x: 50, y: 50), worldSize: Config.worldSize, size: UIScreen.mainScreen().bounds.size)
   let background:SKShapeNode
+  var tiles = [Tile]()
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
@@ -24,7 +25,6 @@ class Container : SKSpriteNode {
     let size = CGSizeMake(CGFloat(ceilf(Float(minimumSize.width / tileSize.width))) * tileSize.width,
                           CGFloat(ceilf(Float(minimumSize.height / tileSize.height))) * tileSize.height)
     background = SKShapeNode(rectOfSize: size)
-    gameScene.center = Coordinate(x: 50, y: 50)
     super.init(texture: nil, color: UIColor.clearColor(), size: size)
     
     background.fillColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.8)
@@ -33,37 +33,44 @@ class Container : SKSpriteNode {
     
     var pos = CGPointZero
     var xDir = true
-    var coord = gameScene.center
+    var coord = testScene.center
     let offset = CGPointMake(-size.width/2, -size.height/2)
-    while (pos.y) < minimumSize.height/2 {
-      let tile = addTile(coord, offset: offset)
-      pos = tile.sprite.position
-      coord = coord + (xDir ? -1 : 0, xDir ? 0 : 1)
-      xDir = !xDir
-    }
     
-    coord = coord + (1, -1)
-    while (pos.x + tileSize.width) < minimumSize.width / 2 {
-      let tile = addTile(coord, offset: offset)
-      pos = tile.sprite.position
-      coord = coord + (xDir ? 1 : 0, xDir ? 0 : 1)
-      xDir = !xDir
+    let buildLeft = SKAction.runBlock { () -> Void in
+      while (pos.y) < minimumSize.height/2 {
+        let tile = self.addTile(coord, offset: offset)
+        pos = tile.sprite.position
+        coord = coord + (xDir ? -1 : 0, xDir ? 0 : 1)
+        xDir = !xDir
+      }
     }
-    
-    while pos.y >= offset.y {
-      let tile = addTile(coord, offset: offset)
-      pos = tile.sprite.position
-      coord = coord + (xDir ? 1 : 0, xDir ? 0 : -1)
-      xDir = !xDir
+    let buildTop = SKAction.runBlock { () -> Void in
+      coord = coord + (1, -1)
+      while (pos.x + tileSize.width) < minimumSize.width / 2 {
+        let tile = self.addTile(coord, offset: offset)
+        pos = tile.sprite.position
+        coord = coord + (xDir ? 1 : 0, xDir ? 0 : 1)
+        xDir = !xDir
+      }
     }
-    
-    coord = coord + (-1, 1)
-    while pos.x >= offset.x {
-      let tile = addTile(coord, offset: offset)
-      pos = tile.sprite.position
-      coord = coord + (xDir ? -1 : 0, xDir ? 0 : -1)
-      xDir = !xDir
+    let buildRight = SKAction.runBlock { () -> Void in
+      while pos.y >= offset.y {
+        let tile = self.addTile(coord, offset: offset)
+        pos = tile.sprite.position
+        coord = coord + (xDir ? 1 : 0, xDir ? 0 : -1)
+        xDir = !xDir
+      }
     }
+    let buildBottom = SKAction.runBlock { () -> Void in
+      coord = coord + (-1, 1)
+      while pos.x >= offset.x {
+        let tile = self.addTile(coord, offset: offset)
+        pos = tile.sprite.position
+        coord = coord + (xDir ? -1 : 0, xDir ? 0 : -1)
+        xDir = !xDir
+      }
+    }
+    runAction(SKAction.sequence([buildLeft, buildTop, buildRight, buildBottom]))
   }
   
   var contentSize:CGSize {
@@ -72,13 +79,18 @@ class Container : SKSpriteNode {
   
   func addTile(coordinate: Coordinate, offset: CGPoint) -> Tile {
     let tile = Tile(coordinate: coordinate, state: TileState.Unlocked)
-    let pos = gameScene.coordinateToPosition(coordinate, closeToCenter: true) - gameScene.coordinateToPosition(gameScene.center)
+    let pos = testScene.coordinateToPosition(coordinate, closeToCenter: true) - testScene.coordinateToPosition(testScene.center)
     let mult = Container.tileScale / Config.objectScale
     tile.hasDropshadow = true
     tile.scale = Container.tileScale
     tile.sprite.position = CGPointMake(pos.x * mult, pos.y * mult) + offset
-    tile.sprite.zPosition = gameScene.zPositionForYPosition(tile.sprite.position.y, zIndex: 100)
+    tile.sprite.zPosition = testScene.zPositionForYPosition(tile.sprite.position.y, zIndex: 100)
     addChild(tile.sprite)
+    tiles.append(tile)
     return tile
+  }
+  
+  deinit {
+    tiles.removeAll()
   }
 }
