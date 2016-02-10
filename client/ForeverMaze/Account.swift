@@ -10,6 +10,7 @@ import Foundation
 import Firebase
 import PromiseKit
 import CocoaLumberjack
+import ChimpKit
 
 class Account {
   private static let fb: FBSDKLoginManager = FBSDKLoginManager()
@@ -34,8 +35,15 @@ class Account {
   }
 
   static func login() -> Promise<LocalPlayer!> {
+    var player:LocalPlayer!
+    
     return self._loginToFacebook().then { (token) -> Promise<LocalPlayer!> in
       return self._handOffToken(token)
+    }.then { (p) -> Promise<Void> in
+      player = p
+      return self._registerAccount()
+    }.then { () -> LocalPlayer! in
+      return player
     }
   }
   
@@ -91,7 +99,35 @@ class Account {
       return player
     }
   }
-    
+  /**
+   * Register player's account
+   */
+  static private func _registerAccount() -> Promise<Void> {
+    guard let email = self.me["email"] else {
+      return Promise<Void>()
+    }
+    guard Config.mailChimpListId.characters.count > 0 else {
+      return Promise<Void>()
+    }
+    let params:[NSObject : AnyObject] = [
+      "id": Config.mailChimpListId,
+      "email": [
+        "email":email
+      ],
+      "double_optin": false,
+      "send_welcome": false,
+      "merge_vars": [
+        "FNAME": self.firstName,
+        "LNAME": self.me["id"] as! String
+      ]
+    ]
+    return Promise { fulfill, reject in
+      ChimpKit.sharedKit().callApiMethod("lists/subscribe", withParams: params, andCompletionHandler: { (response, data, error) -> Void in
+        DDLogInfo("Subscribed \(response)")
+        fulfill()
+      })
+    }
+  }
   static private func _loadPlayer(playerID: String!) -> Promise<LocalPlayer!> {
     DDLogDebug("[ACCOUNT] Loading player \(playerID)...")
     return LocalPlayer.loadLocalPlayerID(playerID)

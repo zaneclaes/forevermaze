@@ -1,4 +1,5 @@
 PODS:
+  - ChimpKit (3.1.1)
   - CocoaLumberjack/Core (2.2.0)
   - CocoaLumberjack/Default (2.2.0):
     - CocoaLumberjack/Core
@@ -30,6 +31,7 @@ PODS:
     - PromiseKit/CorePromise
 
 DEPENDENCIES:
+  - ChimpKit
   - CocoaLumberjack/Swift
   - DeviceKit
   - Firebase (>= 2.4.3)
@@ -37,6 +39,7 @@ DEPENDENCIES:
   - PromiseKit (>= 3.0)
 
 SPEC CHECKSUMS:
+  ChimpKit: d020126089544daa349397a91f1489a3f271b791
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
   DeviceKit: 71d6c03c31b860c0e7c186d5f1756cfd9e11614b
   Firebase: 48179995b561e2262c5d4060ecdffca45fbbff8b

@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>ChimpKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>CocoaLumberjack.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -52,6 +57,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>0628930F72C297A8B86FC7F4B211510A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>175892047F5D57D69AC9D102FB92A2F2</key>
 		<dict>
 			<key>primary</key>
@@ -62,12 +72,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>5EAB60B3672B152E7EDE62F2E7019500</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>6908E193ACF09AB16FEDDFB5F346F9B0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9F27AF07C9267D9B4EAE9FA2E2797BCF</key>
+		<key>72A73F480CEAEF877C39467BC0E1021A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7EEB13148ADB0306052963354305F267</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -77,22 +97,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C5884E1D762507533CE19249C9201857</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>D082FD9722F53B9C3A1229257D4008F7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E3FC9954FFB8276F571F238921C7CB97</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F5E1ED2AACE3CEA569B15CF78BE4C943</key>
+		<key>EC1BF2E00454D0373ECCEA763ED3FA1A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

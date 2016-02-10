@@ -84,6 +84,7 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods-ForeverMazeTests/ChimpKit.framework"
   install_framework "Pods-ForeverMazeTests/CocoaLumberjack.framework"
   install_framework "Pods-ForeverMazeTests/Firebase.framework"
   install_framework "Pods-ForeverMazeTests/Kingfisher.framework"
@@ -91,6 +92,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-ForeverMazeTests/PromiseKit.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods-ForeverMazeTests/ChimpKit.framework"
   install_framework "Pods-ForeverMazeTests/CocoaLumberjack.framework"
   install_framework "Pods-ForeverMazeTests/Firebase.framework"
   install_framework "Pods-ForeverMazeTests/Kingfisher.framework"

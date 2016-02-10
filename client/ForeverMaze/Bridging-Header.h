@@ -13,4 +13,6 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
 
+#import <ChimpKit/ChimpKit.h>
+
 #endif /* Bridging_Header_h */

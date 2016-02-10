@@ -8,6 +8,7 @@ target 'ForeverMaze' do
   pod "CocoaLumberjack/Swift"
   pod "DeviceKit"
   pod 'Kingfisher', '~> 2.0'
+  pod "ChimpKit"
 end
 
 target 'ForeverMazeTests' do
@@ -15,6 +16,7 @@ target 'ForeverMazeTests' do
   pod "PromiseKit", ">= 3.0"
   pod "CocoaLumberjack/Swift"
   pod 'Kingfisher', '~> 2.0'
+  pod "ChimpKit"
 end
 
 target 'ForeverMazeUITests' do
@@ -22,5 +24,6 @@ target 'ForeverMazeUITests' do
   pod "PromiseKit", ">= 3.0"
   pod "CocoaLumberjack/Swift"
   pod 'Kingfisher', '~> 2.0'
+  pod "ChimpKit"
 end
 

@@ -12,26 +12,35 @@ import DeviceKit
 import Firebase
 import PromiseKit
 import SpriteKit
+import ChimpKit
   
 class Config {
 
   static let debug:Bool = false
   static let godMode:Bool = true
+  
+  // API Keys & Config
   static let firebaseUrl:String = "https://forevermaze.firebaseio.com"
-  static let worldAtlas = SKTextureAtlas(named: "world")
+  static let mailChimpApiKey:String = "519b62ef83a56e62c6d0e31cad197d0f-us7"
+  static var mailChimpListId:String = "7ae703d89a"
+  
+  // UI, Assets & Fonts
   static let headerFont:String = "AvenirNext-Bold"
   static let bodyFont:String = "AvenirNext"
+  static let worldAtlas = SKTextureAtlas(named: "world")
+  static let sceneTransition = SKTransition.crossFadeWithDuration(1)
+  static let objectScale:CGFloat = UIDevice.currentDevice().userInterfaceIdiom == .Phone ? 0.5 : 1
+  
+  // Misc:
   static let device = Device()
   static let timeout:NSTimeInterval = 30
   static let baseErrorDomain = NSBundle.mainBundle().bundleIdentifier
   static let stepTime = 0.4
   static let tileBuffer = 5
-  static let objectScale:CGFloat = UIDevice.currentDevice().userInterfaceIdiom == .Phone ? 0.5 : 1
   static let flipTileCost = 15
   static let maxHighScores = 100
   static let minOtherPlayerSpawnDistance:UInt = 20
-  static let sceneTransition = SKTransition.crossFadeWithDuration(1)
-  static let depressionAudioDistance:UInt = 20 // The tile distance for the audio fading
+  static let depressionAudioDistance:UInt = 14 // The tile distance for the audio fading
   
   // Config from server::
   static var worldSize = MapSize(width: 100, height: 100)
@@ -45,6 +54,7 @@ class Config {
     DDLog.addLogger(DDASLLogger.sharedInstance()) // ASL = Apple System Logs
     defaultDebugLevel = Config.debug ? DDLogLevel.All : DDLogLevel.Info
 
+    ChimpKit.sharedKit().apiKey = Config.mailChimpApiKey
     DDLogInfo("[CONFIG] \(device)")
 
     //Firebase.defaultConfig().persistenceEnabled = true
@@ -57,6 +67,7 @@ class Config {
         }
         self.shareRoll = (remote?.childSnapshotForPath("shareRoll").value as! NSNumber).integerValue
         self.shareDelay = (remote?.childSnapshotForPath("shareDelay").value as! NSNumber).doubleValue
+        self.mailChimpListId = remote?.childSnapshotForPath("mailChimpListId").value as! String
         
         let worldSize = remote?.childSnapshotForPath("worldSize")
         let width:Int = (worldSize?.childSnapshotForPath("width").value as! NSNumber).integerValue
