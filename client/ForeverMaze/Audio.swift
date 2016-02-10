@@ -25,14 +25,14 @@ class Audio {
     heroTrack.prepareToPlay()
     heroTrack.volume = 0
     heroTrack.numberOfLoops = -1
-    heroTrack.play()
     
     let fpDepression = NSBundle.mainBundle().URLForResource("depression", withExtension: "mp3")
     try! depressionTrack = AVAudioPlayer(contentsOfURL: fpDepression!)
     depressionTrack.prepareToPlay()
     depressionTrack.volume = 0
     depressionTrack.numberOfLoops = -1
-    depressionTrack.play()
+    
+    play()
   }
   
   func fadeIn(track: AVAudioPlayer) {
@@ -46,7 +46,6 @@ class Audio {
   }
   
   func fadeToTrack(track: AVAudioPlayer) {
-    let tracks = [heroTrack,depressionTrack]
     for otherTrack in tracks {
       if track == otherTrack {
         fadeIn(track)
@@ -55,6 +54,22 @@ class Audio {
         fadeOut(track)
       }
     }
+  }
+  
+  func pause() {
+    for track in tracks {
+      track.pause()
+    }
+  }
+  
+  func play() {
+    for track in tracks {
+      track.play()
+    }
+  }
+  
+  var tracks:[AVAudioPlayer] {
+    return [heroTrack,depressionTrack]
   }
   
   static var sharedInstance:Audio {

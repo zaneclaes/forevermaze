@@ -40,9 +40,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   func applicationDidEnterBackground(application: UIApplication) {
+    Audio.sharedInstance.pause()
   }
 
   func applicationWillEnterForeground(application: UIApplication) {
+    Audio.sharedInstance.play()
   }
 
   func applicationDidBecomeActive(application: UIApplication) {

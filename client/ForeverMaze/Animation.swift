@@ -88,7 +88,7 @@ class Animation {
     )
   }
   
-  func cacheTextures() -> Promise<Animation> {
+  func cacheTextures() -> Promise<Animation?> {
     var textures = Array<SKTexture>()
     for set in frames.values {
       for frame in set {
@@ -111,9 +111,12 @@ class Animation {
     }
   }
   
-  static func preload(name: String) -> Promise<Animation> {
+  static func preload(name: String) -> Promise<Animation?> {
     guard cache[name] == nil else {
-      return Promise<Animation>(cache[name]!)
+      return Promise<Animation?>(cache[name]!)
+    }
+    guard let _ = NSBundle.mainBundle().pathForResource(name, ofType: "plist") else {
+      return Promise<Animation?>(nil)
     }
     cache[name] = Animation(name: name)
     return cache[name]!.cacheTextures()

@@ -34,9 +34,9 @@ class MenuButton : SgButton {
     return CGRectContainsPoint(hitRect, p)
   }
   
-  override func callButtonFunc(touch: UITouch) {
+  override func callButtonFunc() {
     self.runAction(MenuButton.sound)
-    super.callButtonFunc(touch)
+    super.callButtonFunc()
   }
 
   init(title: String, fontSize: CGFloat = 18, dark: Bool = false) {

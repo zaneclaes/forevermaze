@@ -29,7 +29,7 @@ class Account {
 
   static func resume() -> Promise<LocalPlayer!> {
     guard let token: FBSDKAccessToken = FBSDKAccessToken.currentAccessToken() else {
-      return Promise { fulfill, reject in fulfill(nil) }
+      return Promise<LocalPlayer!>(nil)
     }
     return self._handOffToken(token)
   }

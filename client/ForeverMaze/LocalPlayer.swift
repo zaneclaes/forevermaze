@@ -13,11 +13,16 @@ import CocoaLumberjack
 import SpriteKit
 
 class LocalPlayer : Player {
+  let magicHappiness = NSKeyedUnarchiver.unarchiveObjectWithFile(NSBundle.mainBundle().pathForResource("magic-happiness", ofType: "sks")!) as! SKEmitterNode
 
   var adjacentPositions:[String: Emotion] = [:]
 
   override init(playerID: String!) {
     super.init(playerID: playerID)
+    
+    guard self.connection != nil else {
+      return
+    }
     self.connection.childByAppendingPath("online").onDisconnectSetValue(false);
   }
 
@@ -26,14 +31,49 @@ class LocalPlayer : Player {
       return Promise { fulfill, reject in fulfill(nil) }
     }
     let player = LocalPlayer(playerID: playerID)
-    return player.loading.then { (snapshot) -> Promise<GameObject!> in
+    return player.loading.then { (snapshot) -> LocalPlayer! in
       Account.player = player
       player.lastLogin = NSDate().timeIntervalSince1970
       player.online = true
-      return player.draw()
-    }.then { (gameObject) -> LocalPlayer! in
       return Account.player
     }
+  }
+  
+  func update(deltaTime: NSTimeInterval) {
+    happinessPotionTimeRemaining = max(happinessPotionTimeRemaining - deltaTime, 0)
+    if happinessPotionTimeRemaining > 0 {
+      if magicHappiness.parent == nil {
+        magicHappiness.position = CGPointMake(0, self.sprite.frame.size.height/3)
+        magicHappiness.name = "smoke"
+        magicHappiness.zPosition = 1000
+        magicHappiness.targetNode = self.sprite.scene
+        self.sprite.addChild(magicHappiness)
+      }
+    }
+    else if magicHappiness.parent != nil {
+      magicHappiness.removeFromParent()
+    }
+  }
+  
+  override func assignScale() {
+    super.assignScale()
+    self.magicHappiness.xScale = self.sprite.xScale
+    self.magicHappiness.yScale = self.sprite.yScale
+  }
+  
+  func spawnWishingWells() {
+    guard wishingWells.count == 0 else {
+      return
+    }
+    var wells = Set<String>()
+    while wells.count < self.level.numWishingWells {
+      let coord = Coordinate(
+        x: UInt(arc4random_uniform(UInt32(Config.worldSize.width))),
+        y: UInt(arc4random_uniform(UInt32(Config.worldSize.height)))
+      )
+      wells.insert(coord.description)
+    }
+    wishingWells = Array(wells)
   }
 
   /**
@@ -185,6 +225,9 @@ class LocalPlayer : Player {
     self.numFear = 0
     self.unlockedTiles = Array<String>()
     self.adjacentPositions = [:]
+    self.wishingWells = []
+    self.numHappinessPotions = 0
+    self.happinessPotionTimeRemaining = 0
   }
 
   func unlockTile(tile: Tile) -> Bool {

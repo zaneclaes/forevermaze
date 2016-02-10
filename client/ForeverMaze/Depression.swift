@@ -15,7 +15,6 @@ class Depression : Mobile {
   init () {
     super.init(firebasePath: nil)
     alias = I18n.t("Depression")
-    self.draw()
   }
   
   override var assetName:String {
@@ -31,7 +30,13 @@ class Depression : Mobile {
       self.sprite.addChild(self.particle)
     }
     super.updateAnimation()
+    assignScale()
+  }
+  
+  override func assignScale() {
+    super.assignScale()
     self.particle.xScale = self.sprite.xScale
+    self.particle.yScale = self.sprite.yScale
   }
   
   var hidden:Bool {

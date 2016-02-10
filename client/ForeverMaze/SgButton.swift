@@ -416,30 +416,31 @@ class SgButton: SKSpriteNode {
   }
 
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-    if !isDisabled {
+    let touch = touches.first!
+    if !isDisabled && !hidden && containsPoint(touch.locationInNode(parent!)) {
       buttonState = .Highlighted
     }
-
   }
   
-  func callButtonFunc(touch: UITouch) {
-    if buttonFunc != nil {
-      let location = touch.locationInNode(parent!)
-      if self.containsPoint(location) {
-        buttonFunc!(button: self)
+  func callButtonFunc() {
+    guard buttonFunc != nil else {
+      return
+    }
+    buttonFunc!(button: self)
+  }
+
+  override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    if !isDisabled && !hidden {
+      buttonState = .Normal
+      let touch = touches.first!
+      if self.containsPoint(touch.locationInNode(parent!)) {
+        callButtonFunc()
       }
     }
   }
 
-  override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-    if !isDisabled {
-      buttonState = .Normal
-      callButtonFunc(touches.first! as UITouch)
-    }
-  }
-
   override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-    if !isDisabled {
+    if !isDisabled && !hidden {
       buttonState = .Normal
     }
   }

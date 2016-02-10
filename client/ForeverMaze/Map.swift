@@ -15,7 +15,7 @@ import CocoaLumberjack
  * MapSize
  ***********************************************************************/
 struct MapSize : CustomStringConvertible {
-  var width: UInt
+  let width: UInt
   let height: UInt
 
   var description:String {

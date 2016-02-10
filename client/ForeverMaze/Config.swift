@@ -40,12 +40,13 @@ class Config {
   static let flipTileCost = 15
   static let maxHighScores = 100
   static let minOtherPlayerSpawnDistance:UInt = 20
-  static let depressionAudioDistance:UInt = 14 // The tile distance for the audio fading
+  static let depressionAudioDistance:CGFloat = 1200 // The tile distance for the audio fading (in points, will be scaled by objectScale)
   
   // Config from server::
   static var worldSize = MapSize(width: 100, height: 100)
   static var shareRoll:Int = 4
   static var shareDelay:NSTimeInterval = 259200
+  static var happinessPotionDuration:NSTimeInterval = 30
   static var remote:FDataSnapshot!
   static var levels = Array<Level>()
 
@@ -67,6 +68,7 @@ class Config {
         }
         self.shareRoll = (remote?.childSnapshotForPath("shareRoll").value as! NSNumber).integerValue
         self.shareDelay = (remote?.childSnapshotForPath("shareDelay").value as! NSNumber).doubleValue
+        self.happinessPotionDuration = (remote?.childSnapshotForPath("happinessPotionDuration").value as! NSNumber).doubleValue
         self.mailChimpListId = remote?.childSnapshotForPath("mailChimpListId").value as! String
         
         let worldSize = remote?.childSnapshotForPath("worldSize")

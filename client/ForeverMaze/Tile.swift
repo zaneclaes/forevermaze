@@ -94,7 +94,7 @@ class Tile : GameStatic {
       }
     }
     else {
-      loadFulfill(nil)
+      onLoaded(nil)
     }
     
     icon.hidden = true

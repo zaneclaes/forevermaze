@@ -15,6 +15,19 @@ class GameObject : GameStatic {
   private dynamic var x: UInt = 0
   private dynamic var y: UInt = 0
   private var currentAnimationKey = ""
+  
+  /**
+   * After we load data (or not, if offline), we need to draw the object
+   */
+  override func onLoaded(snapshot: FDataSnapshot!) {
+    self.draw().then { (obj) -> Void in
+      self.loadFulfill(snapshot)
+    }
+  }
+  
+  func onAddedToScene() {
+    
+  }
 
   /**
    * Write all the missing SKTextures into the textureCache 
@@ -23,19 +36,30 @@ class GameObject : GameStatic {
   func draw() -> Promise<GameObject!> {
     return Animation.preload(assetName).then { (animation) -> Promise<GameObject!> in
       self.currentAnimationKey = ""
-      let texture = self.animation!.getTexture(.Idle, direction: self.direction)
-      self.sprite.xScale = 1
-      self.sprite.yScale = 1
-      self.sprite.texture = texture
-      self.sprite.size = texture.size()
-      self.assignScale()
-      self.updateAnimation()
+      self.loadCurrentTexture()
       return Promise<GameObject!>(self)
     }
   }
   
+  func loadCurrentTexture() {
+    self.sprite.xScale = 1
+    self.sprite.yScale = 1
+    self.sprite.texture = self.currentTexture
+    self.sprite.size = self.sprite.texture!.size()
+    self.assignScale()
+    self.updateAnimation()
+  }
+  
+  var currentTexture:SKTexture {
+    guard self.animation != nil else {
+      return Config.worldAtlas.textureNamed(assetName)
+    }
+    return self.animation!.getTexture(.Idle, direction: self.direction)
+  }
+  
   var assetName:String {
-    return "hero"
+    assert(false, "assetName must be overwritten")
+    return ""
   }
   
   var speed:Double {
@@ -112,7 +136,7 @@ class GameObject : GameStatic {
 
   var id: String {
     guard self.connection != nil else {
-      return "<\(self.dynamicType)>"
+      return "<\(self.dynamicType)> @\(self.coordinate.description)"
     }
     return self.connection.description
       .stringByReplacingOccurrencesOfString(Config.firebaseUrl, withString: "")
@@ -148,8 +172,8 @@ class GameObject : GameStatic {
       return Promise<GameObject!>(nil)
     }
     else {
-      return obj.loading.then { (snapshot) -> Promise<GameObject!> in
-        return obj.draw()
+      return obj.loading.then { (snapshot) -> GameObject! in
+        return obj
       }
     }
   }

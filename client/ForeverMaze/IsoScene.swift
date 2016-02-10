@@ -135,6 +135,7 @@ class IsoScene: SKScene {
     }
     self.objects[obj.id] = obj
     obj.sprite.zPosition = self.zPositionForYPosition(obj.sprite.position.y, zIndex: 10)
+    obj.onAddedToScene()
     return true
   }
   
@@ -145,6 +146,21 @@ class IsoScene: SKScene {
   func loadObject(path: String) -> Promise<GameObject!> {
     return Data.loadObject(path)
   }
+  
+  func loadObjectsInTile(tile: Tile) {
+    for path in tile.objectIds {
+      if self.objects[path] != nil || !self.shouldLoadObjectID(path) {
+        continue
+      }
+      self.loadObject(path).then { (gameObject) -> Void in
+        guard gameObject != nil else {
+          DDLogWarn("Failed to load object \(path)")
+          return
+        }
+        self.addObject(gameObject!)
+      }
+    }
+  }
 
   func addTile(tile:Tile) -> Bool {
     let key = tile.coordinate.description
@@ -154,18 +170,7 @@ class IsoScene: SKScene {
     if self.addGameSprite(tile, at: tile.coordinate, inLayer: layerIsoGround, offset: IsoScene.tileOffset) {
       tile.sprite.zPosition = self.zPositionForYPosition(tile.sprite.position.y, zIndex: 0)
       self.tiles[tile.coordinate.description] = tile
-      for path in tile.objectIds {
-        if self.objects[path] != nil || !self.shouldLoadObjectID(path) {
-          continue
-        }
-        self.loadObject(path).then { (gameObject) -> Void in
-          guard gameObject != nil else {
-            DDLogWarn("Failed to load object \(path)")
-            return
-          }
-          self.addObject(gameObject!)
-        }
-      }
+      self.loadObjectsInTile(tile)
       return true
     }
     else {
@@ -269,6 +274,11 @@ class IsoScene: SKScene {
       ]), withKey: Animation.movementKey)
     }
   }
+  
+  func removeObject(object: GameObject) {
+    object.cleanup()
+    self.objects.removeValueForKey(object.id)
+  }
 
   func onObjectMoved(object: Mobile) {
     guard object != Account.player else {
@@ -278,8 +288,7 @@ class IsoScene: SKScene {
 
     if !self.isCoordinateOnScreen(object.coordinate, includeBuffer: true) {
       // Not on screen? Just remove it.
-      object.cleanup()
-      self.objects.removeValueForKey(object.id)
+      removeObject(object)
     }
     else if self.objects.keys.contains(object.id) {
       // Moving from one tile to another...
@@ -329,8 +338,7 @@ class IsoScene: SKScene {
   func unloadOffScreenObjects() {
     for obj in self.objects.values {
       if !self.isCoordinateOnScreen(obj.coordinate, includeBuffer: true) {
-        obj.cleanup()
-        self.objects.removeValueForKey(obj.id)
+        removeObject(obj)
       }
     }
   }

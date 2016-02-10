@@ -28,7 +28,7 @@ class GameStatic : NSObject {
     super.init()
 
     guard self.connection != nil else {
-      loadFulfill(nil)
+      onLoaded(nil)
       return
     }
     load()
@@ -38,6 +38,10 @@ class GameStatic : NSObject {
     didSet {
       self.assignScale()
     }
+  }
+  
+  func onLoaded(snapshot: FDataSnapshot!) {
+    loadFulfill(snapshot)
   }
   
   //
@@ -60,7 +64,7 @@ class GameStatic : NSObject {
           // Begin KVO:
           self.addProperty(property)
         }
-        self.loadFulfill(snapshot)
+        self.onLoaded(snapshot)
       }
       else {
         for property in self.firebaseProperties {
@@ -87,7 +91,7 @@ class GameStatic : NSObject {
     after(Config.timeout).then { () -> Void in
       if !self.loading.resolved {
         DDLogWarn("[TIMEOUT] [FIREBASE-READ] \(self.connection.description)")
-        self.loadFulfill(nil)
+        self.onLoaded(nil)
       }
     }
   }
@@ -202,7 +206,7 @@ class GameStatic : NSObject {
   }
 
   deinit {
-    cleanup()
+    // cleanup()
     DDLogDebug("[DEALLOC] \(self)")
   }
 }

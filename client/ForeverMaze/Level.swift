@@ -16,6 +16,7 @@ class Level : NSObject {
   var depressionSpawnDistance:Int = 20
   var depressionSpawnAfterTiles:Int = 10
   var numOtherPlayers:Int = 8
+  var numWishingWells:Int = 100
 
   init(snapshot: FDataSnapshot!, number: UInt) {
     self.snapshot = snapshot
@@ -25,6 +26,7 @@ class Level : NSObject {
     self.depressionSpawnDistance = getValue("depressionSpawnDistance") as! Int
     self.depressionSpawnAfterTiles = getValue("depressionSpawnAfterTiles") as! Int
     self.numOtherPlayers = getValue("numOtherPlayers") as! Int
+    self.numWishingWells = getValue("numWishingWells") as! Int
   }
   
   var previousLevel:Level {

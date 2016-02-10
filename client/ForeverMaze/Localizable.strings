@@ -24,6 +24,8 @@
 "dialog.nextLevel.body" = "You found %{name}!";
 "dialog.sharePrompt.title" = "Share ForeverMaze?";
 "dialog.sharePrompt.body" = "ForeverMaze is more fun with friends. The more friends you have, the more paths you can build.";
+"dialog.wishingWell.title" = "Wishing Well";
+"dialog.wishingWell.body" = "The Wishing Well grants you a Happiness potion. Use it to become immune to Depression for a brief time.";
 
 "share.title" = "ForeverMaze | Battle Depression with Friends";
 "share.body" = "Use the four emotions to build bridges to your friends, escaping depression and discovering happiness along the way.";

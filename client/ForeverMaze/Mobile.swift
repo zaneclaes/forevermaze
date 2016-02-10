@@ -10,7 +10,7 @@ import SpriteKit
 
 class Mobile : GameObject {
   dynamic var alias: String! = nil
-
+  
   func move(xDist: Int, yDist: Int) {
     self.coordinate = self.coordinate + (xDist, yDist)
   }
@@ -34,5 +34,12 @@ class Mobile : GameObject {
       self.gameScene?.onObjectMoved(self)
     }
     super.onPropertyChangedRemotely(property, oldValue: oldValue)
+  }
+  
+  override var id:String {
+    guard self.connection != nil else {
+      return "<\(self.dynamicType)>"
+    }
+    return super.id
   }
 }

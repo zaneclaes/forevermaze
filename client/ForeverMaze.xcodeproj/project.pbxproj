@@ -61,6 +61,7 @@
 		2BB884EE1C04E40F006E4570 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB884ED1C04E40F006E4570 /* Data.swift */; };
 		2BB884F11C0622DC006E4570 /* IsoScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB884F01C0622DC006E4570 /* IsoScene.swift */; };
 		2BEDFA7F1C216788001BE36D /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BEDFA7E1C216788001BE36D /* Errors.swift */; };
+		2F0D68E91C6B9A7E00F9F265 /* WishingWell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0D68E81C6B9A7E00F9F265 /* WishingWell.swift */; };
 		2F22D4241C4D74BE00CAA56F /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F22D4221C4D730200CAA56F /* Animation.swift */; };
 		2F22D4281C4DCDD300CAA56F /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F22D4271C4DCDD300CAA56F /* Coordinate.swift */; };
 		2F22D42A1C4DCDF000CAA56F /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F22D4291C4DCDF000CAA56F /* Direction.swift */; };
@@ -95,7 +96,7 @@
 		2FB6EB6E1C5E6CF800BE6F02 /* unlock-anger.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FB6EB6D1C5E6CF800BE6F02 /* unlock-anger.sks */; };
 		2FB6EB701C5E6D1E00BE6F02 /* unlock-fear.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FB6EB6F1C5E6D1E00BE6F02 /* unlock-fear.sks */; };
 		2FB6EB721C5E6EAB00BE6F02 /* depression.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FB6EB711C5E6EAB00BE6F02 /* depression.sks */; };
-		2FB6EB741C5E876100BE6F02 /* sparkle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FB6EB731C5E876100BE6F02 /* sparkle.sks */; };
+		2FB6EB741C5E876100BE6F02 /* magic-happiness.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FB6EB731C5E876100BE6F02 /* magic-happiness.sks */; };
 		2FB6EB781C5E87A700BE6F02 /* snow.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FB6EB771C5E87A700BE6F02 /* snow.sks */; };
 		2FB6EB791C5E9B5C00BE6F02 /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F22D4221C4D730200CAA56F /* Animation.swift */; };
 		2FB6EB7A1C5E9B6800BE6F02 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F22D4291C4DCDF000CAA56F /* Direction.swift */; };
@@ -211,6 +212,7 @@
 		2BB884ED1C04E40F006E4570 /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Data.swift; path = ForeverMaze/Data.swift; sourceTree = "<group>"; };
 		2BB884F01C0622DC006E4570 /* IsoScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IsoScene.swift; sourceTree = "<group>"; };
 		2BEDFA7E1C216788001BE36D /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Errors.swift; path = ForeverMaze/Errors.swift; sourceTree = "<group>"; };
+		2F0D68E81C6B9A7E00F9F265 /* WishingWell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WishingWell.swift; sourceTree = "<group>"; };
 		2F22D4221C4D730200CAA56F /* Animation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
 		2F22D4271C4DCDD300CAA56F /* Coordinate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		2F22D4291C4DCDF000CAA56F /* Direction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
@@ -233,7 +235,7 @@
 		2FB6EB6D1C5E6CF800BE6F02 /* unlock-anger.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = "unlock-anger.sks"; sourceTree = "<group>"; };
 		2FB6EB6F1C5E6D1E00BE6F02 /* unlock-fear.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = "unlock-fear.sks"; sourceTree = "<group>"; };
 		2FB6EB711C5E6EAB00BE6F02 /* depression.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = depression.sks; sourceTree = "<group>"; };
-		2FB6EB731C5E876100BE6F02 /* sparkle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = sparkle.sks; sourceTree = "<group>"; };
+		2FB6EB731C5E876100BE6F02 /* magic-happiness.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = "magic-happiness.sks"; sourceTree = "<group>"; };
 		2FB6EB771C5E87A700BE6F02 /* snow.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = snow.sks; sourceTree = "<group>"; };
 		2FE234761C664AB9001F9553 /* AboutScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutScene.swift; sourceTree = "<group>"; };
 		2FE234781C664AC7001F9553 /* Dialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
@@ -448,6 +450,7 @@
 		2BB6F15A1BFFDC97009DF879 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
+				2F0D68E71C6B9A6A00F9F265 /* Misc */,
 				2BB6F1681BFFE3B9009DF879 /* Mobiles */,
 				2BB6F15B1BFFDCAA009DF879 /* GameObject.swift */,
 			);
@@ -503,6 +506,14 @@
 			name = UI;
 			sourceTree = "<group>";
 		};
+		2F0D68E71C6B9A6A00F9F265 /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				2F0D68E81C6B9A7E00F9F265 /* WishingWell.swift */,
+			);
+			name = Misc;
+			sourceTree = "<group>";
+		};
 		2F22D42B1C4DCE0D00CAA56F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -554,7 +565,7 @@
 				2FB6EB6F1C5E6D1E00BE6F02 /* unlock-fear.sks */,
 				2FB6EB6D1C5E6CF800BE6F02 /* unlock-anger.sks */,
 				2FB6EB711C5E6EAB00BE6F02 /* depression.sks */,
-				2FB6EB731C5E876100BE6F02 /* sparkle.sks */,
+				2FB6EB731C5E876100BE6F02 /* magic-happiness.sks */,
 				2FB6EB771C5E87A700BE6F02 /* snow.sks */,
 			);
 			path = particles;
@@ -802,7 +813,7 @@
 				2FE456211C5E531200E90B75 /* Localizable.strings in Resources */,
 				2FF533721C630FD4004A324A /* hero.2@2x.png in Resources */,
 				2FB6EB6A1C5E6CBF00BE6F02 /* spark.png in Resources */,
-				2FB6EB741C5E876100BE6F02 /* sparkle.sks in Resources */,
+				2FB6EB741C5E876100BE6F02 /* magic-happiness.sks in Resources */,
 				2B4E97D11BFFA5DD0066D521 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -989,6 +1000,7 @@
 				2F2432DC1C6B89BC00D58092 /* AudioFader.swift in Sources */,
 				2BB6F1571BFFDB62009DF879 /* Player.swift in Sources */,
 				2F22D4241C4D74BE00CAA56F /* Animation.swift in Sources */,
+				2F0D68E91C6B9A7E00F9F265 /* WishingWell.swift in Sources */,
 				2B4B5D7D1C239E1F00E5C7F9 /* Threading.swift in Sources */,
 				2FE2347D1C6660D4001F9553 /* Container.swift in Sources */,
 				2F85BB5A1C67C67400F89E64 /* Social.swift in Sources */,

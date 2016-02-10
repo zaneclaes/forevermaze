@@ -67,14 +67,14 @@ class MenuScene: InterfaceScene {
     }
     
     self.player.direction = Direction.S
-    player.draw().then { (gameObject) -> Void in
+    player.loading.then { (gameObject) -> Void in
       self.player.sprite.position = playerPosition
       self.player.sprite.zPosition = objectZ
       self.addChild(self.player.sprite)
     }
     
     self.depression.direction = Direction.E
-    depression.draw().then { (gameObject) -> Void in
+    depression.loading.then { (gameObject) -> Void in
       self.depression.sprite.position = CGPoint(x: self.scene!.frame.size.width/5, y: playerPosition.y)
       self.addChild(self.depression.sprite)
     }

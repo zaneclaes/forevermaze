@@ -17,10 +17,13 @@ class GameScene: IsoScene {
   let layerDialogs:DialogLayer
   let depression:Depression = Depression()
   let gameOverDialog = Dialog(title: I18n.t("dialog.gameOver.title"), body: I18n.t("dialog.gameOver.body"))
+  let wishingWellDialog = Dialog(title: I18n.t("dialog.wishingWell.title"), body: I18n.t("dialog.wishingWell.body"))
   var loaded:Bool = false
   var gameOver:NSTimeInterval = 0
   var nextLevel:NSTimeInterval = 0
   var menuScene:MenuScene?
+  var lastTime:NSTimeInterval = 0
+  var elapsed:NSTimeInterval = 0
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
@@ -58,7 +61,7 @@ class GameScene: IsoScene {
     self.addChild(label)
 
     self.center = (Account.player?.coordinate)!
-    Account.player!.draw().then { (player) -> Promise<[String:Player]> in
+    Account.player!.loading.then { (player) -> Promise<[String:Player]> in
       return Account.getOtherPlayers(Account.player!.level.numOtherPlayers)
     }.then { (otherPlayers) -> Promise<Void> in
       self.otherPlayers = otherPlayers
@@ -70,6 +73,8 @@ class GameScene: IsoScene {
       self.addObject(Account.player!)
       self.viewIso.position = self.viewIsoPositionForPoint(Account.player!.sprite.position)
       DDLogInfo("Player @ \(Account.player!.sprite.position)")
+      
+      Account.player!.spawnWishingWells()
       
       if Account.player!.depressionCoordinate != nil {
         self.depression.coordinate = Account.player!.depressionCoordinate
@@ -94,7 +99,7 @@ class GameScene: IsoScene {
   var otherPlayers:[String:Player] = [:] {
     didSet {
       for player in otherPlayers.values {
-        player.draw().then { (go) -> Void in
+        player.loading.then { (go) -> Void in
           self.addObject(player)
           self.layerUI.addTracker(player)
         }
@@ -104,6 +109,7 @@ class GameScene: IsoScene {
   
   func prepareNextLevel() {
     Account.player!.reset()
+    Account.player!.spawnWishingWells()
     Account.player!.unlockTile(self.tiles[Account.player!.coordinate.description]!)
     Account.player!.addUnlockedAdjacentCoordinates(Account.player!.coordinate)
     for tile in tiles.values {
@@ -155,7 +161,7 @@ class GameScene: IsoScene {
 
   func checkEndLevel() -> Bool {
     let dp = Account.player!.depressionCoordinate
-    if dp != nil && Account.player!.coordinate == dp && !Config.godMode {
+    if dp != nil && Account.player!.happinessPotionTimeRemaining <= 0 && Account.player!.coordinate == dp && !Config.godMode {
       onGameOver()
       return true
     }
@@ -166,6 +172,25 @@ class GameScene: IsoScene {
       }
     }
     return false
+  }
+  
+  func checkWishingWell() {
+    let coord = Account.player!.coordinate
+    for obj in self.objects.values {
+      if obj is WishingWell && obj.coordinate == coord {
+        var wells = Account.player!.wishingWells
+        let idx = wells.indexOf(coord.description)
+        if idx != nil {
+          wells.removeAtIndex(idx!)
+          Account.player!.wishingWells = wells
+        }
+        Account.player!.numHappinessPotions += 1
+        layerUI.updateUI()
+        removeObject(obj)
+        presentDialog(wishingWellDialog)
+        break
+      }
+    }
   }
   
   override func updateTouches(touches: Set<UITouch>) {
@@ -191,11 +216,14 @@ class GameScene: IsoScene {
     while layerDialogs.dismiss() {}
   }
   
-  func updateAudioVolumes() {
+  /**
+   * Fade the music volumes to the correct levels
+   */
+  func updateMusicVolumes() {
     var heroVolume:Float = 1
     var depressionVolume:Float = 0
     let depressionCoord = Account.player!.depressionCoordinate
-    let depressionDist = depressionCoord == nil ? UInt(UINT32_MAX) : Account.player!.coordinate.getDistance(depressionCoord)
+    let depressionDist:CGFloat = depressionCoord == nil ? CGFloat.max : distance(Account.player!.sprite.position, p2: depression.sprite.position)
     
     if gameOver > 0 {
       heroVolume = 0
@@ -209,7 +237,7 @@ class GameScene: IsoScene {
     }
     else {
       // Cross-fade the two audio tracks based upon the distance to Depression
-      let cutoffDist:Float = Float(Config.depressionAudioDistance / 2)
+      let cutoffDist:Float = Float(Config.depressionAudioDistance / 2 * Config.objectScale)
       let depressionPercent = (cutoffDist - Float(depressionDist)) / cutoffDist
       let heroPercent = (Float(depressionDist) - cutoffDist) / cutoffDist
       heroVolume = clamp(heroPercent, lower: 0, upper: 1)
@@ -254,9 +282,21 @@ class GameScene: IsoScene {
   override func shouldLoadObjectID(objId: String) -> Bool {
     return self.otherPlayers[objId] != nil && super.shouldLoadObjectID(objId)
   }
+  
+  override func loadObjectsInTile(tile: Tile) {
+    if Account.player!.wishingWells.indexOf(tile.coordinate.description) != nil {
+      // Wishing well on this tile...
+      let gameObject = WishingWell(coord: tile.coordinate)
+      gameObject.loading.then { (snapshot) -> Void in
+        self.addObject(gameObject)
+      }
+    }
+    super.loadObjectsInTile(tile)
+  }
 
   override func onFacingNewTile() {
     checkEndLevel()
+    checkWishingWell()
     super.onFacingNewTile()
     layerUI.updateUI()
   }
@@ -277,7 +317,15 @@ class GameScene: IsoScene {
     guard self.loaded && gameOver == 0 else {
       return
     }
-    updateAudioVolumes()
+    let deltaTime = lastTime == 0 ? 0 : currentTime - lastTime
+    elapsed += deltaTime
+    if elapsed >= 1 {
+      elapsed = 0
+      layerUI.updateUI()
+    }
+    Account.player!.update(deltaTime)
+    lastTime = currentTime
+    updateMusicVolumes()
     self.depression.hidden = Account.player!.depressionCoordinate == nil    
     if Account.player!.depressionCoordinate != nil && !self.isObjectMoving(self.depression) {
       self.depression.step()

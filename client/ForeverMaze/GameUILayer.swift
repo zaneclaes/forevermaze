@@ -11,9 +11,15 @@ import PromiseKit
 import CocoaLumberjack
 
 class GameUILayer : SKSpriteNode {
-  let uiZ:CGFloat = 1000
-  let buttonChangeTile = SgButton(normalTexture: Config.worldAtlas.textureNamed("button_up"),
-                                  highlightedTexture: Config.worldAtlas.textureNamed("button_down"))
+  let uiZ:CGFloat = 2000
+  let buttonChangeTile = SgButton(
+    normalTexture: Config.worldAtlas.textureNamed("button_up"),
+    highlightedTexture: Config.worldAtlas.textureNamed("button_down")
+  )
+  let buttonPotion = SgButton(
+    normalTexture: Config.worldAtlas.textureNamed("potion_happiness")
+  )
+  let labelPotion = SKLabelNode(text: "0")
   let banner = SKSpriteNode(texture: Config.worldAtlas.textureNamed("banner"))
   let labelBanner = SKLabelNode(text: "😀 x 0")
   var trackers = Array<Tracker>()
@@ -33,6 +39,7 @@ class GameUILayer : SKSpriteNode {
 
     buttonChangeTile.anchorPoint = CGPointMake(1, 0)
     buttonChangeTile.position = CGPointMake(size.width - sidePad, sidePad)
+    buttonChangeTile.zPosition = uiZ + 10
     buttonChangeTile.buttonFunc = { (button) -> Void in
       let facing = Account.player!.coordinate + Account.player!.direction.amount
       let tile = self.gameScene.tiles[facing.description]
@@ -65,13 +72,31 @@ class GameUILayer : SKSpriteNode {
     }
     self.addChild(buttonChangeTile)
     
-    banner.position = CGPoint(x: size.width/2, y: size.height - sidePad - labelBanner.frame.size.height)
+    buttonPotion.anchorPoint = CGPointMake(1,1)
+    buttonPotion.position = CGPointMake(size.width - sidePad, size.height - sidePad)
+    buttonPotion.buttonFunc = { (button) -> Void in
+      Account.player!.numHappinessPotions -= 1
+      Account.player!.happinessPotionTimeRemaining = Config.happinessPotionDuration
+      self.updateUI()
+      self.buttonPotion.runAction(MenuButton.sound)
+    }
+    buttonPotion.zPosition = uiZ + 10
+    addChild(buttonPotion)
+    
+    labelPotion.fontName = Config.headerFont
+    labelPotion.fontColor = .whiteColor()
+    labelPotion.fontSize = 14
+    labelPotion.zPosition = buttonPotion.zPosition + 1
+    labelPotion.position = CGPointMake(CGRectGetMidX(buttonPotion.frame), CGRectGetMidY(buttonPotion.frame) - 8)
+    addChild(labelPotion)
+    
+    banner.position = CGPoint(x: size.width/2, y: size.height - sidePad - labelBanner.frame.size.height/2)
     banner.zPosition = 1
     banner.xScale = 0.66
     banner.yScale = banner.xScale
     addChild(banner)
 
-    labelBanner.color = SKColor.whiteColor()
+    labelBanner.color = .whiteColor()
     labelBanner.fontName = Config.headerFont
     labelBanner.fontSize = 14
     labelBanner.zPosition = 2
@@ -102,6 +127,18 @@ class GameUILayer : SKSpriteNode {
     let tile = self.gameScene.tiles[facing.description]
     buttonChangeTile.hidden = tile == nil || tile!.unlocked || tile!.unlockable || Account.player!.emoji < Config.flipTileCost
     labelBanner.text = "\(I18n.t("game.level"))\(Account.player!.currentLevel+1) 😀 x\(Account.player!.emoji)"
+    buttonPotion.hidden = Account.player!.happinessPotionTimeRemaining <= 0 && Account.player!.numHappinessPotions <= 0
+    labelPotion.hidden = buttonPotion.hidden
+    if Account.player!.happinessPotionTimeRemaining > 0 {
+      buttonPotion.disabled = true
+      labelPotion.text = "\(Int(Account.player!.happinessPotionTimeRemaining))"
+      labelPotion.fontColor = .blackColor()
+    }
+    else {
+      buttonPotion.disabled = false
+      labelPotion.text = "\(Account.player!.numHappinessPotions)"
+      labelPotion.fontColor = .whiteColor()
+    }
     repositionTrackers()
   }
 

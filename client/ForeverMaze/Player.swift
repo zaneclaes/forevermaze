@@ -25,11 +25,18 @@ class Player : Mobile {
   dynamic var currentLevel:Int = 0
   dynamic var depressionPos:String = ""
   dynamic var score:UInt = 0
+  dynamic var wishingWells:Array<String> = []
+  dynamic var numHappinessPotions:Int = 0
+  dynamic var happinessPotionTimeRemaining:NSTimeInterval = 0
 
   init (playerID: String!) {
     self.playerID = playerID
-    super.init(firebasePath: "/players/\(playerID)")
+    super.init(firebasePath: playerID == nil ? nil : "/players/\(playerID)")
     self.alias = self.alias == nil ? "Player" : self.alias
+  }
+  
+  override var assetName:String {
+    return "hero"
   }
 
   override var guardedProperties:[String] {
