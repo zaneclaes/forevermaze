@@ -9,6 +9,7 @@
 import SpriteKit
 import CocoaLumberjack
 import PromiseKit
+import AVFoundation
 
 class InterfaceScene: SKScene {
   
@@ -21,6 +22,8 @@ class InterfaceScene: SKScene {
   override func didMoveToView(view: SKView) {
     super.didMoveToView(view)
     
+    Audio.sharedInstance.fadeToTrack(musicTrack)
+    Analytics.view("\(self.dynamicType)")
     guard background.parent == nil else {
       return
     }
@@ -60,6 +63,10 @@ class InterfaceScene: SKScene {
       self.popScene()
     }
     addChild(buttonBack)
+  }
+  
+  var musicTrack:AVAudioPlayer {
+    return Audio.sharedInstance.depressionTrack
   }
   
   var previousScene:InterfaceScene? {

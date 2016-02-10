@@ -16,7 +16,7 @@ import SpriteKit
 class Config {
 
   static let debug:Bool = false
-  static let godMode:Bool = false
+  static let godMode:Bool = true
   static let firebaseUrl:String = "https://forevermaze.firebaseio.com"
   static let worldAtlas = SKTextureAtlas(named: "world")
   static let headerFont:String = "AvenirNext-Bold"
@@ -31,7 +31,12 @@ class Config {
   static let maxHighScores = 100
   static let minOtherPlayerSpawnDistance:UInt = 20
   static let sceneTransition = SKTransition.crossFadeWithDuration(1)
+  static let depressionAudioDistance:UInt = 20 // The tile distance for the audio fading
+  
+  // Config from server::
   static var worldSize = MapSize(width: 100, height: 100)
+  static var shareRoll:Int = 4
+  static var shareDelay:NSTimeInterval = 259200
   static var remote:FDataSnapshot!
   static var levels = Array<Level>()
 
@@ -50,6 +55,9 @@ class Config {
           reject(Errors.network)
           return
         }
+        self.shareRoll = (remote?.childSnapshotForPath("shareRoll").value as! NSNumber).integerValue
+        self.shareDelay = (remote?.childSnapshotForPath("shareDelay").value as! NSNumber).doubleValue
+        
         let worldSize = remote?.childSnapshotForPath("worldSize")
         let width:Int = (worldSize?.childSnapshotForPath("width").value as! NSNumber).integerValue
         let height:Int = (worldSize?.childSnapshotForPath("height").value as! NSNumber).integerValue

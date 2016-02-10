@@ -41,7 +41,7 @@ class MenuScene: InterfaceScene {
     labelLoading.color = SKColor.whiteColor()
     labelLoading.position = CGPoint(x: mid.x, y: 10)
     self.addChild(labelLoading)
-    
+        
     var lastWasX = false
     let playerPosition = CGPoint(x: self.scene!.frame.size.width/5*4, y: self.scene!.frame.size.height/4)
     var coordinate = Coordinate(xIndex: 0,yIndex: 0)
@@ -131,7 +131,7 @@ class MenuScene: InterfaceScene {
   func maybePromptShare() {
     let now = NSDate().timeIntervalSince1970
     let age = now - NSUserDefaults.standardUserDefaults().doubleForKey("lastSharePrompt")
-    guard age >= (60 * 60 * 24 * 3) && arc4random_uniform(4) == 0 else {
+    guard age >= Config.shareDelay && Config.shareRoll > 0 && arc4random_uniform(UInt32(Config.shareRoll)) == 0 else {
       return
     }
     let alert = UIAlertView(
@@ -143,9 +143,11 @@ class MenuScene: InterfaceScene {
     )
     alert.promise().then { (button) -> Void in
       guard button != alert.cancelButtonIndex else {
+        Analytics.log(.Share, params: ["accept": false])
         return
       }
-      Share.shareOnFacebook()
+      Social.shareOnFacebook()
+      Analytics.log(.Share, params: ["accept": true])
     }
     NSUserDefaults.standardUserDefaults().setDouble(now, forKey: "lastSharePrompt")
     NSUserDefaults.standardUserDefaults().synchronize()
@@ -213,6 +215,8 @@ class MenuScene: InterfaceScene {
 
     Account.login().then { (playerID) -> Void in
       DDLogInfo("PLAYER ID \(playerID)")
+      let fader = AudioFader(player: Audio.sharedInstance.depressionTrack)
+      fader.fadeOut()
       self.replaceScene(self.gameScene)
     }.always {
       self.isLoading = false

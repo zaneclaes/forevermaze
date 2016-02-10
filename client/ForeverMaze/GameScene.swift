@@ -45,6 +45,7 @@ class GameScene: IsoScene {
   override func didMoveToView(view: SKView) {
     super.didMoveToView(view)
     
+    Analytics.log(.StartGame)
     guard !loaded && Account.player!.sprite.parent == nil else {
       return
     }
@@ -69,7 +70,7 @@ class GameScene: IsoScene {
       self.addObject(Account.player!)
       self.viewIso.position = self.viewIsoPositionForPoint(Account.player!.sprite.position)
       DDLogInfo("Player @ \(Account.player!.sprite.position)")
-
+      
       if Account.player!.depressionCoordinate != nil {
         self.depression.coordinate = Account.player!.depressionCoordinate
       }
@@ -123,6 +124,7 @@ class GameScene: IsoScene {
       return
     }
     gameOver = NSDate().timeIntervalSince1970
+    Analytics.log(.EndGame, params: ["score": Account.player!.score])
     
     Account.player!.score = Account.player!.score + UInt(Account.player!.emoji)
     Account.player!.emoji = 0
@@ -136,6 +138,7 @@ class GameScene: IsoScene {
     guard nextLevel == 0 else {
       return
     }
+    Analytics.log(.BeatLevel, params: ["level": Account.player!.currentLevel])
     nextLevel = NSDate().timeIntervalSince1970
     Account.player!.currentLevel += 1
     prepareNextLevel()
@@ -186,6 +189,35 @@ class GameScene: IsoScene {
     nextLevel = 0
     gameOver = 0
     while layerDialogs.dismiss() {}
+  }
+  
+  func updateAudioVolumes() {
+    var heroVolume:Float = 1
+    var depressionVolume:Float = 0
+    let depressionCoord = Account.player!.depressionCoordinate
+    let depressionDist = depressionCoord == nil ? UInt(UINT32_MAX) : Account.player!.coordinate.getDistance(depressionCoord)
+    
+    if gameOver > 0 {
+      heroVolume = 0
+      depressionVolume = 1
+    }
+    else if nextLevel > 0 {
+      // no-op
+    }
+    else if depressionDist > Config.depressionAudioDistance {
+      // no-op
+    }
+    else {
+      // Cross-fade the two audio tracks based upon the distance to Depression
+      let cutoffDist:Float = Float(Config.depressionAudioDistance / 2)
+      let depressionPercent = (cutoffDist - Float(depressionDist)) / cutoffDist
+      let heroPercent = (Float(depressionDist) - cutoffDist) / cutoffDist
+      heroVolume = clamp(heroPercent, lower: 0, upper: 1)
+      depressionVolume = clamp(depressionPercent, lower: 0, upper: 1)
+    }
+    
+    Audio.sharedInstance.heroTrack.volume = heroVolume
+    Audio.sharedInstance.depressionTrack.volume = depressionVolume
   }
   
   override func endTouches(touches: Set<UITouch>) {
@@ -245,6 +277,7 @@ class GameScene: IsoScene {
     guard self.loaded && gameOver == 0 else {
       return
     }
+    updateAudioVolumes()
     self.depression.hidden = Account.player!.depressionCoordinate == nil    
     if Account.player!.depressionCoordinate != nil && !self.isObjectMoving(self.depression) {
       self.depression.step()

@@ -9,7 +9,7 @@
 import SpriteKit
 
 class MenuButton : SgButton {
-  
+  static let sound = SKAction.playSoundFileNamed("unlock.caf", waitForCompletion: false)
   let icon = SKSpriteNode(texture: Config.worldAtlas.textureNamed("icon_happiness"))
   
   required init?(coder aDecoder: NSCoder) {
@@ -32,6 +32,11 @@ class MenuButton : SgButton {
       self.frame.size.height - yPad*2
     )
     return CGRectContainsPoint(hitRect, p)
+  }
+  
+  override func callButtonFunc(touch: UITouch) {
+    self.runAction(MenuButton.sound)
+    super.callButtonFunc(touch)
   }
 
   init(title: String, fontSize: CGFloat = 18, dark: Bool = false) {

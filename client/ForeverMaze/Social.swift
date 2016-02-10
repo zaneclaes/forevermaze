@@ -1,5 +1,5 @@
 //
-//  Share.swift
+//  Social.swift
 //  ForeverMaze
 //
 //  Created by Zane Claes on 2/7/16.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Share {
+class Social {
   static func shareOnFacebook() {
     let content : FBSDKShareLinkContent = FBSDKShareLinkContent()
     content.contentURL = NSURL(string: "http://ForeverMaze.com")

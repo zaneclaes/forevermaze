@@ -64,6 +64,7 @@ enum Emotion: Int {
 class Tile : GameStatic {
   static let size = (width:88, height:88)
   static let yOrigin:CGFloat = 68
+  static let unlockSound = SKAction.playSoundFileNamed("unlock.caf", waitForCompletion: false)
   
   let coordinate: Coordinate
   private dynamic var e:Int = 0
@@ -224,7 +225,7 @@ class Tile : GameStatic {
       return state == .Online ? Emotion(rawValue: self.e)! : _emotion
     }
   }
-
+  
   func playUnlockAnimation() {
     let path = NSBundle.mainBundle().pathForResource("unlock-\(self.emotion.description.lowercaseString)", ofType: "sks")!
     let particle = NSKeyedUnarchiver.unarchiveObjectWithFile(path) as! SKEmitterNode
@@ -233,6 +234,7 @@ class Tile : GameStatic {
     //particle.targetNode = self.gameScene
     particle.zPosition = 10000
     self.sprite.addChild(particle)
+    sprite.runAction(Tile.unlockSound)
   }
 
   override var description:String {

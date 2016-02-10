@@ -18,6 +18,9 @@ class AboutScene: InterfaceScene {
   
   override func didMoveToView(view: SKView) {
     super.didMoveToView(view)
+    guard container.parent == nil else {
+      return
+    }
     
     labelTitle.text = I18n.t("menu.about")
     
@@ -55,7 +58,7 @@ class AboutScene: InterfaceScene {
     )
     buttonShare.emotion = Emotion.Happiness
     buttonShare.buttonFunc = { (button) -> Void in
-      Share.shareOnFacebook()
+      Social.shareOnFacebook()
     }
     addChild(buttonShare)
   }

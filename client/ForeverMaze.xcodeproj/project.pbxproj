@@ -64,9 +64,15 @@
 		2F22D4241C4D74BE00CAA56F /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F22D4221C4D730200CAA56F /* Animation.swift */; };
 		2F22D4281C4DCDD300CAA56F /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F22D4271C4DCDD300CAA56F /* Coordinate.swift */; };
 		2F22D42A1C4DCDF000CAA56F /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F22D4291C4DCDF000CAA56F /* Direction.swift */; };
+		2F2432D61C6AE18400D58092 /* depression.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2F2432D21C6AE18400D58092 /* depression.mp3 */; };
+		2F2432D71C6AE18400D58092 /* hero.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2F2432D31C6AE18400D58092 /* hero.mp3 */; };
+		2F2432D81C6AE18400D58092 /* unlock.caf in Resources */ = {isa = PBXBuildFile; fileRef = 2F2432D51C6AE18400D58092 /* unlock.caf */; };
+		2F2432DA1C6B851A00D58092 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2432D91C6B851A00D58092 /* Audio.swift */; };
+		2F2432DC1C6B89BC00D58092 /* AudioFader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2432DB1C6B89BC00D58092 /* AudioFader.swift */; };
 		2F349AF11C66EDC4000BAF0E /* ScoreNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F349AF01C66EDC4000BAF0E /* ScoreNode.swift */; };
 		2F349AF31C66EEF6000BAF0E /* AvatarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F349AF21C66EEF6000BAF0E /* AvatarNode.swift */; };
-		2F85BB5A1C67C67400F89E64 /* Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F85BB591C67C67400F89E64 /* Share.swift */; };
+		2F85BB5A1C67C67400F89E64 /* Social.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F85BB591C67C67400F89E64 /* Social.swift */; };
+		2F85BB5C1C67F43C00F89E64 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F85BB5B1C67F43C00F89E64 /* Analytics.swift */; };
 		2FAF46821C0BCC7F00B1F898 /* MapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAF46811C0BCC7F00B1F898 /* MapTests.swift */; };
 		2FAF46831C0BCD0100B1F898 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB884ED1C04E40F006E4570 /* Data.swift */; };
 		2FAF46841C0BCD0100B1F898 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB884ED1C04E40F006E4570 /* Data.swift */; };
@@ -208,9 +214,15 @@
 		2F22D4221C4D730200CAA56F /* Animation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
 		2F22D4271C4DCDD300CAA56F /* Coordinate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		2F22D4291C4DCDF000CAA56F /* Direction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
+		2F2432D21C6AE18400D58092 /* depression.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = depression.mp3; sourceTree = "<group>"; };
+		2F2432D31C6AE18400D58092 /* hero.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hero.mp3; sourceTree = "<group>"; };
+		2F2432D51C6AE18400D58092 /* unlock.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = unlock.caf; sourceTree = "<group>"; };
+		2F2432D91C6B851A00D58092 /* Audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Audio.swift; path = ForeverMaze/Audio.swift; sourceTree = "<group>"; };
+		2F2432DB1C6B89BC00D58092 /* AudioFader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFader.swift; sourceTree = "<group>"; };
 		2F349AF01C66EDC4000BAF0E /* ScoreNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreNode.swift; sourceTree = "<group>"; };
 		2F349AF21C66EEF6000BAF0E /* AvatarNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvatarNode.swift; sourceTree = "<group>"; };
-		2F85BB591C67C67400F89E64 /* Share.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Share.swift; path = ForeverMaze/Share.swift; sourceTree = "<group>"; };
+		2F85BB591C67C67400F89E64 /* Social.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Social.swift; path = ForeverMaze/Social.swift; sourceTree = "<group>"; };
+		2F85BB5B1C67F43C00F89E64 /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Analytics.swift; path = ForeverMaze/Analytics.swift; sourceTree = "<group>"; };
 		2FAF46811C0BCC7F00B1F898 /* MapTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapTests.swift; sourceTree = "<group>"; };
 		2FAF46911C0BCDC000B1F898 /* ForeverMazeTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ForeverMazeTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		2FAF46941C0C188C00B1F898 /* String+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
@@ -388,7 +400,9 @@
 				2B5B05FE1C041273006E0973 /* I18n.swift */,
 				2BEDFA7E1C216788001BE36D /* Errors.swift */,
 				2BB884ED1C04E40F006E4570 /* Data.swift */,
-				2F85BB591C67C67400F89E64 /* Share.swift */,
+				2F85BB591C67C67400F89E64 /* Social.swift */,
+				2F85BB5B1C67F43C00F89E64 /* Analytics.swift */,
+				2F2432D91C6B851A00D58092 /* Audio.swift */,
 			);
 			name = Singletons;
 			path = ..;
@@ -408,6 +422,8 @@
 		2BB6F12B1BFFC656009DF879 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2F2432D11C6AE18400D58092 /* music */,
+				2F2432D41C6AE18400D58092 /* sfx */,
 				2FF5339D1C6319C1004A324A /* world.atlasc */,
 				2FF533781C631464004A324A /* depression.atlasc */,
 				2FF533651C630FD4004A324A /* hero.atlasc */,
@@ -495,6 +511,25 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		2F2432D11C6AE18400D58092 /* music */ = {
+			isa = PBXGroup;
+			children = (
+				2F2432D21C6AE18400D58092 /* depression.mp3 */,
+				2F2432D31C6AE18400D58092 /* hero.mp3 */,
+			);
+			name = music;
+			path = Resources/music;
+			sourceTree = SOURCE_ROOT;
+		};
+		2F2432D41C6AE18400D58092 /* sfx */ = {
+			isa = PBXGroup;
+			children = (
+				2F2432D51C6AE18400D58092 /* unlock.caf */,
+			);
+			name = sfx;
+			path = Resources/sfx;
+			sourceTree = SOURCE_ROOT;
+		};
 		2FAF46931C0C186A00B1F898 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -504,6 +539,7 @@
 				2F22D4271C4DCDD300CAA56F /* Coordinate.swift */,
 				2F22D4291C4DCDF000CAA56F /* Direction.swift */,
 				2BB6F1781BFFEA0C009DF879 /* Map.swift */,
+				2F2432DB1C6B89BC00D58092 /* AudioFader.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -739,6 +775,7 @@
 				2FF533A31C6319C1004A324A /* Icon in Resources */,
 				2FF533741C630FD4004A324A /* hero.3@3x.png in Resources */,
 				2FF533981C631464004A324A /* depression.7@3x.png in Resources */,
+				2F2432D71C6AE18400D58092 /* hero.mp3 in Resources */,
 				2FB6EB6B1C5E6CBF00BE6F02 /* unlock-happiness.sks in Resources */,
 				2FF533911C631464004A324A /* depression.2@3x.png in Resources */,
 				2FF533931C631464004A324A /* depression.3@3x.png in Resources */,
@@ -747,6 +784,7 @@
 				2FB6EB6E1C5E6CF800BE6F02 /* unlock-anger.sks in Resources */,
 				2FF533A71C6319C1004A324A /* world.plist in Resources */,
 				2FB6EB691C5E6CBF00BE6F02 /* flip-sadness.sks in Resources */,
+				2F2432D81C6AE18400D58092 /* unlock.caf in Resources */,
 				2FF533951C631464004A324A /* depression.4@3x.png in Resources */,
 				2B4E97D61BFFA5DD0066D521 /* LaunchScreen.storyboard in Resources */,
 				2FF5338D1C631464004A324A /* depression.11@3x.png in Resources */,
@@ -754,6 +792,7 @@
 				2FF5336F1C630FD4004A324A /* hero.1.png in Resources */,
 				2FF533731C630FD4004A324A /* hero.2@3x.png in Resources */,
 				2FF533921C631464004A324A /* depression.3@2x.png in Resources */,
+				2F2432D61C6AE18400D58092 /* depression.mp3 in Resources */,
 				2FF5339B1C631464004A324A /* depression.plist in Resources */,
 				2FF533771C630FD4004A324A /* Icon in Resources */,
 				2FB6EB701C5E6D1E00BE6F02 /* unlock-fear.sks in Resources */,
@@ -930,6 +969,7 @@
 				2B5B05FF1C041273006E0973 /* I18n.swift in Sources */,
 				2B5B05FD1C03FE62006E0973 /* Utils.swift in Sources */,
 				2BB884EE1C04E40F006E4570 /* Data.swift in Sources */,
+				2F85BB5C1C67F43C00F89E64 /* Analytics.swift in Sources */,
 				2FE2347B1C664B95001F9553 /* InterfaceScene.swift in Sources */,
 				2B4E97CC1BFFA5DD0066D521 /* GameScene.swift in Sources */,
 				2BB6F15C1BFFDCAA009DF879 /* GameObject.swift in Sources */,
@@ -940,16 +980,18 @@
 				2B4E97C81BFFA5DD0066D521 /* AppDelegate.swift in Sources */,
 				2B55507E1C4E8F2500742CC7 /* Tracker.swift in Sources */,
 				2FE234791C664AC7001F9553 /* Dialog.swift in Sources */,
+				2F2432DA1C6B851A00D58092 /* Audio.swift in Sources */,
 				2BB6F16B1BFFE407009DF879 /* Tile.swift in Sources */,
 				2FE234771C664AB9001F9553 /* AboutScene.swift in Sources */,
 				2FE456251C5E608A00E90B75 /* MenuButton.swift in Sources */,
 				2B732B821C3E353D00295D0D /* GameUILayer.swift in Sources */,
 				2BB6F14F1BFFD272009DF879 /* Config.swift in Sources */,
+				2F2432DC1C6B89BC00D58092 /* AudioFader.swift in Sources */,
 				2BB6F1571BFFDB62009DF879 /* Player.swift in Sources */,
 				2F22D4241C4D74BE00CAA56F /* Animation.swift in Sources */,
 				2B4B5D7D1C239E1F00E5C7F9 /* Threading.swift in Sources */,
 				2FE2347D1C6660D4001F9553 /* Container.swift in Sources */,
-				2F85BB5A1C67C67400F89E64 /* Share.swift in Sources */,
+				2F85BB5A1C67C67400F89E64 /* Social.swift in Sources */,
 				2F22D42A1C4DCDF000CAA56F /* Direction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

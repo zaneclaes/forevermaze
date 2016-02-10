@@ -189,7 +189,9 @@ class Account {
     }
     return loading
   }
-  
+  /**
+   * Sort players, cap the amount of total players, and potentially insert the local player
+   */
   static func prepareHighScores(players:[Player], max: Int = 0, includeLocalPlayer:Bool = true) -> [Player] {
     var plyrs = players
     if includeLocalPlayer && Account.player != nil {
@@ -201,7 +203,7 @@ class Account {
     while max > 0 && plyrs.count > max {
       plyrs.removeLast()
     }
-    return players
+    return plyrs
   }
   /**
    * Get all actual friend data (convert FBIDs to player IDs)
