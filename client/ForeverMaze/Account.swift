@@ -198,7 +198,7 @@ class Account {
       var filteredPlayers:[String:Player] = [:]
       for player in players {
         let dist = Account.player!.coordinate.getDistance(player.coordinate)
-        if dist > Config.minOtherPlayerSpawnDistance {
+        if Config.godMode || dist > Config.minOtherPlayerSpawnDistance {
           filteredPlayers[player.id] = player
         }
       }
@@ -296,6 +296,16 @@ class Account {
     self.auth = nil
     self.player = nil
     Account.fb.logOut()
+  }
+  
+  static func isFacebookFriend(fbid: String) -> Bool {
+    for friendData in facebookFriends {
+      let id = friendData["id"]
+      if id is String && fbid == id as! String {
+        return true
+      }
+    }
+    return false
   }
   
   static var facebookFriends:[NSDictionary] {

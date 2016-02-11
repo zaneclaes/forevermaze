@@ -48,10 +48,10 @@ class Audio {
   func fadeToTrack(track: AVAudioPlayer) {
     for otherTrack in tracks {
       if track == otherTrack {
-        fadeIn(track)
+        fadeIn(otherTrack)
       }
       else {
-        fadeOut(track)
+        fadeOut(otherTrack)
       }
     }
   }

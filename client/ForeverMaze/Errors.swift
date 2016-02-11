@@ -16,8 +16,9 @@ class Errors {
   ]
   
   static func show(error: NSError) {
-    let title = messages[error.domain]
-    UIAlertView(title: title != nil ? title : error.localizedDescription, message: nil, delegate: nil, cancelButtonTitle: I18n.t("menu.ok")).show()
+    let title = messages[error.domain] != nil ? messages[error.domain] : error.localizedDescription
+    Analytics.log(.Error, params: ["title": title==nil ? "?" : title!, "desc": error.description])
+    UIAlertView(title: title!, message: nil, delegate: nil, cancelButtonTitle: I18n.t("menu.ok")).show()
   }
 
   static let network = NSError(

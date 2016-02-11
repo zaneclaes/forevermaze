@@ -16,6 +16,7 @@ class LocalPlayer : Player {
   let magicHappiness = NSKeyedUnarchiver.unarchiveObjectWithFile(NSBundle.mainBundle().pathForResource("magic-happiness", ofType: "sks")!) as! SKEmitterNode
 
   var adjacentPositions:[String: Emotion] = [:]
+  private var emojiRemainder = Float(0.0)
 
   override init(playerID: String!) {
     super.init(playerID: playerID)
@@ -212,7 +213,7 @@ class LocalPlayer : Player {
   func updateAdjacentTilesLockedStates() {
     for adjacentTile in self.gameScene!.tiles.values {
       if self.adjacentPositions[adjacentTile.coordinate.description] != nil {
-        adjacentTile.updateLockedState()
+        adjacentTile.updateLockedState(true)
       }
     }
   }
@@ -226,7 +227,6 @@ class LocalPlayer : Player {
     self.unlockedTiles = Array<String>()
     self.adjacentPositions = [:]
     self.wishingWells = []
-    self.numHappinessPotions = 0
     self.happinessPotionTimeRemaining = 0
   }
 
@@ -247,7 +247,7 @@ class LocalPlayer : Player {
       self.numHappiness++
     }
     self.unlockedTiles.append(tile.coordinate.description)
-    tile.updateLockedState()
+    tile.updateLockedState(true)
     self.adjacentPositions.removeValueForKey(tile.coordinate.description)
     self.addUnlockedAdjacentCoordinates(tile.coordinate).then { () -> () in
       self.updateAdjacentTilesLockedStates()
@@ -257,7 +257,10 @@ class LocalPlayer : Player {
     let expand = SKAction.scaleXTo(self.sprite.xScale, y: Config.objectScale, duration: 0.05)
     let jump = SKAction.moveByX(0, y: 20, duration: 0.15)
     let emoji = SKAction.runBlock { () -> Void in
-      self.emoji = self.emoji + 1
+      self.emojiRemainder += (1.0 * self.level.emojiMultiplier)
+      let wholeNumber = floorf(self.emojiRemainder)
+      self.emoji = self.emoji + Int(wholeNumber)
+      self.emojiRemainder = self.emojiRemainder - wholeNumber
       self.gameScene!.layerUI.runEmojiAnimation(tile.emotion)
       self.gameScene!.layerUI.updateUI()
       tile.playUnlockAnimation()

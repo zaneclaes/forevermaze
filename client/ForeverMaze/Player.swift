@@ -14,6 +14,9 @@ import Kingfisher
 class Player : Mobile {
 
   let playerID: String!
+  override var allowsForDynamicUnloading:Bool {
+    return false
+  }
   dynamic var lastLogin: NSNumber? = nil
   dynamic var online: Bool = false
   dynamic var unlockedTiles:Array<String> = []
@@ -25,6 +28,7 @@ class Player : Mobile {
   dynamic var currentLevel:Int = 0
   dynamic var depressionPos:String = ""
   dynamic var score:UInt = 0
+  dynamic var highScore:UInt = 0
   dynamic var wishingWells:Array<String> = []
   dynamic var numHappinessPotions:Int = 0
   dynamic var happinessPotionTimeRemaining:NSTimeInterval = 0

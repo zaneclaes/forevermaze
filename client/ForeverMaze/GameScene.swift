@@ -11,6 +11,8 @@ import PromiseKit
 import CocoaLumberjack
 
 class GameScene: IsoScene {
+  
+  static let tick = 0.2
 
   let background:SKSpriteNode = SKSpriteNode(imageNamed: "background")
   let layerUI:GameUILayer
@@ -52,14 +54,10 @@ class GameScene: IsoScene {
     guard !loaded && Account.player!.sprite.parent == nil else {
       return
     }
-
-    let label = SKLabelNode(text: I18n.t("menu.loading"))
-    label.fontName = Config.headerFont
-    label.fontSize = 36
-    label.color = SKColor.whiteColor()
-    label.position = CGPoint(x: CGRectGetMidX(self.scene!.frame), y: CGRectGetMidY(self.scene!.frame))
-    self.addChild(label)
-
+    
+    let dialog = Dialog(title: I18n.t("menu.loading"), body: I18n.t("menu.loading.quote"))
+    presentDialog(dialog)
+    
     self.center = (Account.player?.coordinate)!
     Account.player!.loading.then { (player) -> Promise<[String:Player]> in
       return Account.getOtherPlayers(Account.player!.level.numOtherPlayers)
@@ -87,12 +85,12 @@ class GameScene: IsoScene {
     }.then { (players) -> Void in
       Account.player!.updateAdjacentTilesLockedStates()
       self.layerUI.updateUI()
-      label.removeFromParent()
+      self.layerDialogs.dismiss()
     }.always { () -> Void in
       self.loaded = true
     }.error { (error) -> Void in
-      label.text = "\(error)"
       DDLogError("World Error \(error)")
+      Errors.show(error as NSError)
     }
   }
   
@@ -130,10 +128,12 @@ class GameScene: IsoScene {
       return
     }
     gameOver = NSDate().timeIntervalSince1970
-    Analytics.log(.EndGame, params: ["score": Account.player!.score])
+    Analytics.log(.EndGame, params: ["score": Account.player!.score, "level": Account.player!.level])
     
+    Account.player!.highScore = max(Account.player!.highScore, Account.player!.score)
     Account.player!.score = Account.player!.score + UInt(Account.player!.emoji)
     Account.player!.emoji = 0
+    Account.player!.numHappinessPotions = 0
     Account.player!.currentLevel = 0
     Account.player!.saveHighScore()
     prepareNextLevel()
@@ -165,8 +165,11 @@ class GameScene: IsoScene {
       onGameOver()
       return true
     }
-    for player in otherPlayers.values {
-      if Account.player!.coordinate == player.coordinate {
+    for obj in self.objects.values {
+      guard let player = obj as? Player else {
+        continue
+      }
+      if Account.player! != player && Account.player!.coordinate == player.coordinate {
         onBeatLevel(player)
         return true
       }
@@ -280,6 +283,10 @@ class GameScene: IsoScene {
   }
   
   override func shouldLoadObjectID(objId: String) -> Bool {
+    let fbid = objId.componentsSeparatedByString(":").last!
+    if Account.isFacebookFriend(fbid) {
+      return true
+    }
     return self.otherPlayers[objId] != nil && super.shouldLoadObjectID(objId)
   }
   
@@ -314,12 +321,12 @@ class GameScene: IsoScene {
   }
 
   override func update(currentTime: CFTimeInterval) {
-    guard self.loaded && gameOver == 0 else {
+    guard self.loaded && layerDialogs.dialogs.count == 0 else {
       return
     }
     let deltaTime = lastTime == 0 ? 0 : currentTime - lastTime
     elapsed += deltaTime
-    if elapsed >= 1 {
+    if elapsed >= GameScene.tick {
       elapsed = 0
       layerUI.updateUI()
     }

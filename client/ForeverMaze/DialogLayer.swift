@@ -28,6 +28,7 @@ class DialogLayer : SKSpriteNode {
     
     background.fillColor = .blackColor()
     background.alpha = 0
+    background.lineWidth = 0
     background.zPosition = 1020
     addChild(background)
   }

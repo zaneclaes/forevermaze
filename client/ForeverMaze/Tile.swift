@@ -69,6 +69,7 @@ class Tile : GameStatic {
   let coordinate: Coordinate
   private dynamic var e:Int = 0
   dynamic var objectIds:Array<String> = []
+  dynamic var raised:Bool = false
   let icon = SKSpriteNode(texture: Config.worldAtlas.textureNamed("icon_happiness"))
   private var dropshadow:SKSpriteNode?
   private let state: TileState
@@ -97,7 +98,7 @@ class Tile : GameStatic {
       onLoaded(nil)
     }
     
-    icon.hidden = true
+    icon.alpha = 0
     icon.position = CGPointMake(0,Tile.yOrigin + self.icon.frame.size.height/3)
     sprite.addChild(self.icon)
   }
@@ -151,18 +152,27 @@ class Tile : GameStatic {
     assignScale()
   }
 
-  func updateLockedState() {
+  func updateLockedState(animated: Bool = false) {
+    var col = UIColor.whiteColor()
+    var iconHidden = true
     if unlocked {
-      sprite.color = .whiteColor()
-      icon.hidden = true
+      col = .whiteColor()
     }
     else if unlockable {
-      sprite.color = self.emotion.lockedColor
-      icon.hidden = false
+      col = self.emotion.lockedColor
+      iconHidden = false
     }
     else {
-      sprite.color = UIColor.clearColor()
-      icon.hidden = true
+      col = .clearColor()
+    }
+    if animated {
+      let dur = 0.15
+      self.sprite.runAction(SKAction.colorizeWithColor(col, colorBlendFactor: 1.0, duration: dur))
+      self.icon.runAction(SKAction.fadeAlphaTo(iconHidden ? 0 : 1, duration: dur))
+    }
+    else {
+      self.sprite.color = col
+      self.icon.alpha = iconHidden ? 0 : 1
     }
   }
 
@@ -173,6 +183,9 @@ class Tile : GameStatic {
       let removedObjectIds = oldObjectIds.subtract(self.objectIds)
       let changedObjectIds = addedObjectIds.union(removedObjectIds)
       self.gameScene?.onObjectsIdsMoved(changedObjectIds)
+    }
+    else if property == "raised" {
+      self.gameScene?.animateTileRaised(self)
     }
   }
 

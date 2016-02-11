@@ -31,6 +31,7 @@ class Tracker : AvatarNode {
       background.fillColor = UIColor(red: 0.24, green: 0.2, blue: 0.36, alpha: 1)
     }
 
+    self.hidden = true
     reposition()
   }
   
@@ -38,7 +39,7 @@ class Tracker : AvatarNode {
    * Re-calculate and assign the visibility & position
    */
   func reposition() {
-    guard !mobile.sprite.hidden && mobile.gameScene != nil else {
+    guard !mobile.sprite.hidden && mobile.gameScene != nil && mobile.gameScene!.loaded else {
       self.hidden = true
       return
     }

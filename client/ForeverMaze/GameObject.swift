@@ -28,6 +28,10 @@ class GameObject : GameStatic {
   func onAddedToScene() {
     
   }
+  
+  var allowsForDynamicUnloading:Bool {
+    return false
+  }
 
   /**
    * Write all the missing SKTextures into the textureCache 

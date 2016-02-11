@@ -9,7 +9,7 @@
 import Foundation
 
 enum EventName {
-  case StartGame, EndGame, BeatLevel, ViewScene, Share
+  case StartGame, EndGame, BeatLevel, ViewScene, Share, Error
   
   var description:String {
     switch self {
@@ -18,6 +18,7 @@ enum EventName {
     case BeatLevel: return "BeatLevel"
     case ViewScene: return "ViewScene"
     case Share:     return "Share"
+    case Error:     return "Error"
     }
   }
 

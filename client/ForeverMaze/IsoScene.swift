@@ -116,7 +116,7 @@ class IsoScene: SKScene {
     guard gameSprite.sprite.parent == nil || gameSprite.sprite.parent == inLayer else {
       return false
     }
-    gameSprite.sprite.position = coordinateToPosition(at, closeToCenter: gameSprite.sprite != self.playerSprite) + offset
+    gameSprite.sprite.position = coordinateToPosition(at, closeToCenter: gameSprite.sprite != self.playerSprite, includeHeight: true) + offset
     gameSprite.sprite.anchorPoint = CGPoint(x:0.5, y:0)
     if gameSprite.sprite.parent != inLayer {
       inLayer.addChild(gameSprite.sprite)
@@ -167,13 +167,14 @@ class IsoScene: SKScene {
     guard self.tiles[key] == nil else {
       return false
     }
+    self.tiles[tile.coordinate.description] = tile
     if self.addGameSprite(tile, at: tile.coordinate, inLayer: layerIsoGround, offset: IsoScene.tileOffset) {
       tile.sprite.zPosition = self.zPositionForYPosition(tile.sprite.position.y, zIndex: 0)
-      self.tiles[tile.coordinate.description] = tile
       self.loadObjectsInTile(tile)
       return true
     }
     else {
+      self.tiles.removeValueForKey(tile.coordinate.description)
       return false
     }
   }
@@ -216,7 +217,7 @@ class IsoScene: SKScene {
     return abs(dist.x) < maxDist.width && abs(dist.y) < maxDist.height
   }
 
-  func coordinateToPosition(pos:Coordinate, closeToCenter:Bool = false) -> CGPoint {
+  func coordinateToPosition(pos:Coordinate, closeToCenter:Bool = false, includeHeight:Bool = false) -> CGPoint {
     // Since positions can wrap around the world, we choose the point which is closest to our current center.
     var xPos = Int(pos.x)
     var yPos = Int(pos.y)
@@ -238,7 +239,15 @@ class IsoScene: SKScene {
     
     let pixels = CGPoint(x: CGFloat(xPos) * IsoScene.tileSize.width, y: CGFloat(yPos)*IsoScene.tileSize.height)
     let point = CGPoint(x:((pixels.x + pixels.y)), y: (pixels.y - pixels.x)/2)
-    return point
+    let offset = includeHeight ? CGPointMake(0, tileHeight(pos)) : CGPointZero
+    return point + offset
+  }
+  
+  func tileHeight(coordinate: Coordinate) -> CGFloat {
+    guard let tile = self.tiles[coordinate.description] else {
+      return 0
+    }
+    return tile.raised ? (30 * Config.objectScale) : 0
   }
   
   /************************************************************************
@@ -247,8 +256,7 @@ class IsoScene: SKScene {
   private var objectsMovingTo:[String:CGPoint] = [:]
 
   func isObjectMoving(object: Mobile) -> Bool {
-    return object.sprite.actionForKey(Animation.movementKey) != nil ||
-            (self.objectsMovingTo[object.id] != nil && !object.sprite.hidden && self.isCoordinateOnScreen(object.coordinate, includeBuffer: true))
+    return (self.objectsMovingTo[object.id] != nil && !object.sprite.hidden && self.isCoordinateOnScreen(object.coordinate, includeBuffer: true))
   }
 
   func onObjectFinishedMoving(object: Mobile) {
@@ -259,7 +267,7 @@ class IsoScene: SKScene {
 
   func animateObjectMovement(object: Mobile) {
     let time = Config.stepTime / object.speed
-    let point = coordinateToPosition(object.coordinate, closeToCenter: true)
+    let point = coordinateToPosition(object.coordinate, closeToCenter: true, includeHeight: true)
 
     let alreadyMovingTo = self.objectsMovingTo[object.id]
     if alreadyMovingTo == nil || alreadyMovingTo! != point {
@@ -288,7 +296,9 @@ class IsoScene: SKScene {
 
     if !self.isCoordinateOnScreen(object.coordinate, includeBuffer: true) {
       // Not on screen? Just remove it.
-      removeObject(object)
+      if object.allowsForDynamicUnloading {
+        removeObject(object)
+      }
     }
     else if self.objects.keys.contains(object.id) {
       // Moving from one tile to another...
@@ -396,6 +406,19 @@ class IsoScene: SKScene {
   
   func onViewportPanned() {
   }
+  
+  func animateTileRaised(tile: Tile, dur:Double = 0.25) {
+    let pos = coordinateToPosition(tile.coordinate, closeToCenter: true, includeHeight: true) + IsoScene.tileOffset
+    tile.sprite.runAction(SKAction.moveTo(pos, duration: dur))
+    
+    for obj in self.objects.values {
+      if obj.coordinate != tile.coordinate {
+        continue
+      }
+      let objPos = coordinateToPosition(obj.coordinate, closeToCenter: true, includeHeight: true)
+      obj.sprite.runAction(SKAction.moveTo(objPos, duration: dur))
+    }
+  }
 
   func checkStep() {
     guard playerSprite?.actionForKey(Animation.movementKey) == nil && playerSprite?.actionForKey(Animation.unlockKey) == nil else {
@@ -406,6 +429,7 @@ class IsoScene: SKScene {
       Account.player!.updateAnimation()
       return
     }
+    let time = Config.stepTime / Account.player!.speed
     let oldPos = self.center
     let newPos = self.center + dir!.amount
     guard self.tiles[newPos.description] != nil else {
@@ -413,8 +437,12 @@ class IsoScene: SKScene {
       return
     }
     let tile = self.tiles[newPos.description]!
-    var oldPoint = self.coordinateToPosition(oldPos)
-
+    var oldPoint = self.coordinateToPosition(oldPos, closeToCenter: false, includeHeight: true)
+    if arc4random_uniform(UInt32(Config.toggleRaisedRoll)) == 0 {
+      tile.raised = !tile.raised
+      animateTileRaised(tile, dur: time)
+    }
+    
     Account.player!.direction = dir!
     if !Account.player!.hasUnlockedTileAt(tile.coordinate) && !Account.player!.canUnlockTile(tile) {
       Account.player!.updateAnimation()
@@ -427,23 +455,23 @@ class IsoScene: SKScene {
     self.center = (Account.player?.coordinate)!
     self.loadTiles()
     
-    let point = self.coordinateToPosition(self.center)
+    let point = self.coordinateToPosition(self.center, closeToCenter: false, includeHeight: true)
     if oldPos.willWrapAroundWorld(self.center, worldSize: self.worldSize, threshold: 1) {
       // Before doing step calculations, teleport around the edge of the world.
       let testCoord = Coordinate(x: 5, y: 5)
-      let testPoint = self.coordinateToPosition(testCoord)
-      let travelDist = testPoint - self.coordinateToPosition(testCoord + Account.player!.direction.amount)
+      let testPoint = self.coordinateToPosition(testCoord, closeToCenter: false, includeHeight: true)
+      let travelDist = testPoint - self.coordinateToPosition(testCoord + Account.player!.direction.amount, closeToCenter: false, includeHeight: true)
       let teleportPoint = point + travelDist
       self.playerSprite?.position = teleportPoint
       oldPoint = teleportPoint
       
       // Redraw the world, otherwise we just teleported into nothingness.
       for tile in self.tiles.values {
-        tile.sprite.position = coordinateToPosition(tile.coordinate, closeToCenter: true) + IsoScene.tileOffset
+        tile.sprite.position = coordinateToPosition(tile.coordinate, closeToCenter: true, includeHeight: true) + IsoScene.tileOffset
         tile.sprite.zPosition = self.zPositionForYPosition(tile.sprite.position.y, zIndex: 0)
       }
       for obj in self.objects.values {
-        obj.sprite.position = coordinateToPosition(obj.coordinate, closeToCenter: true)
+        obj.sprite.position = coordinateToPosition(obj.coordinate, closeToCenter: true, includeHeight: true)
         obj.sprite.zPosition = self.zPositionForYPosition(obj.sprite.position.y, zIndex: 10)
         
         let mobile = obj as? Mobile
@@ -456,7 +484,6 @@ class IsoScene: SKScene {
     }
     let diff = point - oldPoint
     var first = true
-    let time = Config.stepTime / Account.player!.speed
     let moveAction = SKAction.customActionWithDuration(time, actionBlock: { (node, elapsed) -> Void in
       if first {
         Account.player!.updateAnimation()
@@ -471,6 +498,7 @@ class IsoScene: SKScene {
     })
     
     var actions = [moveAction, SKAction.runBlock(self.onStep)]
+    self.objectsMovingTo[Account.player!.id] = point
     if unlocking {
       actions.append(SKAction.runBlock({ () -> Void in
         Account.player!.updateAnimation(.Idle)
@@ -486,12 +514,13 @@ class IsoScene: SKScene {
     if !Account.player!.unlockTile(tile) {
       Account.player!.updateAnimation()
     }
-    self.onFacingNewTile()
+    onObjectFinishedMoving(Account.player!)
+    onFacingNewTile()
   }
 
   override func update(currentTime: CFTimeInterval) {
     if playerSprite?.actionForKey(Animation.movementKey) == nil && playerSprite?.actionForKey(Animation.unlockKey) == nil {
-      self.checkStep()
+      checkStep()
     }
     super.update(currentTime)
   }

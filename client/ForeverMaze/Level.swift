@@ -16,7 +16,8 @@ class Level : NSObject {
   var depressionSpawnDistance:Int = 20
   var depressionSpawnAfterTiles:Int = 10
   var numOtherPlayers:Int = 8
-  var numWishingWells:Int = 100
+  var numWishingWells:Int = 5
+  var emojiMultiplier:Float = 1.0
 
   init(snapshot: FDataSnapshot!, number: UInt) {
     self.snapshot = snapshot
@@ -27,6 +28,7 @@ class Level : NSObject {
     self.depressionSpawnAfterTiles = getValue("depressionSpawnAfterTiles") as! Int
     self.numOtherPlayers = getValue("numOtherPlayers") as! Int
     self.numWishingWells = getValue("numWishingWells") as! Int
+    self.emojiMultiplier = getValue("emojiMultiplier") as! Float
   }
   
   var previousLevel:Level {

@@ -13,6 +13,7 @@
 "menu.about" = "About";
 "menu.scores" = "Scores";
 "menu.loading" = "Loading...";
+"menu.loading.quote" = "Building a bridge to your friends...";
 "menu.back" = "Back";
 "menu.allPlayers" = "Everyone";
 "menu.friends" = "Friends";
