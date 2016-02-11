@@ -17,7 +17,7 @@ import ChimpKit
 class Config {
 
   static let debug:Bool = false
-  static let godMode:Bool = true
+  static let godMode:Bool = false
   
   // API Keys & Config
   static let firebaseUrl:String = "https://forevermaze.firebaseio.com"
@@ -48,7 +48,6 @@ class Config {
   static var shareDelay:NSTimeInterval = 259200
   static var happinessPotionDuration:NSTimeInterval = 30
   static var remote:FDataSnapshot!
-  static var toggleRaisedRoll:Int = 5
   static var levels = Array<Level>()
 
   static func setup() -> Promise<Void> {
@@ -67,7 +66,6 @@ class Config {
           reject(Errors.network)
           return
         }
-        self.toggleRaisedRoll = (remote?.childSnapshotForPath("toggleRaisedRoll").value as! NSNumber).integerValue
         self.shareRoll = (remote?.childSnapshotForPath("shareRoll").value as! NSNumber).integerValue
         self.shareDelay = (remote?.childSnapshotForPath("shareDelay").value as! NSNumber).doubleValue
         self.happinessPotionDuration = (remote?.childSnapshotForPath("happinessPotionDuration").value as! NSNumber).doubleValue

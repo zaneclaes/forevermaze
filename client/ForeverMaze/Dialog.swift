@@ -32,7 +32,7 @@ class Dialog : SKSpriteNode {
     let contentHeight = CGFloat(max(labelBody.labelHeight, 80))
     let size = CGSizeMake(CGFloat(Dialog.width), contentHeight + Container.padding * 2)
     container = Container(minimumSize: size)
-    labelBody.position = CGPointMake(0, CGRectGetMaxY(container.frame) - Container.padding - 40 + CGFloat(labelBody.labelHeight/2))
+    labelBody.position = CGPointMake(-10, CGRectGetMaxY(container.frame) - Container.padding - 40 + CGFloat(labelBody.labelHeight/2))
     
     banner.position = CGPointMake(0, size.height/2)
     banner.zPosition = 1010

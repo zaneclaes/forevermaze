@@ -39,7 +39,7 @@ class Tracker : AvatarNode {
    * Re-calculate and assign the visibility & position
    */
   func reposition() {
-    guard !mobile.sprite.hidden && mobile.gameScene != nil && mobile.gameScene!.loaded else {
+    guard !mobile.sprite.hidden && mobile.gameScene != nil && mobile.gameScene!.layerDialogs.dialogs.count == 0 else {
       self.hidden = true
       return
     }

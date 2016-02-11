@@ -33,13 +33,24 @@ class DialogLayer : SKSpriteNode {
     addChild(background)
   }
   
-  func present(dialog: Dialog) {
+  func present(dialog: Dialog, animated: Bool = true) {
     if self.dialogs.count == 0 {
-      background.runAction(SKAction.fadeAlphaTo(0.66, duration: DialogLayer.animationTime))
+      if animated {
+        background.runAction(SKAction.fadeAlphaTo(0.66, duration: DialogLayer.animationTime))
+      }
+      else {
+        background.alpha = 0.66
+      }
     }
-    dialog.xScale = 0
-    dialog.yScale = 0
-    dialog.runAction(SKAction.scaleTo(1, duration: DialogLayer.animationTime))
+    if animated {
+      dialog.xScale = 0
+      dialog.yScale = 0
+      dialog.runAction(SKAction.scaleTo(1, duration: DialogLayer.animationTime))
+    }
+    else {
+      dialog.xScale = 1
+      dialog.yScale = 1
+    }
     addChild(dialog)
     dialogs.append(dialog)
     dialog.presentedAt = NSDate().timeIntervalSince1970

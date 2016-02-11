@@ -412,7 +412,7 @@ class IsoScene: SKScene {
     tile.sprite.runAction(SKAction.moveTo(pos, duration: dur))
     
     for obj in self.objects.values {
-      if obj.coordinate != tile.coordinate {
+      if obj.coordinate != tile.coordinate || obj is LocalPlayer {
         continue
       }
       let objPos = coordinateToPosition(obj.coordinate, closeToCenter: true, includeHeight: true)
@@ -438,10 +438,6 @@ class IsoScene: SKScene {
     }
     let tile = self.tiles[newPos.description]!
     var oldPoint = self.coordinateToPosition(oldPos, closeToCenter: false, includeHeight: true)
-    if arc4random_uniform(UInt32(Config.toggleRaisedRoll)) == 0 {
-      tile.raised = !tile.raised
-      animateTileRaised(tile, dur: time)
-    }
     
     Account.player!.direction = dir!
     if !Account.player!.hasUnlockedTileAt(tile.coordinate) && !Account.player!.canUnlockTile(tile) {
@@ -452,6 +448,9 @@ class IsoScene: SKScene {
 
     Account.player!.step()
     let unlocking = tile.unlockable
+    if unlocking {
+      tile.raised = !tile.raised
+    }
     self.center = (Account.player?.coordinate)!
     self.loadTiles()
     
@@ -500,6 +499,7 @@ class IsoScene: SKScene {
     var actions = [moveAction, SKAction.runBlock(self.onStep)]
     self.objectsMovingTo[Account.player!.id] = point
     if unlocking {
+      self.animateTileRaised(tile, dur: time)
       actions.append(SKAction.runBlock({ () -> Void in
         Account.player!.updateAnimation(.Idle)
       }))
@@ -514,7 +514,7 @@ class IsoScene: SKScene {
     if !Account.player!.unlockTile(tile) {
       Account.player!.updateAnimation()
     }
-    onObjectFinishedMoving(Account.player!)
+    objectsMovingTo.removeValueForKey(Account.player!.id)
     onFacingNewTile()
   }
 

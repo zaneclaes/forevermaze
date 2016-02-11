@@ -195,12 +195,22 @@ class Account {
       
       return when(promises)
     }.then { () -> [String:Player] in
+      var remainingPlayers:[Player] = players
       var filteredPlayers:[String:Player] = [:]
       for player in players {
         let dist = Account.player!.coordinate.getDistance(player.coordinate)
         if Config.godMode || dist > Config.minOtherPlayerSpawnDistance {
           filteredPlayers[player.id] = player
+          let idx = remainingPlayers.indexOf(player)
+          if idx != nil {
+            remainingPlayers.removeAtIndex(idx!)
+          }
         }
+      }
+      // Last-resort backfill with any available player...
+      while filteredPlayers.count <= 2 && remainingPlayers.count > 0 {
+        let player = remainingPlayers.removeFirst()
+        filteredPlayers[player.id] = player
       }
       DDLogInfo("All Other Players: \(filteredPlayers)")
       return filteredPlayers
@@ -234,7 +244,7 @@ class Account {
       plyrs.append(Account.player!)
     }
     plyrs.sortInPlace { (playerA, playerB) -> Bool in
-      return playerB.score < playerA.score
+      return playerB.highScore < playerA.highScore
     }
     while max > 0 && plyrs.count > max {
       plyrs.removeLast()

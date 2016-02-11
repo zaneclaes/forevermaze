@@ -18,7 +18,7 @@ class GameStatic : NSObject {
   var snapshot: FDataSnapshot!
   var sprite = SKSpriteNode()
   var writing = Array<String>()
-  let (loading, loadFulfill, loadReject) = Promise<FDataSnapshot!>.pendingPromise()
+  let (loading, loadFulfill, loadReject) = Promise<GameStatic!>.pendingPromise()
 
   private var properties:Array<String>
 
@@ -41,7 +41,7 @@ class GameStatic : NSObject {
   }
   
   func onLoaded(snapshot: FDataSnapshot!) {
-    loadFulfill(snapshot)
+    loadFulfill(self)
   }
   
   //

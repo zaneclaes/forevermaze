@@ -21,7 +21,7 @@ class GameObject : GameStatic {
    */
   override func onLoaded(snapshot: FDataSnapshot!) {
     self.draw().then { (obj) -> Void in
-      self.loadFulfill(snapshot)
+      self.loadFulfill(obj)
     }
   }
   

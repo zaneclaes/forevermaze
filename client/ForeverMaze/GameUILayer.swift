@@ -102,6 +102,8 @@ class GameUILayer : SKSpriteNode {
     labelBanner.zPosition = 2
     labelBanner.position = banner.position + CGPointMake(0, 1)
     self.addChild(labelBanner)
+    
+    updateUI()
   }
 
   func addTracker(mobile: Mobile) {

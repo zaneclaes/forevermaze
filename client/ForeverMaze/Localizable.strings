@@ -20,8 +20,10 @@
 "menu.nobody" = "Nobody Found!";
 "menu.share" = "Share";
 
+"dialog.highScore.title" = "High Score!";
+
 "dialog.gameOver.title" = "Game Over";
-"dialog.gameOver.body" = "Depression has caught up to you.";
+"dialog.gameOver.body" = "Depression has caught up to you, %{steps} steps away from your friend.";
 "dialog.nextLevel.body" = "You found %{name}!";
 "dialog.sharePrompt.title" = "Share ForeverMaze?";
 "dialog.sharePrompt.body" = "ForeverMaze is more fun with friends. The more friends you have, the more paths you can build.";

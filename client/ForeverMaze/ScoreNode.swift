@@ -32,7 +32,7 @@ class ScoreNode : AvatarNode {
     labelName.position = CGPointMake(0, CGRectGetMinY(background.frame) - 18)
     addChild(labelName)
     
-    labelScore.text = "😀x\(String.Count(player.score))"
+    labelScore.text = "😀x\(String.Count(player.highScore))"
     labelScore.fontColor = .blackColor()
     labelScore.fontSize = 11
     labelScore.xScale = 1 / self.xScale

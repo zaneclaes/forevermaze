@@ -56,10 +56,12 @@ class GameScene: IsoScene {
     }
     
     let dialog = Dialog(title: I18n.t("menu.loading"), body: I18n.t("menu.loading.quote"))
-    presentDialog(dialog)
+    layerDialogs.present(dialog, animated: false)
     
     self.center = (Account.player?.coordinate)!
-    Account.player!.loading.then { (player) -> Promise<[String:Player]> in
+    after(0.5).then { () -> Promise<GameStatic!> in
+      return Account.player!.loading
+    }.then { (player) -> Promise<[String:Player]> in
       return Account.getOtherPlayers(Account.player!.level.numOtherPlayers)
     }.then { (otherPlayers) -> Promise<Void> in
       self.otherPlayers = otherPlayers
@@ -127,16 +129,28 @@ class GameScene: IsoScene {
     guard gameOver == 0 else {
       return
     }
-    gameOver = NSDate().timeIntervalSince1970
-    Analytics.log(.EndGame, params: ["score": Account.player!.score, "level": Account.player!.level])
     
-    Account.player!.highScore = max(Account.player!.highScore, Account.player!.score)
-    Account.player!.score = Account.player!.score + UInt(Account.player!.emoji)
+    gameOver = NSDate().timeIntervalSince1970
+    var minStepsToFriend:Int = Int.max
+    for player in otherPlayers.values {
+      let dist = player.coordinate.getDistance(Account.player!.coordinate)
+      minStepsToFriend = min(minStepsToFriend, Int(dist))
+    }
+    let newScore = UInt(Account.player!.emoji)
+    let highScore = newScore > Account.player!.highScore
+    Analytics.log(.EndGame, params: ["score": newScore, "level": Account.player!.level])
+    
+    Account.player!.highScore = max(Account.player!.highScore, newScore)
+    Account.player!.score = Account.player!.score + newScore
     Account.player!.emoji = 0
     Account.player!.numHappinessPotions = 0
     Account.player!.currentLevel = 0
     Account.player!.saveHighScore()
     prepareNextLevel()
+    
+    
+    gameOverDialog.labelTitle.text = highScore ? I18n.t("dialog.highScore.title") : I18n.t("dialog.gameOver.title")
+    gameOverDialog.labelBody.text = I18n.t("dialog.gameOver.body").stringByReplacingOccurrencesOfString("%{steps}", withString: String(minStepsToFriend))
     presentDialog(gameOverDialog)
   }
   

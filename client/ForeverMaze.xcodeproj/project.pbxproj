@@ -70,6 +70,7 @@
 		2F2432D81C6AE18400D58092 /* unlock.caf in Resources */ = {isa = PBXBuildFile; fileRef = 2F2432D51C6AE18400D58092 /* unlock.caf */; };
 		2F2432DA1C6B851A00D58092 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2432D91C6B851A00D58092 /* Audio.swift */; };
 		2F2432DC1C6B89BC00D58092 /* AudioFader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2432DB1C6B89BC00D58092 /* AudioFader.swift */; };
+		2F24A4FC1C6C4589005D0269 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F24A4FB1C6C4589005D0269 /* GameOverScene.swift */; };
 		2F349AF11C66EDC4000BAF0E /* ScoreNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F349AF01C66EDC4000BAF0E /* ScoreNode.swift */; };
 		2F349AF31C66EEF6000BAF0E /* AvatarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F349AF21C66EEF6000BAF0E /* AvatarNode.swift */; };
 		2F85BB5A1C67C67400F89E64 /* Social.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F85BB591C67C67400F89E64 /* Social.swift */; };
@@ -126,7 +127,6 @@
 		2FF533741C630FD4004A324A /* hero.3@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FF5336B1C630FD4004A324A /* hero.3@3x.png */; };
 		2FF533751C630FD4004A324A /* hero.4@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FF5336C1C630FD4004A324A /* hero.4@3x.png */; };
 		2FF533761C630FD4004A324A /* hero.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FF5336D1C630FD4004A324A /* hero.plist */; };
-		2FF533771C630FD4004A324A /* Icon in Resources */ = {isa = PBXBuildFile; fileRef = 2FF5336E1C630FD4004A324A /* Icon */; };
 		2FF5338B1C631464004A324A /* depression.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FF533791C631464004A324A /* depression.1.png */; };
 		2FF5338C1C631464004A324A /* depression.10@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FF5337A1C631464004A324A /* depression.10@3x.png */; };
 		2FF5338D1C631464004A324A /* depression.11@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FF5337B1C631464004A324A /* depression.11@3x.png */; };
@@ -144,8 +144,6 @@
 		2FF533991C631464004A324A /* depression.8@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FF533871C631464004A324A /* depression.8@3x.png */; };
 		2FF5339A1C631464004A324A /* depression.9@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FF533881C631464004A324A /* depression.9@3x.png */; };
 		2FF5339B1C631464004A324A /* depression.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FF533891C631464004A324A /* depression.plist */; };
-		2FF5339C1C631464004A324A /* Icon in Resources */ = {isa = PBXBuildFile; fileRef = 2FF5338A1C631464004A324A /* Icon */; };
-		2FF533A31C6319C1004A324A /* Icon in Resources */ = {isa = PBXBuildFile; fileRef = 2FF5339E1C6319C1004A324A /* Icon */; };
 		2FF533A41C6319C1004A324A /* world.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FF5339F1C6319C1004A324A /* world.1.png */; };
 		2FF533A51C6319C1004A324A /* world.1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FF533A01C6319C1004A324A /* world.1@2x.png */; };
 		2FF533A61C6319C1004A324A /* world.1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FF533A11C6319C1004A324A /* world.1@3x.png */; };
@@ -221,6 +219,7 @@
 		2F2432D51C6AE18400D58092 /* unlock.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = unlock.caf; sourceTree = "<group>"; };
 		2F2432D91C6B851A00D58092 /* Audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Audio.swift; path = ForeverMaze/Audio.swift; sourceTree = "<group>"; };
 		2F2432DB1C6B89BC00D58092 /* AudioFader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFader.swift; sourceTree = "<group>"; };
+		2F24A4FB1C6C4589005D0269 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		2F349AF01C66EDC4000BAF0E /* ScoreNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreNode.swift; sourceTree = "<group>"; };
 		2F349AF21C66EEF6000BAF0E /* AvatarNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvatarNode.swift; sourceTree = "<group>"; };
 		2F85BB591C67C67400F89E64 /* Social.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Social.swift; path = ForeverMaze/Social.swift; sourceTree = "<group>"; };
@@ -255,7 +254,6 @@
 		2FF5336B1C630FD4004A324A /* hero.3@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hero.3@3x.png"; sourceTree = "<group>"; };
 		2FF5336C1C630FD4004A324A /* hero.4@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hero.4@3x.png"; sourceTree = "<group>"; };
 		2FF5336D1C630FD4004A324A /* hero.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = hero.plist; sourceTree = "<group>"; };
-		2FF5336E1C630FD4004A324A /* Icon */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Icon"; sourceTree = "<group>"; };
 		2FF533791C631464004A324A /* depression.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = depression.1.png; sourceTree = "<group>"; };
 		2FF5337A1C631464004A324A /* depression.10@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "depression.10@3x.png"; sourceTree = "<group>"; };
 		2FF5337B1C631464004A324A /* depression.11@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "depression.11@3x.png"; sourceTree = "<group>"; };
@@ -273,8 +271,6 @@
 		2FF533871C631464004A324A /* depression.8@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "depression.8@3x.png"; sourceTree = "<group>"; };
 		2FF533881C631464004A324A /* depression.9@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "depression.9@3x.png"; sourceTree = "<group>"; };
 		2FF533891C631464004A324A /* depression.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = depression.plist; sourceTree = "<group>"; };
-		2FF5338A1C631464004A324A /* Icon */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Icon"; sourceTree = "<group>"; };
-		2FF5339E1C6319C1004A324A /* Icon */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Icon"; sourceTree = "<group>"; };
 		2FF5339F1C6319C1004A324A /* world.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = world.1.png; sourceTree = "<group>"; };
 		2FF533A01C6319C1004A324A /* world.1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "world.1@2x.png"; sourceTree = "<group>"; };
 		2FF533A11C6319C1004A324A /* world.1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "world.1@3x.png"; sourceTree = "<group>"; };
@@ -480,6 +476,7 @@
 			isa = PBXGroup;
 			children = (
 				2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */,
+				2F24A4FB1C6C4589005D0269 /* GameOverScene.swift */,
 				2B2A76B91C0240A300172E27 /* MenuScene.swift */,
 				2BB884F01C0622DC006E4570 /* IsoScene.swift */,
 				2FE234761C664AB9001F9553 /* AboutScene.swift */,
@@ -582,7 +579,6 @@
 				2FF5336B1C630FD4004A324A /* hero.3@3x.png */,
 				2FF5336C1C630FD4004A324A /* hero.4@3x.png */,
 				2FF5336D1C630FD4004A324A /* hero.plist */,
-				2FF5336E1C630FD4004A324A /* Icon */,
 			);
 			name = hero.atlasc;
 			path = Resources/hero.atlasc;
@@ -608,7 +604,6 @@
 				2FF533871C631464004A324A /* depression.8@3x.png */,
 				2FF533881C631464004A324A /* depression.9@3x.png */,
 				2FF533891C631464004A324A /* depression.plist */,
-				2FF5338A1C631464004A324A /* Icon */,
 			);
 			name = depression.atlasc;
 			path = Resources/depression.atlasc;
@@ -617,7 +612,6 @@
 		2FF5339D1C6319C1004A324A /* world.atlasc */ = {
 			isa = PBXGroup;
 			children = (
-				2FF5339E1C6319C1004A324A /* Icon */,
 				2FF5339F1C6319C1004A324A /* world.1.png */,
 				2FF533A01C6319C1004A324A /* world.1@2x.png */,
 				2FF533A11C6319C1004A324A /* world.1@3x.png */,
@@ -782,8 +776,6 @@
 				2FF5338B1C631464004A324A /* depression.1.png in Resources */,
 				2FF533A41C6319C1004A324A /* world.1.png in Resources */,
 				2FF533711C630FD4004A324A /* hero.1@3x.png in Resources */,
-				2FF5339C1C631464004A324A /* Icon in Resources */,
-				2FF533A31C6319C1004A324A /* Icon in Resources */,
 				2FF533741C630FD4004A324A /* hero.3@3x.png in Resources */,
 				2FF533981C631464004A324A /* depression.7@3x.png in Resources */,
 				2F2432D71C6AE18400D58092 /* hero.mp3 in Resources */,
@@ -805,7 +797,6 @@
 				2FF533921C631464004A324A /* depression.3@2x.png in Resources */,
 				2F2432D61C6AE18400D58092 /* depression.mp3 in Resources */,
 				2FF5339B1C631464004A324A /* depression.plist in Resources */,
-				2FF533771C630FD4004A324A /* Icon in Resources */,
 				2FB6EB701C5E6D1E00BE6F02 /* unlock-fear.sks in Resources */,
 				2FF533701C630FD4004A324A /* hero.1@2x.png in Resources */,
 				2FF533761C630FD4004A324A /* hero.plist in Resources */,
@@ -964,6 +955,7 @@
 			files = (
 				2FAF46951C0C188C00B1F898 /* String+Extensions.swift in Sources */,
 				2B2A76BA1C0240A300172E27 /* MenuScene.swift in Sources */,
+				2F24A4FC1C6C4589005D0269 /* GameOverScene.swift in Sources */,
 				2BB6F1601BFFDCB4009DF879 /* Mobile.swift in Sources */,
 				2B732B841C3E373C00295D0D /* SgButton.swift in Sources */,
 				2FE234811C667C58001F9553 /* ScoresScene.swift in Sources */,
