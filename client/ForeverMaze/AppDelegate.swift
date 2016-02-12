@@ -45,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func applicationWillEnterForeground(application: UIApplication) {
     Audio.sharedInstance.play()
+    Config.setup() // Re-setup so that we have latest config, esp. if coming from offline
   }
 
   func applicationDidBecomeActive(application: UIApplication) {
@@ -53,7 +54,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func applicationWillTerminate(application: UIApplication) {
   }
-
-
 }
 

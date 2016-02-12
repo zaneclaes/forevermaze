@@ -29,6 +29,7 @@ PODS:
     - PromiseKit/CorePromise
   - PromiseKit/UIKit (3.0.0):
     - PromiseKit/CorePromise
+  - ReachabilitySwift (2.3.3)
 
 DEPENDENCIES:
   - ChimpKit
@@ -37,6 +38,16 @@ DEPENDENCIES:
   - Firebase (>= 2.4.3)
   - Kingfisher (~> 2.0)
   - PromiseKit (>= 3.0)
+  - ReachabilitySwift (from `https://github.com/ashleymills/Reachability.swift`)
+
+EXTERNAL SOURCES:
+  ReachabilitySwift:
+    :git: https://github.com/ashleymills/Reachability.swift
+
+CHECKOUT OPTIONS:
+  ReachabilitySwift:
+    :commit: ec4b33a7e439e5b203b0cae0f71383ca803ad031
+    :git: https://github.com/ashleymills/Reachability.swift
 
 SPEC CHECKSUMS:
   ChimpKit: d020126089544daa349397a91f1489a3f271b791
@@ -46,5 +57,6 @@ SPEC CHECKSUMS:
   Kingfisher: 3af2020040453f710507819e6aa5f5721da03d9b
   OMGHTTPURLRQ: 8376dc887d76a5a7e2a67881dc788f917a2f437c
   PromiseKit: 665540a1eb43156446872dcf49ed7dee6ebbe13b
+  ReachabilitySwift: e0f6b6f280effb47731acfaaa2d5ffe223703793
 
 COCOAPODS: 0.39.0

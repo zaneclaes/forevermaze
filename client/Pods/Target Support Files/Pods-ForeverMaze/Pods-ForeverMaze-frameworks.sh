@@ -91,6 +91,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-ForeverMaze/Kingfisher.framework"
   install_framework "Pods-ForeverMaze/OMGHTTPURLRQ.framework"
   install_framework "Pods-ForeverMaze/PromiseKit.framework"
+  install_framework "Pods-ForeverMaze/ReachabilitySwift.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-ForeverMaze/ChimpKit.framework"
@@ -100,4 +101,5 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-ForeverMaze/Kingfisher.framework"
   install_framework "Pods-ForeverMaze/OMGHTTPURLRQ.framework"
   install_framework "Pods-ForeverMaze/PromiseKit.framework"
+  install_framework "Pods-ForeverMaze/ReachabilitySwift.framework"
 fi

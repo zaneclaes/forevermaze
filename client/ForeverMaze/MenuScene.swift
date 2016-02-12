@@ -175,7 +175,9 @@ class MenuScene: InterfaceScene {
     }
     isLoading = true
     DDLogInfo("Loading account...")
-    Config.setup().then { () -> Promise<LocalPlayer!> in
+    Config.setup().then { () -> Promise<Void> in
+      return Config.enforceReachability()
+    }.then { () -> Promise<LocalPlayer!> in
       return Account.resume()
     }.then { (player) -> Void in
       DDLogInfo("[PLAYER]: \(player)")
@@ -215,8 +217,7 @@ class MenuScene: InterfaceScene {
 
     Account.login().then { (playerID) -> Void in
       DDLogInfo("PLAYER ID \(playerID)")
-      let fader = AudioFader(player: Audio.sharedInstance.depressionTrack)
-      fader.fadeOut()
+      self.gameScene.touches.removeAll()
       self.replaceScene(self.gameScene)
     }.always {
       self.isLoading = false

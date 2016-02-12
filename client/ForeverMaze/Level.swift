@@ -37,8 +37,7 @@ class Level : NSObject {
   }
   
   func getValue(key: String) -> AnyObject {
-    let val = snapshot.childSnapshotForPath(key)
-    let value = val == nil || val.value == nil || val.value is NSNull ? nil : val.value
+    let value = snapshot.configValue(key)
     guard value != nil else {
       if self.levelNumber == 0 {
         return self.valueForKey("\(key)")!
@@ -47,6 +46,6 @@ class Level : NSObject {
         return previousLevel.getValue(key)
       }
     }
-    return value
+    return value!
   }
 }

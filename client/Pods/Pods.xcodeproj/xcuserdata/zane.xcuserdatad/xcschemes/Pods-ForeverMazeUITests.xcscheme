@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'C5C60DF51C61EAB2346AE3BD'
+               BlueprintIdentifier = 'F388C84680552164D6FB25F2'
                BlueprintName = 'Pods-ForeverMazeUITests'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'Pods_ForeverMazeUITests.framework'>

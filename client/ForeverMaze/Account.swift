@@ -26,6 +26,10 @@ class Account {
   init() {
     NSException(name: "NotImplemented", reason: "Static implementation only.", userInfo: nil).raise()
   }
+  
+  static var canResume:Bool {
+    return FBSDKAccessToken.currentAccessToken() != nil
+  }
 
   static func resume() -> Promise<LocalPlayer!> {
     guard let token: FBSDKAccessToken = FBSDKAccessToken.currentAccessToken() else {

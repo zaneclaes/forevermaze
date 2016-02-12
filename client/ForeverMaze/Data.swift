@@ -36,6 +36,27 @@ extension Firebase {
   }
 }
 
+extension FDataSnapshot {
+  public func configValue(childPath: String) -> AnyObject? {
+    guard self.hasChild(childPath) else {
+      return nil
+    }
+    let experimentPath = "\(childPath)Experiment"
+    let exp = self.hasChild(experimentPath) ? self.childSnapshotForPath(experimentPath).value : nil
+    let val = self.childSnapshotForPath(childPath).value
+    if exp is NSDictionary {
+      let experiment = exp as! NSDictionary
+      let treatment = Analytics.getTreatment(experimentPath, treatments: experiment.allKeys as! [String])
+      let expVal = self.childSnapshotForPath(experimentPath).childSnapshotForPath(treatment).value
+      return expVal is NSNull ? nil : expVal
+    }
+    if val is NSNull {
+      return nil
+    }
+    return val
+  }
+}
+
 class Data {
   
   static var promiseObjects:[String:Promise<GameObject!>] = [:]

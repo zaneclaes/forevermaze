@@ -31,7 +31,7 @@ class AboutScene: InterfaceScene {
     let aboutText = "ForeverMaze is a game of battling depression by building bridges to your friends. Run towards your friends (shown in circles around the corners of the screen). As you explore the maze, you must keep the emotions balanced. This means you can only unlock certain tiles at any given time. As you explore, each time you find a friend, you beat a level. Created by Zane Claes (inZania LLC)."
     let label = SKMultilineLabel(
       text: aboutText,
-      labelWidth: Int(container.frame.size.width - Container.padding*2),
+      labelWidth: Int(container.frame.size.width - Container.padding*2 - 20),
       pos: CGPointMake(self.size.width/2, CGRectGetMaxY(container.frame) - Container.padding - 40),
       fontName: Config.bodyFont,
       fontSize: 14,

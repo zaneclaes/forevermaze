@@ -70,7 +70,8 @@
 		2F2432D81C6AE18400D58092 /* unlock.caf in Resources */ = {isa = PBXBuildFile; fileRef = 2F2432D51C6AE18400D58092 /* unlock.caf */; };
 		2F2432DA1C6B851A00D58092 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2432D91C6B851A00D58092 /* Audio.swift */; };
 		2F2432DC1C6B89BC00D58092 /* AudioFader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2432DB1C6B89BC00D58092 /* AudioFader.swift */; };
-		2F24A4FC1C6C4589005D0269 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F24A4FB1C6C4589005D0269 /* GameOverScene.swift */; };
+		2F24A4FD1C6CEB9D005D0269 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F85BB5B1C67F43C00F89E64 /* Analytics.swift */; };
+		2F24A4FE1C6CEB9D005D0269 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F85BB5B1C67F43C00F89E64 /* Analytics.swift */; };
 		2F349AF11C66EDC4000BAF0E /* ScoreNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F349AF01C66EDC4000BAF0E /* ScoreNode.swift */; };
 		2F349AF31C66EEF6000BAF0E /* AvatarNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F349AF21C66EEF6000BAF0E /* AvatarNode.swift */; };
 		2F85BB5A1C67C67400F89E64 /* Social.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F85BB591C67C67400F89E64 /* Social.swift */; };
@@ -219,7 +220,6 @@
 		2F2432D51C6AE18400D58092 /* unlock.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = unlock.caf; sourceTree = "<group>"; };
 		2F2432D91C6B851A00D58092 /* Audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Audio.swift; path = ForeverMaze/Audio.swift; sourceTree = "<group>"; };
 		2F2432DB1C6B89BC00D58092 /* AudioFader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFader.swift; sourceTree = "<group>"; };
-		2F24A4FB1C6C4589005D0269 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		2F349AF01C66EDC4000BAF0E /* ScoreNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreNode.swift; sourceTree = "<group>"; };
 		2F349AF21C66EEF6000BAF0E /* AvatarNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvatarNode.swift; sourceTree = "<group>"; };
 		2F85BB591C67C67400F89E64 /* Social.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Social.swift; path = ForeverMaze/Social.swift; sourceTree = "<group>"; };
@@ -476,7 +476,6 @@
 			isa = PBXGroup;
 			children = (
 				2B4E97CB1BFFA5DD0066D521 /* GameScene.swift */,
-				2F24A4FB1C6C4589005D0269 /* GameOverScene.swift */,
 				2B2A76B91C0240A300172E27 /* MenuScene.swift */,
 				2BB884F01C0622DC006E4570 /* IsoScene.swift */,
 				2FE234761C664AB9001F9553 /* AboutScene.swift */,
@@ -955,7 +954,6 @@
 			files = (
 				2FAF46951C0C188C00B1F898 /* String+Extensions.swift in Sources */,
 				2B2A76BA1C0240A300172E27 /* MenuScene.swift in Sources */,
-				2F24A4FC1C6C4589005D0269 /* GameOverScene.swift in Sources */,
 				2BB6F1601BFFDCB4009DF879 /* Mobile.swift in Sources */,
 				2B732B841C3E373C00295D0D /* SgButton.swift in Sources */,
 				2FE234811C667C58001F9553 /* ScoresScene.swift in Sources */,
@@ -1006,6 +1004,7 @@
 			files = (
 				2FAF46921C0BCDC000B1F898 /* ForeverMazeTests-Bridging-Header.h in Sources */,
 				2BB6F1661BFFE371009DF879 /* LocalPlayer.swift in Sources */,
+				2F24A4FE1C6CEB9D005D0269 /* Analytics.swift in Sources */,
 				2FAF46821C0BCC7F00B1F898 /* MapTests.swift in Sources */,
 				2FB6EB7A1C5E9B6800BE6F02 /* Direction.swift in Sources */,
 				2B9401961C39D43C001D3799 /* IsoScene.swift in Sources */,
@@ -1040,6 +1039,7 @@
 				2BB6F1721BFFE499009DF879 /* GameStatic.swift in Sources */,
 				2BB6F1511BFFD272009DF879 /* Config.swift in Sources */,
 				2BB6F16D1BFFE407009DF879 /* Tile.swift in Sources */,
+				2F24A4FD1C6CEB9D005D0269 /* Analytics.swift in Sources */,
 				2FAF468A1C0BCD0B00B1F898 /* Utils.swift in Sources */,
 				2BB6F14D1BFFD243009DF879 /* Account.swift in Sources */,
 				2FB6EB7B1C5E9B6D00BE6F02 /* Direction.swift in Sources */,

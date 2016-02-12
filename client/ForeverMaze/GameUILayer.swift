@@ -40,6 +40,7 @@ class GameUILayer : SKSpriteNode {
     buttonChangeTile.anchorPoint = CGPointMake(1, 0)
     buttonChangeTile.position = CGPointMake(size.width - sidePad, sidePad)
     buttonChangeTile.zPosition = uiZ + 10
+    buttonChangeTile.hidden = true
     buttonChangeTile.buttonFunc = { (button) -> Void in
       let facing = Account.player!.coordinate + Account.player!.direction.amount
       let tile = self.gameScene.tiles[facing.description]
@@ -80,6 +81,7 @@ class GameUILayer : SKSpriteNode {
       self.updateUI()
       self.buttonPotion.runAction(MenuButton.sound)
     }
+    buttonPotion.hidden = true
     buttonPotion.zPosition = uiZ + 10
     addChild(buttonPotion)
     
@@ -88,6 +90,7 @@ class GameUILayer : SKSpriteNode {
     labelPotion.fontSize = 14
     labelPotion.zPosition = buttonPotion.zPosition + 1
     labelPotion.position = CGPointMake(CGRectGetMidX(buttonPotion.frame), CGRectGetMidY(buttonPotion.frame) - 8)
+    labelPotion.hidden = true
     addChild(labelPotion)
     
     banner.position = CGPoint(x: size.width/2, y: size.height - sidePad - labelBanner.frame.size.height/2)
@@ -102,8 +105,6 @@ class GameUILayer : SKSpriteNode {
     labelBanner.zPosition = 2
     labelBanner.position = banner.position + CGPointMake(0, 1)
     self.addChild(labelBanner)
-    
-    updateUI()
   }
 
   func addTracker(mobile: Mobile) {

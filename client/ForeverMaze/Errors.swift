@@ -7,15 +7,18 @@
 //
 
 import Foundation
-
+import ReachabilitySwift
 
 class Errors {
   
   static let messages = [
-    Config.baseErrorDomain! + ".permissions" : I18n.t("errors.permissions")
+    Config.baseErrorDomain! + ".permissions" : I18n.t("errors.permissions"),
+    Config.baseErrorDomain! + ".network" : I18n.t("errors.network"),
+    Config.baseErrorDomain! + ".data" : I18n.t("errors.data"),
   ]
   
-  static func show(error: NSError) {
+  static func show(err: NSError) {
+    let error = transformError(err)
     let title = messages[error.domain] != nil ? messages[error.domain] : error.localizedDescription
     Analytics.log(.Error, params: ["title": title==nil ? "?" : title!, "desc": error.description])
     UIAlertView(title: title!, message: nil, delegate: nil, cancelButtonTitle: I18n.t("menu.ok")).show()
@@ -38,4 +41,13 @@ class Errors {
     code: 3,
     userInfo: [NSLocalizedDescriptionKey : I18n.t("errors.permissions")]
   )
+  
+  static func transformError(originalError: NSError) -> NSError {
+    if originalError.domain == "FirebaseAuthentication" {
+      if originalError.code == -15 {// Network / Auth error
+        return Errors.network
+      }
+    }
+    return originalError
+  }
 }

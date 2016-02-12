@@ -16,7 +16,6 @@ class InterfaceScene: SKScene {
   let background = SKSpriteNode(imageNamed: "background")
   let banner = SKSpriteNode(texture: Config.worldAtlas.textureNamed("banner"))
   let labelTitle = SKLabelNode(text: "ForeverMaze")
-  let particle = NSKeyedUnarchiver.unarchiveObjectWithFile(NSBundle.mainBundle().pathForResource("snow", ofType: "sks")!) as! SKEmitterNode
   let buttonBack = MenuButton(title: I18n.t("menu.back"))
   
   override func didMoveToView(view: SKView) {
@@ -34,11 +33,6 @@ class InterfaceScene: SKScene {
     background.yScale = max( Config.objectScale, 0.6 )
     background.zPosition = -2
     addChild(background)
-    
-    particle.position = CGPointMake(mid.x, CGRectGetMaxY(self.scene!.frame) + 40)
-    particle.name = "snow"
-    particle.zPosition = -1
-    addChild(particle)
     
     banner.position = CGPoint(x: mid.x, y: self.scene!.frame.size.height/4*3)
     banner.zPosition = 1001

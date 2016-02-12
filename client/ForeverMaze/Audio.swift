@@ -36,11 +36,17 @@ class Audio {
   }
   
   func fadeIn(track: AVAudioPlayer) {
+    guard track.volume < 1 else {
+      return
+    }
     let fader = AudioFader(player: track)
     fader.fadeIn(Audio.FADE_DURATION, velocity: Audio.FADE_VELOCITY, onFinished: nil)
   }
   
   func fadeOut(track: AVAudioPlayer) {
+    guard track.volume > 0 else {
+      return
+    }
     let fader = AudioFader(player: track)
     fader.fadeOut(Audio.FADE_DURATION, velocity: Audio.FADE_VELOCITY, onFinished: nil)
   }

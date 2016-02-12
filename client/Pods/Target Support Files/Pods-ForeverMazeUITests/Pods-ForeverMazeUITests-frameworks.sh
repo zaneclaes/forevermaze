@@ -90,6 +90,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-ForeverMazeUITests/Kingfisher.framework"
   install_framework "Pods-ForeverMazeUITests/OMGHTTPURLRQ.framework"
   install_framework "Pods-ForeverMazeUITests/PromiseKit.framework"
+  install_framework "Pods-ForeverMazeUITests/ReachabilitySwift.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-ForeverMazeUITests/ChimpKit.framework"
@@ -98,4 +99,5 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-ForeverMazeUITests/Kingfisher.framework"
   install_framework "Pods-ForeverMazeUITests/OMGHTTPURLRQ.framework"
   install_framework "Pods-ForeverMazeUITests/PromiseKit.framework"
+  install_framework "Pods-ForeverMazeUITests/ReachabilitySwift.framework"
 fi

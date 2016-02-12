@@ -20,7 +20,7 @@ class Dialog : SKSpriteNode {
   init(title: String, body: String) {
     labelBody = SKMultilineLabel(
       text: body,
-      labelWidth: Int(Dialog.width - Container.padding*2),
+      labelWidth: Int(Dialog.width - Container.padding*2 - 20),
       pos: CGPointZero,
       fontName: Config.bodyFont,
       fontSize: 14,

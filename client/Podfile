@@ -9,6 +9,7 @@ target 'ForeverMaze' do
   pod "DeviceKit"
   pod 'Kingfisher', '~> 2.0'
   pod "ChimpKit"
+  pod 'ReachabilitySwift', :git => 'https://github.com/ashleymills/Reachability.swift'
 end
 
 target 'ForeverMazeTests' do
@@ -17,6 +18,7 @@ target 'ForeverMazeTests' do
   pod "CocoaLumberjack/Swift"
   pod 'Kingfisher', '~> 2.0'
   pod "ChimpKit"
+  pod 'ReachabilitySwift', :git => 'https://github.com/ashleymills/Reachability.swift'
 end
 
 target 'ForeverMazeUITests' do
@@ -25,5 +27,6 @@ target 'ForeverMazeUITests' do
   pod "CocoaLumberjack/Swift"
   pod 'Kingfisher', '~> 2.0'
   pod "ChimpKit"
+  pod 'ReachabilitySwift', :git => 'https://github.com/ashleymills/Reachability.swift'
 end
 

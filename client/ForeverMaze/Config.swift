@@ -13,6 +13,7 @@ import Firebase
 import PromiseKit
 import SpriteKit
 import ChimpKit
+import ReachabilitySwift
   
 class Config {
 
@@ -49,31 +50,39 @@ class Config {
   static var happinessPotionDuration:NSTimeInterval = 30
   static var remote:FDataSnapshot!
   static var levels = Array<Level>()
+  static var isOnline:Bool = true // default to true as an absolute fallback
 
   static func setup() -> Promise<Void> {
+    Config.monitorReachability()
+    
     DDLog.addLogger(DDTTYLogger.sharedInstance()) // TTY = Xcode console
     DDLog.addLogger(DDASLLogger.sharedInstance()) // ASL = Apple System Logs
     defaultDebugLevel = Config.debug ? DDLogLevel.All : DDLogLevel.Info
 
     ChimpKit.sharedKit().apiKey = Config.mailChimpApiKey
     DDLogInfo("[CONFIG] \(device)")
+    
 
     //Firebase.defaultConfig().persistenceEnabled = true
-    return Data.loadSnapshot("/config").then { (snapshot) -> Promise<Void> in
+    return monitorReachability().then { (reachable) in
+      return Config.enforceReachability()
+    }.then { () -> Promise<FDataSnapshot?> in
+      return Data.loadSnapshot("/config")
+    }.then { (snapshot) -> Promise<Void> in
       remote = snapshot
       return Promise { fulfill, reject in
         if remote == nil {
           reject(Errors.network)
           return
         }
-        self.shareRoll = (remote?.childSnapshotForPath("shareRoll").value as! NSNumber).integerValue
-        self.shareDelay = (remote?.childSnapshotForPath("shareDelay").value as! NSNumber).doubleValue
-        self.happinessPotionDuration = (remote?.childSnapshotForPath("happinessPotionDuration").value as! NSNumber).doubleValue
-        self.mailChimpListId = remote?.childSnapshotForPath("mailChimpListId").value as! String
+        self.shareRoll = (remote?.configValue("shareRoll") as! NSNumber).integerValue
+        self.shareDelay = (remote?.configValue("shareDelay") as! NSNumber).doubleValue
+        self.happinessPotionDuration = (remote?.configValue("happinessPotionDuration") as! NSNumber).doubleValue
+        self.mailChimpListId = remote?.configValue("mailChimpListId") as! String
         
         let worldSize = remote?.childSnapshotForPath("worldSize")
-        let width:Int = (worldSize?.childSnapshotForPath("width").value as! NSNumber).integerValue
-        let height:Int = (worldSize?.childSnapshotForPath("height").value as! NSNumber).integerValue
+        let width:Int = (worldSize?.configValue("width") as! NSNumber).integerValue
+        let height:Int = (worldSize?.configValue("height") as! NSNumber).integerValue
         self.worldSize = MapSize(width: UInt(max(10,width)), height: UInt(max(10,height)))
 
         // Load levels
@@ -86,6 +95,62 @@ class Config {
         fulfill()
       }
     }
+  }
+  /**
+   * Return a promise that merely enforces `isOnline`
+   */
+  static func enforceReachability() -> Promise<Void> {
+    return Promise { fulfill, reject in
+      guard Config.isOnline else {
+        reject(Errors.network)
+        return
+      }
+      fulfill()
+    }
+  }
+  /**
+   * Monitor reachability status, keeping `isOnline` in-sync
+   */
+  static func monitorReachability() -> Promise<Bool> {
+    let reachability: Reachability
+    do {
+      reachability = try Reachability.reachabilityForInternetConnection()
+    } catch {
+      DDLogError("Unable to create Reachability")
+      return Promise<Bool>(true)
+    }
+    
+    let (promise, fulfill, _) = Promise<Bool>.pendingPromise()
+    let fulfiller = { (online: Bool) -> Void in
+      Config.isOnline = online
+      fulfill(online)
+    }
+    after(Config.timeout).then { () -> Void in
+      if !promise.resolved {
+        fulfiller(false)
+      }
+    }
+    reachability.whenReachable = { reachability in
+      // this is called on a background thread, but UI updates must
+      // be on the main thread, like this:
+      dispatch_async(dispatch_get_main_queue()) {
+        fulfiller(true)
+      }
+    }
+    reachability.whenUnreachable = { reachability in
+      // this is called on a background thread, but UI updates must
+      // be on the main thread, like this:
+      dispatch_async(dispatch_get_main_queue()) {
+        fulfiller(false)
+      }
+    }
+    
+    do {
+      try reachability.startNotifier()
+    } catch {
+      DDLogError("Unable to start notifier")
+    }
+    return promise
   }
 
   static var screenTiles:MapSize {
