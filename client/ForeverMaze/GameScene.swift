@@ -144,10 +144,9 @@ class GameScene: IsoScene {
     Account.player!.score = Account.player!.score + newScore
     Account.player!.emoji = 0
     Account.player!.numHappinessPotions = 0
-    Account.player!.currentLevel = 0
+    Account.player!.currentLevel = max(Account.player!.currentLevel-1, 0)
     Account.player!.saveHighScore()
     prepareNextLevel()
-    
     
     gameOverDialog.labelTitle.text = highScore ? I18n.t("dialog.highScore.title") : I18n.t("dialog.gameOver.title")
     gameOverDialog.labelBody.text = I18n.t("dialog.gameOver.body").stringByReplacingOccurrencesOfString("%{steps}", withString: String(minStepsToFriend))

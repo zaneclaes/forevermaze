@@ -50,6 +50,7 @@ class Config {
   static var happinessPotionDuration:NSTimeInterval = 30
   static var remote:FDataSnapshot!
   static var levels = Array<Level>()
+  static var reachability:Reachability? = nil
   static var isOnline:Bool = true // default to true as an absolute fallback
 
   static func setup() -> Promise<Void> {
@@ -80,9 +81,9 @@ class Config {
         self.happinessPotionDuration = (remote?.configValue("happinessPotionDuration") as! NSNumber).doubleValue
         self.mailChimpListId = remote?.configValue("mailChimpListId") as! String
         
-        let worldSize = remote?.childSnapshotForPath("worldSize")
-        let width:Int = (worldSize?.configValue("width") as! NSNumber).integerValue
-        let height:Int = (worldSize?.configValue("height") as! NSNumber).integerValue
+        let worldSize = remote?.configValue("worldSize") as! NSDictionary
+        let width:Int = worldSize["width"]!.integerValue
+        let height:Int = worldSize["height"]!.integerValue
         self.worldSize = MapSize(width: UInt(max(10,width)), height: UInt(max(10,height)))
 
         // Load levels
@@ -112,7 +113,9 @@ class Config {
    * Monitor reachability status, keeping `isOnline` in-sync
    */
   static func monitorReachability() -> Promise<Bool> {
-    let reachability: Reachability
+    guard Config.reachability == nil else {
+      return Promise<Bool>(isOnline)
+    }
     do {
       reachability = try Reachability.reachabilityForInternetConnection()
     } catch {
@@ -130,14 +133,14 @@ class Config {
         fulfiller(false)
       }
     }
-    reachability.whenReachable = { reachability in
+    reachability!.whenReachable = { reachability in
       // this is called on a background thread, but UI updates must
       // be on the main thread, like this:
       dispatch_async(dispatch_get_main_queue()) {
         fulfiller(true)
       }
     }
-    reachability.whenUnreachable = { reachability in
+    reachability!.whenUnreachable = { reachability in
       // this is called on a background thread, but UI updates must
       // be on the main thread, like this:
       dispatch_async(dispatch_get_main_queue()) {
@@ -146,7 +149,7 @@ class Config {
     }
     
     do {
-      try reachability.startNotifier()
+      try reachability!.startNotifier()
     } catch {
       DDLogError("Unable to start notifier")
     }
