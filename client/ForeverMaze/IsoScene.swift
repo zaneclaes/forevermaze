@@ -238,7 +238,7 @@ class IsoScene: SKScene {
     }
     
     let pixels = CGPoint(x: CGFloat(xPos) * IsoScene.tileSize.width, y: CGFloat(yPos)*IsoScene.tileSize.height)
-    let point = CGPoint(x:((pixels.x + pixels.y)), y: (pixels.y - pixels.x)/2)
+    let point = CGPoint(x:pixels.x + pixels.y, y: (pixels.y - pixels.x)/2)
     let offset = includeHeight ? CGPointMake(0, tileHeight(pos)) : CGPointZero
     return point + offset
   }

@@ -204,25 +204,6 @@ class Tile : GameStatic {
     self.objectIds.append(obj.id)
   }
 
-  func scrubObjects() {
-    var objIds = Array<String>()
-    var changed = false
-    
-    for objId in self.objectIds {
-      let obj = self.gameScene?.objects[objId]
-      if obj != nil && obj?.coordinate.x != self.coordinate.x && obj?.coordinate.y != self.coordinate.y {
-        DDLogWarn("Scrubbing \(objId) from \(self) because it has moved.")
-        changed = true
-      }
-      else {
-        objIds.append(objId)
-      }
-    }
-    if changed {
-      self.objectIds = objIds
-    }
-  }
-
   var emotion: Emotion {
     set {
       if state == .Online {

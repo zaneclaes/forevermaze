@@ -67,8 +67,6 @@ struct Coordinate : CustomStringConvertible, Hashable {
   }
   
   func willWrapAroundWorld(newPos: Coordinate, worldSize: MapSize, threshold: UInt) -> Bool {
-    //let wrapX = (newPos.x == 0 && self.x == worldSize.width - 1) || (newPos.x == worldSize.width - 1 && self.x == 0)
-    //let wrapY = (newPos.y == 0 && self.y == worldSize.height - 1) || (newPos.y == worldSize.height - 1 && self.y == 0)
     return self.willWrapAroundWorldX(newPos, worldSize: worldSize, threshold: threshold) ||
       self.willWrapAroundWorldY(newPos, worldSize: worldSize, threshold: threshold)
   }
